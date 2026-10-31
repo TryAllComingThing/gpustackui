@@ -1,0 +1,1 @@
+M1 status: **NOT VERIFIED**. Directory contract checked locally; real pnpm dependency installation, typecheck, build, Nuxt UI compatibility and browser validation not executed. Existing React baseline unchanged. Nuxt UI adapters, API, modules and quality workflows are planned placeholders, not implemented functionality.

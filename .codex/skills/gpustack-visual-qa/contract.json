@@ -1,0 +1,22 @@
+{
+  "name": "gpustack-visual-qa",
+  "version": "1.1.0",
+  "inputs": [
+    "browser_matrix",
+    "theme_matrix",
+    "baseline_reference"
+  ],
+  "constraints": {
+    "require_real_evidence": true,
+    "never_self_approve_baselines": true
+  },
+  "outputs": [
+    "VISUAL-MATRIX.md",
+    "VISUAL-DIFF.md",
+    "ACCESSIBILITY.md"
+  ],
+  "gates": [
+    "visual",
+    "accessibility"
+  ]
+}

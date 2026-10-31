@@ -1,0 +1,9 @@
+name: Release Placeholder
+on:
+  workflow_dispatch:
+jobs:
+  disabled:
+    if: ${{ false }}
+    runs-on: macos-latest
+    steps:
+      - run: echo "Release disabled until M1/M3 verification"

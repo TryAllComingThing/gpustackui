@@ -1,0 +1,29 @@
+{
+  "name": "gpustack-page-migration",
+  "version": "1.1.0",
+  "inputs": [
+    "source_page",
+    "target_page_spec",
+    "api_contract",
+    "acceptance_cases"
+  ],
+  "constraints": {
+    "preserve_api_contract": true,
+    "preserve_business_behavior": true,
+    "use_design_tokens": true,
+    "require_real_evidence": true
+  },
+  "outputs": [
+    "MIGRATION-REPORT.md",
+    "API-PARITY.md",
+    "TEST-RESULTS.md",
+    "VISUAL-DIFF.md",
+    "RISK-REPORT.md"
+  ],
+  "gates": [
+    "typecheck",
+    "unit",
+    "e2e",
+    "visual"
+  ]
+}

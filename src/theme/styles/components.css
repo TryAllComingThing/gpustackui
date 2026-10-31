@@ -1,0 +1,19 @@
+/* GPUStack component appearance; map Nuxt UI variants to these semantic classes. */
+.gp-card { background:var(--gp-card-bg); color:var(--gp-text-primary); border:1px solid var(--gp-border-default); border-radius:var(--gp-radius-card); box-shadow:var(--gp-shadow-card); }
+.gp-button { min-height:36px; border-radius:var(--gp-radius-control); font:500 var(--gp-font-md)/1.4 var(--gp-font-family); }
+.gp-button--primary { background:var(--gp-primary); color:#FFFFFF; }
+.gp-button--primary:hover { background:var(--gp-primary-hover); }
+.gp-button--primary:active { background:var(--gp-primary-pressed); }
+.gp-input, .gp-select, .gp-textarea { background:var(--gp-card-bg); color:var(--gp-text-primary); border:1px solid var(--gp-border-default); border-radius:var(--gp-radius-control); }
+.gp-input:focus-visible, .gp-select:focus-visible, .gp-button:focus-visible { outline:2px solid var(--gp-focus-ring); outline-offset:2px; }
+.gp-input:disabled, .gp-button:disabled { background:var(--gp-background-disabled); opacity:.65; cursor:not-allowed; }
+.gp-table { width:100%; border-collapse:collapse; color:var(--gp-text-primary); font-size:var(--gp-font-md); }
+.gp-table th { background:var(--gp-table-head-bg); color:var(--gp-text-n800); font-weight:600; }
+.gp-table th, .gp-table td { padding:12px 16px; border-bottom:1px solid var(--gp-border-default); text-align:left; }
+.gp-table tbody tr:hover { background:var(--gp-brand-g100); }
+.gp-badge { border-radius:var(--gp-radius-tag); font-size:12px; padding:2px 6px; }
+.gp-badge--success { background:var(--gp-success-bg); color:var(--gp-success-fg); }
+.gp-badge--warning { background:var(--gp-warning-bg); color:var(--gp-warning-fg); }
+.gp-badge--danger { background:var(--gp-danger-bg); color:var(--gp-danger-fg); }
+.gp-modal { background:var(--gp-card-bg); color:var(--gp-text-primary); border-radius:var(--gp-radius-dialog); box-shadow:var(--gp-shadow-modal); }
+.gp-popover { background:var(--gp-card-bg); color:var(--gp-text-primary); border:1px solid var(--gp-border-default); border-radius:var(--gp-radius-dialog); box-shadow:var(--gp-shadow-popover); }

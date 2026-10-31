@@ -1,0 +1,10 @@
+@import './tokens.css';
+@import './themes/standard.css';
+@import './themes/business.css';
+@import './themes/future.css';
+@import './typography.css';
+@import './layout.css';
+@import './components.css';
+:root:not([data-theme]), :root[data-theme="standard"] { color-scheme: light; }
+html, body, #app { min-height: 100%; }
+body { background: var(--gp-page-bg); color: var(--gp-text-primary); }

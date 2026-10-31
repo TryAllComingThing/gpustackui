@@ -1,0 +1,23 @@
+{
+  "name": "gpustack-repo-audit",
+  "version": "1.1.0",
+  "inputs": [
+    "repository",
+    "design_system_version"
+  ],
+  "constraints": {
+    "read_only": true,
+    "preserve_api_contract": true,
+    "require_real_evidence": true
+  },
+  "outputs": [
+    "M0-AUDIT.md",
+    "PAGE-INVENTORY.md",
+    "API-CONTRACT.md",
+    "DESIGN-GAP.md",
+    "RISK-REGISTER.md"
+  ],
+  "gates": [
+    "source_review"
+  ]
+}

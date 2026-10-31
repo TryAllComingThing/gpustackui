@@ -1,0 +1,10 @@
+name: PR Check
+on:
+  pull_request:
+jobs:
+  structure:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 quality/check_structure.py
+# M1 阶段仅结构检查，依赖构建门禁在锁文件验证后启用。

@@ -1,0 +1,27 @@
+{
+  "name": "gpustack-release-gate",
+  "version": "1.1.0",
+  "inputs": [
+    "release_candidate",
+    "deployment_plan",
+    "rollback_plan"
+  ],
+  "constraints": {
+    "require_real_evidence": true,
+    "require_human_approval": true
+  },
+  "outputs": [
+    "GATE-RESULT.json",
+    "GATE-REPORT.md",
+    "RELEASE-CHECKLIST.md"
+  ],
+  "gates": [
+    "typecheck",
+    "unit",
+    "e2e",
+    "build",
+    "visual",
+    "security",
+    "rollback"
+  ]
+}

@@ -1,0 +1,34 @@
+/* Invariant geometry and typography tokens. Colors live in themes/*.css. */
+:root {
+  --gp-font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --gp-font-xs: 12px; --gp-font-sm: 13px; --gp-font-md: 14px; --gp-font-lg: 16px;
+  --gp-font-xl: 18px; --gp-font-title: 24px; --gp-font-kpi: 32px;
+  --gp-space-1: 4px; --gp-space-2: 8px; --gp-space-3: 12px; --gp-space-4: 16px;
+  --gp-space-5: 20px; --gp-space-6: 24px; --gp-space-8: 32px;
+  --gp-radius-none: 0px; --gp-radius-tag: 3px; --gp-radius-control: 4px;
+  --gp-radius-card: 6px; --gp-radius-dialog: 8px; --gp-radius-full: 9999px;
+  --gp-shadow-card: 0 1px 3px #0000000D;
+  --gp-shadow-popover: 0 8px 24px #0000001A;
+  --gp-shadow-modal: 0 16px 48px #00000030;
+  --gp-header-height: 60px; --gp-sidebar-width: 200px; --gp-sidebar-collapsed-width: 64px;
+  --gp-menu-row-height: 44px; --gp-submenu-row-height: 40px;
+  --gp-menu-icon-size: 18px; --gp-submenu-icon-size: 16px;
+  --gp-content-padding-x: 24px; --gp-sidebar-transition: 200ms;
+  --gp-alpha-black-90: #000000E6; --gp-alpha-black-60: #00000099;
+  --gp-alpha-black-30: #0000004D; --gp-alpha-black-10: #0000001A; --gp-alpha-black-5: #0000000D;
+  --gp-alpha-white-90: #FFFFFFE6; --gp-alpha-white-60: #FFFFFF99;
+  --gp-alpha-white-30: #FFFFFF4D; --gp-alpha-white-10: #FFFFFF1A; --gp-alpha-white-5: #FFFFFF0D;
+  /* Backward-compatible aliases for V2.0 layout.css and typography.css. */
+  --header-bg: var(--gp-header-bg); --header-fg: var(--gp-header-fg);
+  --sidebar-bg: var(--gp-sidebar-bg); --sidebar-fg: var(--gp-sidebar-fg);
+  --sidebar-item-hover-bg: var(--gp-sidebar-hover-bg);
+  --sidebar-item-active-bg: var(--gp-sidebar-active-bg);
+  --sidebar-item-active-fg: var(--gp-sidebar-active-fg);
+  --page-bg: var(--gp-page-bg); --card-bg: var(--gp-card-bg);
+  --table-head-bg: var(--gp-table-head-bg); --text-primary: var(--gp-text-primary);
+  --text-n800: var(--gp-text-n800); --text-secondary: var(--gp-text-secondary);
+  --border-default: var(--gp-border-default); --radius-control: var(--gp-radius-control);
+  --radius-card: var(--gp-radius-card); --radius-dialog: var(--gp-radius-dialog);
+  --radius-tag: var(--gp-radius-tag); --shadow-card: var(--gp-shadow-card);
+}
+@media (prefers-reduced-motion: reduce) { :root { --gp-sidebar-transition: 0ms; } }
