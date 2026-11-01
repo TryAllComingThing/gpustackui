@@ -1,0 +1,17 @@
+<script setup lang="ts">
+const sidebarCollapsed = defineModel<boolean>('sidebarCollapsed', { default: false })
+</script>
+
+<template>
+  <div class="gp-app-shell" :data-sidebar="sidebarCollapsed ? 'collapsed' : 'expanded'">
+    <header class="gp-app-header">
+      <div class="gp-app-header__brand"><slot name="brand">GPUStack</slot></div>
+      <slot name="breadcrumb" />
+      <div class="gp-app-header__actions"><slot name="actions" /></div>
+    </header>
+    <div class="gp-app-workspace">
+      <aside class="gp-app-sidebar" :data-collapsed="sidebarCollapsed" aria-label="主导航"><slot name="sidebar" /></aside>
+      <main class="gp-app-main"><slot /></main>
+    </div>
+  </div>
+</template>

@@ -5,16 +5,24 @@ description: Implement GPUStack UI Design System V2.4 with multi-theme token con
 
 # gpustack-design-system
 
+## Shared repository contract
+
+- The only active design authority is the root [`DESIGN.md`](../../../DESIGN.md); archived documents are traceability evidence only.
+- Read `AGENTS.md`, the real source, and the configured test scripts before editing. Never invent a second DESIGN.md, project Profile, theme engine, or `--ds-*` runtime namespace.
+- Prefer Nuxt UI 4 primitives. Create or use a thin `Drp*` adapter only for cross-page routing, state, accessibility, stable test IDs, or project layout behavior.
+- Components and Showcase must share `src/theme`, `src/components`, the Theme/Density/Typography/Layout managers, and `--gp-*` tokens. Showcase uses local fixtures and never enters production routes or bundles.
+- A quality report must include command, exit code, environment, artifact/report paths, failures, and repairs. Missing or unexecuted evidence is never PASS.
+
 ## Authority and preconditions
 Read this skill contract and validate it with `python3 scripts/validate_contracts.py` before execution. The contract is descriptive; enforcement is via schemas and Harness. Never self-approve.
 Read repository `AGENTS.md`, `DESIGN.md`, task manifest and real source files. Do not claim tests passed without executable evidence. Do not alter backend API or permissions.
 
 ## Workflow
-1. Read actual V2.4 authority first; block undocumented theme values rather than invent them.
+1. Read the root DESIGN.md authority first; block undocumented theme values rather than invent them.
 2. Map primitive, semantic and component tokens; register allowed theme IDs and supported modes.
 3. Implement runtime theme switch, persistence, first-paint application, fallback and system preference handling.
 4. Validate header breadcrumbs, navigation, tables, dialogs, charts, overlays and keyboard focus in all supported themes.
-5. Generate showcase snapshots and review reports; never overwrite baselines automatically.
+5. Generate Showcase evidence and review reports; never overwrite baselines automatically without an explicit approved baseline update.
 
 ## Required deliverables
 - `TOKEN-MAPPING.md`

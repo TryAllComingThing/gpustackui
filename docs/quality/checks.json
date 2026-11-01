@@ -1,0 +1,182 @@
+[
+  {
+    "check_id": "S-001",
+    "category": "Static",
+    "name": "contracts",
+    "command": "python3 scripts/validate_contracts.py",
+    "exit_code": 0,
+    "duration_ms": 43,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-001-contracts.log"
+  },
+  {
+    "check_id": "S-002",
+    "category": "Static",
+    "name": "skills",
+    "command": "pnpm validate:skills",
+    "exit_code": 0,
+    "duration_ms": 208,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-002-skills.log"
+  },
+  {
+    "check_id": "S-003",
+    "category": "Static",
+    "name": "structure",
+    "command": "pnpm check:structure",
+    "exit_code": 0,
+    "duration_ms": 200,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-003-structure.log"
+  },
+  {
+    "check_id": "S-004",
+    "category": "Static",
+    "name": "typecheck",
+    "command": "pnpm typecheck",
+    "exit_code": 0,
+    "duration_ms": 2055,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-004-typecheck.log"
+  },
+  {
+    "check_id": "S-005",
+    "category": "Static",
+    "name": "typecheck-showcase",
+    "command": "pnpm typecheck:showcase",
+    "exit_code": 0,
+    "duration_ms": 3381,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-005-typecheck-showcase.log"
+  },
+  {
+    "check_id": "S-006",
+    "category": "Static",
+    "name": "lint",
+    "command": "pnpm lint",
+    "exit_code": 0,
+    "duration_ms": 428,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-006-lint.log"
+  },
+  {
+    "check_id": "S-007",
+    "category": "Static",
+    "name": "f2-tokens",
+    "command": "pnpm validate:f2-tokens",
+    "exit_code": 0,
+    "duration_ms": 203,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-007-f2-tokens.log"
+  },
+  {
+    "check_id": "S-008",
+    "category": "Static",
+    "name": "f3-tokens",
+    "command": "pnpm validate:f3-tokens",
+    "exit_code": 0,
+    "duration_ms": 209,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-008-f3-tokens.log"
+  },
+  {
+    "check_id": "S-009",
+    "category": "Static",
+    "name": "diff-check",
+    "command": "git diff --check",
+    "exit_code": 0,
+    "duration_ms": 24,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/S-009-diff-check.log"
+  },
+  {
+    "check_id": "B-001",
+    "category": "Build",
+    "name": "production-build",
+    "command": "pnpm build",
+    "exit_code": 0,
+    "duration_ms": 4631,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/B-001-production-build.log"
+  },
+  {
+    "check_id": "B-002",
+    "category": "Build",
+    "name": "showcase-build",
+    "command": "pnpm build:showcase",
+    "exit_code": 0,
+    "duration_ms": 6345,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/B-002-showcase-build.log"
+  },
+  {
+    "check_id": "F-001",
+    "category": "Functional",
+    "name": "unit",
+    "command": "pnpm test:unit",
+    "exit_code": 0,
+    "duration_ms": 905,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/F-001-unit.log"
+  },
+  {
+    "check_id": "F-002",
+    "category": "Functional",
+    "name": "production-e2e",
+    "command": "pnpm test:e2e",
+    "exit_code": 0,
+    "duration_ms": 6172,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/F-002-production-e2e.log"
+  },
+  {
+    "check_id": "F-003",
+    "category": "Functional",
+    "name": "showcase",
+    "command": "pnpm test:showcase",
+    "exit_code": 0,
+    "duration_ms": 19380,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/F-003-showcase.log"
+  },
+  {
+    "check_id": "V-001",
+    "category": "Visual",
+    "name": "visual",
+    "command": "pnpm test:visual",
+    "exit_code": 0,
+    "duration_ms": 21435,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/V-001-visual.log"
+  },
+  {
+    "check_id": "A-001",
+    "category": "Accessibility",
+    "name": "accessibility",
+    "command": "pnpm test:accessibility",
+    "exit_code": 0,
+    "duration_ms": 10187,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/A-001-accessibility.log"
+  },
+  {
+    "check_id": "A-002",
+    "category": "Accessibility",
+    "name": "strict-axe-browser-visual",
+    "command": "pnpm test:strict",
+    "exit_code": 0,
+    "duration_ms": 19065,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/A-002-strict-axe-browser-visual.log"
+  },
+  {
+    "check_id": "A-003",
+    "category": "Accessibility",
+    "name": "showcase-isolation",
+    "command": "pnpm check:showcase-isolation",
+    "exit_code": 0,
+    "duration_ms": 207,
+    "status": "PASS",
+    "evidence_path": "docs/quality/evidence/A-003-showcase-isolation.log"
+  }
+]

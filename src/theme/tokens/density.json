@@ -1,0 +1,10 @@
+{
+  "status": "APPROVED",
+  "source": "design-system/contracts/LAYOUT_MATRIX.csv:1-11; DESIGN.md:31-35",
+  "independentFromTheme": true,
+  "presets": {
+    "compact": { "controlHeight": "32px", "tableRowHeight": "36px", "cardPadding": "12px", "fieldGap": "12px", "sectionGap": "16px", "filterGap": "8px", "headerHeight": "60px", "sidebarExpanded": "232px", "sidebarCollapsed": "64px", "contentPadding": "20px" },
+    "standard": { "controlHeight": "36px", "tableRowHeight": "44px", "cardPadding": "20px", "fieldGap": "16px", "sectionGap": "24px", "filterGap": "12px", "headerHeight": "60px", "sidebarExpanded": "232px", "sidebarCollapsed": "64px", "contentPadding": "24px" },
+    "comfortable": { "controlHeight": "40px", "tableRowHeight": "52px", "cardPadding": "24px", "fieldGap": "20px", "sectionGap": "32px", "filterGap": "16px", "headerHeight": "60px", "sidebarExpanded": "232px", "sidebarCollapsed": "64px", "contentPadding": "32px" }
+  }
+}

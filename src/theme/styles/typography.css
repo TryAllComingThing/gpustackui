@@ -1,28 +1,29 @@
 /* Load after tokens.css */
-:root { font-family: var(--font-sans); font-synthesis: none; text-rendering: optimizeLegibility; }
-body { margin: 0; font-family: var(--font-sans); font-size: var(--font-size-base); line-height: var(--line-height-base); color: var(--text-primary); background: var(--page-bg); }
+:root { font-family: var(--gp-font-family); font-synthesis: none; text-rendering: optimizeLegibility; }
+body { margin: 0; font-family: var(--gp-font-family); font-size: var(--gp-type-body-size); line-height: var(--gp-type-body-line-height); color: var(--gp-text-primary); background: var(--gp-page-bg); }
 h1, h2, h3, p { margin-block-start: 0; }
-.ds-page-title, h1.ds-title { font-size: var(--font-size-xl); line-height: var(--line-height-xl); font-weight: 600; color: var(--text-primary); }
-.ds-section-title { font-size: var(--font-size-lg); line-height: var(--line-height-lg); font-weight: 600; color: var(--text-primary); }
-.ds-card-title { font-size: var(--font-size-md); line-height: var(--line-height-md); font-weight: 600; color: var(--text-n800); }
-.ds-body, .ds-table { font-size: var(--font-size-base); line-height: var(--line-height-base); font-weight: 400; color: var(--text-primary); }
-.ds-secondary { font-size: var(--font-size-sm); line-height: var(--line-height-sm); color: var(--text-secondary); }
-.ds-helper { font-size: var(--font-size-xs); line-height: var(--line-height-xs); color: var(--text-muted); }
-.ds-kpi { font-size: var(--font-size-kpi); line-height: var(--line-height-kpi); font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.ds-page-title, h1.ds-title { font-size: var(--gp-type-page-title-size); line-height: var(--gp-type-page-title-line-height); font-weight: 600; color: var(--gp-text-primary); }
+.ds-section-title { font-size: var(--gp-type-section-title-size); line-height: var(--gp-type-section-title-line-height); font-weight: 600; color: var(--gp-text-primary); }
+.ds-card-title { font-size: var(--gp-type-body-size); line-height: var(--gp-type-body-line-height); font-weight: 600; color: var(--gp-text-n800); }
+.ds-body, .ds-table { font-size: var(--gp-type-body-size); line-height: var(--gp-type-body-line-height); font-weight: 400; color: var(--gp-text-primary); }
+.ds-secondary { font-size: var(--gp-type-body-small-size); line-height: var(--gp-type-body-small-line-height); color: var(--gp-text-secondary); }
+.ds-helper { font-size: var(--gp-type-caption-size); line-height: var(--gp-type-caption-line-height); color: var(--gp-text-n500); }
+.ds-kpi { font-size: var(--gp-type-display-size); line-height: var(--gp-type-display-line-height); font-weight: 700; color: var(--gp-text-primary); font-variant-numeric: tabular-nums; }
 .ds-numeric, .ds-table td[data-numeric] { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
-.ds-breadcrumb { font-size: var(--font-size-sm); line-height: var(--line-height-sm); }
+.ds-breadcrumb { font-size: var(--gp-type-body-small-size); line-height: var(--gp-type-body-small-line-height); }
 .ds-breadcrumb a { color: var(--breadcrumb-link); text-decoration: none; }
 .ds-breadcrumb [aria-current="page"] { color: var(--breadcrumb-current); font-weight: 500; }
-.ds-table th { background: var(--table-head-bg); font-weight: 500; color: var(--text-n800); }
-.ds-table td, .ds-table th { padding: 10px 12px; border-bottom: 1px solid var(--divider-default); }
+.ds-table th { background: var(--gp-table-head-bg); font-weight: 500; color: var(--gp-text-n800); }
+.ds-table td, .ds-table th { padding: var(--gp-space-2) var(--gp-space-3); border-bottom: 1px solid var(--gp-line-n250); }
 /* N400 is reserved for decoration; never use as required 12–14px body text. */
 
 /* V2.2 cross-theme hierarchy */
-.gp-page-title { font:600 24px/32px var(--gp-font-family); color:var(--gp-text-primary); }
-.gp-section-title { font:600 18px/26px var(--gp-font-family); color:var(--gp-text-primary); }
-.gp-card-title { font:600 16px/24px var(--gp-font-family); color:var(--gp-text-primary); }
-.gp-body { font:400 14px/22px var(--gp-font-family); color:var(--gp-text-primary); }
-.gp-secondary { font:400 13px/20px var(--gp-font-family); color:var(--gp-text-secondary); }
-.gp-helper { font:400 12px/18px var(--gp-font-family); color:var(--gp-text-secondary); }
-.gp-kpi { font:650 32px/40px var(--gp-font-family); color:var(--gp-text-primary); font-variant-numeric:tabular-nums; }
-.gp-numeric { font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; }
+.gp-page-title { font-size:var(--gp-type-page-title-size); line-height:var(--gp-type-page-title-line-height); font-weight:var(--gp-type-page-title-weight); color:var(--gp-text-primary); }
+.gp-section-title { font-size:var(--gp-type-section-title-size); line-height:var(--gp-type-section-title-line-height); font-weight:var(--gp-type-section-title-weight); color:var(--gp-text-primary); }
+.gp-card-title { font-size:var(--gp-type-card-title-size); line-height:var(--gp-type-card-title-line-height); font-weight:var(--gp-type-card-title-weight); color:var(--gp-text-primary); }
+.gp-body { font-size:var(--gp-type-body-size); line-height:var(--gp-type-body-line-height); font-weight:var(--gp-type-body-weight); color:var(--gp-text-primary); }
+.gp-secondary { font-size:var(--gp-type-body-small-size); line-height:var(--gp-type-body-small-line-height); font-weight:var(--gp-type-body-small-weight); color:var(--gp-text-secondary); }
+.gp-helper { font-size:var(--gp-type-caption-size); line-height:var(--gp-type-caption-line-height); font-weight:var(--gp-type-caption-weight); color:var(--gp-text-secondary); }
+.gp-kpi { font-size:var(--gp-type-display-size); line-height:var(--gp-type-display-line-height); font-weight:var(--gp-type-display-weight); color:var(--gp-text-primary); font-variant-numeric:tabular-nums; }
+.gp-numeric { font-size:var(--gp-type-numeric-size); line-height:var(--gp-type-numeric-line-height); font-weight:var(--gp-type-numeric-weight); font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; }
+.gp-code { font-size:var(--gp-type-code-size); line-height:var(--gp-type-code-line-height); font-weight:var(--gp-type-code-weight); font-family:var(--gp-type-code-family, ui-monospace, SFMono-Regular, Menlo, monospace); }

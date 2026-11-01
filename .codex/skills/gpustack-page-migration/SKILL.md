@@ -5,12 +5,20 @@ description: Migrate one GPUStack frontend page at a time preserving API contrac
 
 # gpustack-page-migration
 
+## Shared repository contract
+
+- The only active design authority is the root [`DESIGN.md`](../../../DESIGN.md); archived documents are not active requirements.
+- Read `AGENTS.md`, real page/API sources, and test scripts before editing. Preserve existing API, auth, permission, async, and route semantics.
+- Prefer Nuxt UI 4 and existing `Drp*` adapters; reuse `src/theme` managers and `--gp-*` tokens. Do not create a page-local theme engine, Profile, or demo-only component copy.
+- Showcase may be used for acceptance with local fixtures, but it cannot replace production page verification or enter the production bundle.
+- Reports must contain real commands, exit codes, environment, artifacts, failures, repairs, and rollback information.
+
 ## Authority and preconditions
 Read this skill contract and validate it with `python3 scripts/validate_contracts.py` before execution. The contract is descriptive; enforcement is via schemas and Harness. Never self-approve.
 Read repository `AGENTS.md`, `DESIGN.md`, task manifest and real source files. Do not claim tests passed without executable evidence. Do not alter backend API or permissions.
 
 ## Workflow
-1. Identify source page and target specification; freeze API, auth, async states and acceptance cases.
+1. Identify source page and target specification from root DESIGN.md; freeze API, auth, async states and acceptance cases.
 2. Create file-level plan and allowlist before edits; stop if required evidence is missing.
 3. Implement Vue3 TypeScript page using shared tokens and UI adapters; avoid unapproved dependencies.
 4. Run typecheck, unit, integration, E2E and visual tests using configured scripts.

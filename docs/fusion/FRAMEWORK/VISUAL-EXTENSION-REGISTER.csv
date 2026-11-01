@@ -1,0 +1,6 @@
+extension_id,domain,proposal,source,affected_tokens,implementation_target,required_evidence,status,approver_scope
+VE-001,Radius,theme-dependent radius variants,SaaS DESIGN §7; F3 audit,--gp-radius-*,tokens.css and theme layers,theme x component computed-style matrix,PROPOSED,requires design/product/architecture/QA/a11y review
+VE-002,Shadow,canonical structured elevation scale,SaaS DESIGN §7; F3 audit,--gp-shadow-*,tokens.css/compiler source,layered surface computed-style matrix and rollback, PENDING,requires architecture and design review
+VE-003,Motion,duration tiers for standard/overlay,SaaS DESIGN §8; F3 audit,--gp-motion-*,tokens.css and component transitions,reduced-motion and transition behavior,PROPOSED,requires design/architecture/QA review
+VE-004,Icon,icon family/line-width/semantic set,SaaS DESIGN §8; F3 audit,--gp-icon-*,shared icon contract,keyboard/name and size contract,PROPOSED,requires design/product/architecture/a11y review
+VE-005,DataViz,six palette families,SaaS validation.json; F3 audit,--gp-chart-*,theme CSS and chart contract,semantic mapping and non-color fallback,PROPOSED,requires design/product/architecture/QA review

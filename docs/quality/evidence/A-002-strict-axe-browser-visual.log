@@ -1,0 +1,38 @@
+
+> gpustack-vue-frontend@0.2.0 test:strict /Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend
+> playwright test --config playwright.strict.config.ts
+
+
+Running 12 tests using 3 workers
+
+  ✓   3 [chromium] › tests/strict/f4.strict.spec.ts:4:1 › F4 components and patterns pass keyboard, state, theme and density checks (2.2s)
+  ✓   1 [webkit] › tests/strict/f4.strict.spec.ts:4:1 › F4 components and patterns pass keyboard, state, theme and density checks (3.4s)
+  ✓   4 [chromium] › tests/strict/f4.strict.spec.ts:49:1 › F4 Showcase has no axe-core violations (1.8s)
+  ✓   2 [firefox] › tests/strict/f4.strict.spec.ts:4:1 › F4 components and patterns pass keyboard, state, theme and density checks (4.0s)
+  ✓   6 [chromium] › tests/strict/f4.strict.spec.ts:55:1 › user management acceptance covers themes and densities (1.1s)
+  ✓   5 [webkit] › tests/strict/f4.strict.spec.ts:49:1 › F4 Showcase has no axe-core violations (2.1s)
+  ✓   8 [chromium] › tests/strict/f4.strict.spec.ts:68:1 › F4 visual baseline renders the shared component and pattern sections (661ms)
+  ✓   9 [webkit] › tests/strict/f4.strict.spec.ts:55:1 › user management acceptance covers themes and densities (1.8s)
+  ✓   7 [firefox] › tests/strict/f4.strict.spec.ts:49:1 › F4 Showcase has no axe-core violations (2.6s)
+  ✓  10 [webkit] › tests/strict/f4.strict.spec.ts:68:1 › F4 visual baseline renders the shared component and pattern sections (834ms)
+  ✓  11 [firefox] › tests/strict/f4.strict.spec.ts:55:1 › user management acceptance covers themes and densities (1.3s)
+  ✓  12 [firefox] › tests/strict/f4.strict.spec.ts:68:1 › F4 visual baseline renders the shared component and pattern sections (717ms)
+
+  12 passed (18.4s)
+
+[WebServer] (node:88838) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88860) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88889) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88897) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:88905) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:88906) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:88904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)

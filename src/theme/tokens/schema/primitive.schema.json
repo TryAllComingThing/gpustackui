@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpustack.local/schema/saas-primitive-theme.json",
+  "title": "SaaS Primitive Theme Token",
+  "type": "object",
+  "required": ["brand", "success", "warning", "danger", "info", "text", "border", "background", "alpha"],
+  "properties": {
+    "brand": { "$ref": "#/$defs/brand" },
+    "success": { "$ref": "#/$defs/semantic" },
+    "warning": { "$ref": "#/$defs/semantic" },
+    "danger": { "$ref": "#/$defs/semantic" },
+    "info": { "$ref": "#/$defs/semantic" },
+    "text": { "type": "object", "required": ["primary", "secondary", "tertiary", "muted", "disabled"], "additionalProperties": false, "properties": { "primary": { "$ref": "#/$defs/color" }, "secondary": { "$ref": "#/$defs/color" }, "tertiary": { "$ref": "#/$defs/color" }, "muted": { "$ref": "#/$defs/color" }, "disabled": { "$ref": "#/$defs/color" } } },
+    "border": { "type": "object", "required": ["default", "divider", "subtle"], "additionalProperties": false, "properties": { "default": { "$ref": "#/$defs/color" }, "divider": { "$ref": "#/$defs/color" }, "subtle": { "$ref": "#/$defs/color" } } },
+    "background": { "type": "object", "required": ["disabled", "canvas", "subtle", "default"], "additionalProperties": false, "properties": { "disabled": { "$ref": "#/$defs/color" }, "canvas": { "$ref": "#/$defs/color" }, "subtle": { "$ref": "#/$defs/color" }, "default": { "$ref": "#/$defs/color" } } },
+    "alpha": { "type": "object", "required": ["black", "white"], "additionalProperties": false, "properties": { "black": { "$ref": "#/$defs/alphaSet" }, "white": { "$ref": "#/$defs/alphaSet" } } }
+  },
+  "$defs": {
+    "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6,8}$" },
+    "semantic": { "type": "object", "required": ["default", "pressed", "hover", "light", "background"], "additionalProperties": false, "properties": { "default": { "$ref": "#/$defs/color" }, "pressed": { "$ref": "#/$defs/color" }, "hover": { "$ref": "#/$defs/color" }, "light": { "$ref": "#/$defs/color" }, "background": { "$ref": "#/$defs/color" } } },
+    "brand": { "type": "object", "required": ["primary", "pressed", "accent", "light", "subtle"], "additionalProperties": false, "properties": { "primary": { "$ref": "#/$defs/color" }, "pressed": { "$ref": "#/$defs/color" }, "accent": { "$ref": "#/$defs/color" }, "light": { "$ref": "#/$defs/color" }, "subtle": { "$ref": "#/$defs/color" } } },
+    "alphaSet": { "type": "object", "required": ["90", "60", "30", "10", "5"], "additionalProperties": false, "properties": { "90": { "$ref": "#/$defs/color" }, "60": { "$ref": "#/$defs/color" }, "30": { "$ref": "#/$defs/color" }, "10": { "$ref": "#/$defs/color" }, "5": { "$ref": "#/$defs/color" } } }
+  }
+}

@@ -1,0 +1,3 @@
+defect_id,severity,area,description,evidence,status,remediation
+F5-P1-001,P1,accessibility,新增用户管理 DataTablePattern 与既有 Pattern 使用重复 landmark aria-label,初次 pnpm test:strict exit 1；axe-core 报 landmark-unique，三浏览器复现,CLOSED,DataTablePattern 增加 ariaLabel；用户管理使用唯一“用户管理数据表格”及唯一分页 label；pnpm test:strict exit 0
+F5-P1-002,P1,showcase-test,用户管理测试初始使用 UModal wrapper testid 和非唯一密码/用户文本定位器,初次 pnpm test:showcase exit 1；保留失败报告并修正定位器,CLOSED,改用 role dialog、exact field labels 和 table cell locator；pnpm test:showcase exit 0

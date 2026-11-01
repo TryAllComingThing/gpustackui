@@ -1,0 +1,10 @@
+component,implementation,evidence,states_or_capabilities,real_component,stable_test_ids,notes
+Button,UButton + gp-button,showcase/sections/ComponentSection.vue:12-15,"default, hover CSS, focus CSS, disabled, loading",YES,button-primary/button-disabled/button-loading/button-modal-open,Modal opener is neutral outline
+Input,UInput + gp-input,showcase/sections/ComponentSection.vue:17; showcase/sections/FormSection.vue:73-81,"default, focus CSS, form error, disabled via UForm",YES,section-form/input inferred by label,No explicit readonly Showcase case
+Select,USelect,showcase/sections/FormSection.vue:76-78,"default, focus, disabled via UForm, selected option",YES,combobox role,Error is surfaced through UFormField
+Form,UForm + UFormField + Zod,showcase/sections/FormSection.vue:4-60,"required error, format error, submit, reset, disabled",YES,section-form,Uses local Zod safeParse plus UForm context
+Table,DrpDataTable + UTable + UPagination,src/components/common/DrpDataTable.vue:1-113; showcase/App.vue:191-193,"normal, loading, empty, sorting, pagination, row selection",YES,section-table,Sorting button is adapter behavior
+Modal,UModal,showcase/sections/ComponentSection.vue:20,default/focus/overlay/close,YES,component-modal,Focus trap/Escape not separately asserted
+Navigation,DrpSidebarNav + UNavigationMenu,src/components/common/DrpSidebarNav.vue:1-58; showcase/App.vue:184-187,"expand, collapse, selected, keyboard Enter",YES,section-navigation,Uses Showcase memory router
+Breadcrumb,DrpBreadcrumb + UBreadcrumb,src/components/common/DrpBreadcrumb.vue:1-12; showcase/App.vue:187,"current item and aria-label",YES,breadcrumb,Rendered in Showcase content card; production Header integration UNKNOWN
+Theme switch,theme.manager + native select,src/theme/theme.manager.ts:6-20; showcase/App.vue:178,"standard/business/future, localStorage, refresh restore",YES,theme-select,No first-paint inline script

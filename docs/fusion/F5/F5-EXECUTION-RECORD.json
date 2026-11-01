@@ -1,0 +1,167 @@
+{
+  "stage": "F5",
+  "status": "VERIFIED",
+  "started_at": "2026-11-01T15:44:59.127650+00:00",
+  "finished_at": "2026-11-01T15:46:34.797289+00:00",
+  "environment": {
+    "cwd": "/Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend",
+    "platform": "macOS-15.2-arm64-arm-64bit",
+    "python": "3.11.9",
+    "node": "v22.22.0",
+    "pnpm": "9.3.0",
+    "playwright": "Version 1.64.1"
+  },
+  "quality_entry": "pnpm quality:check",
+  "release_decision": "PASS",
+  "check_count": 18,
+  "checks": [
+    {
+      "check_id": "S-001",
+      "category": "Static",
+      "command": "python3 scripts/validate_contracts.py",
+      "exit_code": 0,
+      "duration_ms": 43,
+      "evidence_path": "docs/quality/evidence/S-001-contracts.log"
+    },
+    {
+      "check_id": "S-002",
+      "category": "Static",
+      "command": "pnpm validate:skills",
+      "exit_code": 0,
+      "duration_ms": 208,
+      "evidence_path": "docs/quality/evidence/S-002-skills.log"
+    },
+    {
+      "check_id": "S-003",
+      "category": "Static",
+      "command": "pnpm check:structure",
+      "exit_code": 0,
+      "duration_ms": 200,
+      "evidence_path": "docs/quality/evidence/S-003-structure.log"
+    },
+    {
+      "check_id": "S-004",
+      "category": "Static",
+      "command": "pnpm typecheck",
+      "exit_code": 0,
+      "duration_ms": 2055,
+      "evidence_path": "docs/quality/evidence/S-004-typecheck.log"
+    },
+    {
+      "check_id": "S-005",
+      "category": "Static",
+      "command": "pnpm typecheck:showcase",
+      "exit_code": 0,
+      "duration_ms": 3381,
+      "evidence_path": "docs/quality/evidence/S-005-typecheck-showcase.log"
+    },
+    {
+      "check_id": "S-006",
+      "category": "Static",
+      "command": "pnpm lint",
+      "exit_code": 0,
+      "duration_ms": 428,
+      "evidence_path": "docs/quality/evidence/S-006-lint.log"
+    },
+    {
+      "check_id": "S-007",
+      "category": "Static",
+      "command": "pnpm validate:f2-tokens",
+      "exit_code": 0,
+      "duration_ms": 203,
+      "evidence_path": "docs/quality/evidence/S-007-f2-tokens.log"
+    },
+    {
+      "check_id": "S-008",
+      "category": "Static",
+      "command": "pnpm validate:f3-tokens",
+      "exit_code": 0,
+      "duration_ms": 209,
+      "evidence_path": "docs/quality/evidence/S-008-f3-tokens.log"
+    },
+    {
+      "check_id": "S-009",
+      "category": "Static",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "duration_ms": 24,
+      "evidence_path": "docs/quality/evidence/S-009-diff-check.log"
+    },
+    {
+      "check_id": "B-001",
+      "category": "Build",
+      "command": "pnpm build",
+      "exit_code": 0,
+      "duration_ms": 4631,
+      "evidence_path": "docs/quality/evidence/B-001-production-build.log"
+    },
+    {
+      "check_id": "B-002",
+      "category": "Build",
+      "command": "pnpm build:showcase",
+      "exit_code": 0,
+      "duration_ms": 6345,
+      "evidence_path": "docs/quality/evidence/B-002-showcase-build.log"
+    },
+    {
+      "check_id": "F-001",
+      "category": "Functional",
+      "command": "pnpm test:unit",
+      "exit_code": 0,
+      "duration_ms": 905,
+      "evidence_path": "docs/quality/evidence/F-001-unit.log"
+    },
+    {
+      "check_id": "F-002",
+      "category": "Functional",
+      "command": "pnpm test:e2e",
+      "exit_code": 0,
+      "duration_ms": 6172,
+      "evidence_path": "docs/quality/evidence/F-002-production-e2e.log"
+    },
+    {
+      "check_id": "F-003",
+      "category": "Functional",
+      "command": "pnpm test:showcase",
+      "exit_code": 0,
+      "duration_ms": 19380,
+      "evidence_path": "docs/quality/evidence/F-003-showcase.log"
+    },
+    {
+      "check_id": "V-001",
+      "category": "Visual",
+      "command": "pnpm test:visual",
+      "exit_code": 0,
+      "duration_ms": 21435,
+      "evidence_path": "docs/quality/evidence/V-001-visual.log"
+    },
+    {
+      "check_id": "A-001",
+      "category": "Accessibility",
+      "command": "pnpm test:accessibility",
+      "exit_code": 0,
+      "duration_ms": 10187,
+      "evidence_path": "docs/quality/evidence/A-001-accessibility.log"
+    },
+    {
+      "check_id": "A-002",
+      "category": "Accessibility",
+      "command": "pnpm test:strict",
+      "exit_code": 0,
+      "duration_ms": 19065,
+      "evidence_path": "docs/quality/evidence/A-002-strict-axe-browser-visual.log"
+    },
+    {
+      "check_id": "A-003",
+      "category": "Accessibility",
+      "command": "pnpm check:showcase-isolation",
+      "exit_code": 0,
+      "duration_ms": 207,
+      "evidence_path": "docs/quality/evidence/A-003-showcase-isolation.log"
+    }
+  ],
+  "code_diff": "docs/fusion/F5/F5-CODE-DIFF.patch",
+  "screenshots": "docs/fusion/F5/F5-SCREENSHOTS.txt",
+  "quality_report": "docs/quality/QUALITY-REPORT.md",
+  "defects": "docs/fusion/F5/F5-DEFECTS.csv"
+}

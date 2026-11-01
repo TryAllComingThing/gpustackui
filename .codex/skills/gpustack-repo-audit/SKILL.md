@@ -5,12 +5,19 @@ description: Audit an existing GPUStack frontend repository without modifying ap
 
 # gpustack-repo-audit
 
+## Shared repository contract
+
+- The only active design authority is the root [`DESIGN.md`](../../../DESIGN.md); identify archived or stale references without treating them as requirements.
+- Audit the real Vue/Nuxt UI/Theme/Density/Showcase/test sources. Do not assume a GPU-specific Profile or invent one.
+- Classify existing assets as REUSE, MODIFY, REMOVE, or DEFER with repository-relative evidence and line/path references.
+- Reports must state environment, commands, exit codes, unknowns, risks, and unexecuted checks. Never claim a test or build without evidence.
+
 ## Authority and preconditions
 Read this skill contract and validate it with `python3 scripts/validate_contracts.py` before execution. The contract is descriptive; enforcement is via schemas and Harness. Never self-approve.
 Read repository `AGENTS.md`, `DESIGN.md`, task manifest and real source files. Do not claim tests passed without executable evidence. Do not alter backend API or permissions.
 
 ## Workflow
-1. Confirm git SHA, dirty tree, runtime and package manager without changing files.
+1. Confirm git SHA, dirty tree, runtime, package manager, root DESIGN.md authority, and active Showcase/quality entry points without changing files.
 2. Inventory routes, views, components, stores, API calls, authentication, permissions, themes, locale and tests.
 3. For every claim attach repository-relative path and line numbers; mark unknowns UNKNOWN.
 4. Produce page inventory, API contract, design gap, risk register and migration ADR recommendation.

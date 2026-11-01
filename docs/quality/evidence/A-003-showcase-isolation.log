@@ -1,0 +1,5 @@
+
+> gpustack-vue-frontend@0.2.0 check:showcase-isolation /Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend
+> python3 quality/check_showcase_isolation.py
+
+PASS: no known showcase-only markers in dist; review imports separately

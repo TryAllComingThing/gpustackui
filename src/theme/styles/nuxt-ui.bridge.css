@@ -1,0 +1,22 @@
+/* Shared Nuxt UI bridge. Keep component colors on the --gp-* runtime contract. */
+:root {
+  --ui-primary: var(--gp-primary);
+  --ui-secondary: var(--gp-info-fg);
+  --ui-success: var(--gp-success-fg);
+  --ui-warning: var(--gp-warning-fg);
+  /* Use the pressed semantic tone for text on subtle error surfaces. */
+  --ui-error: var(--gp-danger-pressed);
+  --ui-info: var(--gp-info-fg);
+  --ui-bg: var(--gp-card-bg);
+  --ui-bg-muted: var(--gp-page-bg);
+  --ui-bg-elevated: var(--gp-page-bg);
+  --ui-bg-accented: var(--gp-background-disabled);
+  --ui-text: var(--gp-text-primary);
+  --ui-text-toned: var(--gp-text-n800);
+  --ui-text-muted: var(--gp-text-secondary);
+  --ui-text-dimmed: var(--gp-text-secondary);
+  --ui-text-highlighted: var(--gp-text-primary);
+  --ui-border: var(--gp-border-default);
+  --ui-border-muted: var(--gp-border-default);
+  --ui-border-accented: var(--gp-line-n300);
+}

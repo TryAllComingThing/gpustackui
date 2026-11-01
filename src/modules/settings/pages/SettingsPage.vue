@@ -1,0 +1,1 @@
+<template><section class="gp-page" data-testid="production-settings"><header class="gp-page-header"><div><h1 class="gp-page-title">系统设置</h1><p class="gp-secondary">管理主题、密度和应用偏好。</p></div></header><div class="gp-card"><p class="gp-body">设置项将按照现有权限和后端契约逐步接入。</p></div></section></template>

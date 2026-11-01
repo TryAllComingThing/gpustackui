@@ -1,0 +1,1 @@
+<template><section class="gp-page" data-testid="production-models"><header class="gp-page-header"><div><h1 class="gp-page-title">模型服务</h1><p class="gp-secondary">管理模型登记和服务配置。</p></div></header><div class="gp-card"><p class="gp-body">暂无需要处理的模型服务。</p></div></section></template>

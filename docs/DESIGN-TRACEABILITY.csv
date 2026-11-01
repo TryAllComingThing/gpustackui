@@ -1,0 +1,16 @@
+requirement_id,source,requirement,target_source,target_test,status,classification
+DS-001,DESIGN.md:theme-token-section,Five approved theme runtime IDs and semantic tokens,src/theme/theme.types.ts; src/theme/theme.registry.ts; src/theme/styles/themes/*.css,tests/visual/showcase.spec.ts; tests/strict/f4.strict.spec.ts,ACTIVE,REUSE
+DS-002,DESIGN.md:Density,Theme and density remain orthogonal,src/theme/density.manager.ts; showcase/main.ts,tests/e2e/f3-third-round.e2e.ts; tests/strict/f4.strict.spec.ts,ACTIVE,MODIFY
+DS-003,DESIGN.md:Typography,Nine semantic typography levels,src/theme/typography.manager.ts; src/theme/tokens/typography.json,tests/e2e/f3-specialized.e2e.ts; tests/unit/density-typography.spec.ts,ACTIVE,REUSE
+GP-001,DESIGN.md:Layout,Header defaults to 60px,src/theme/layout.manager.ts; src/components/layout/AppShell.vue,tests/e2e/f3-specialized.e2e.ts,ACTIVE,REUSE
+GP-002,DESIGN.md:Layout,Sidebar defaults to 200px/64px,src/theme/layout.manager.ts; src/components/common/DrpSidebarNav.vue,tests/e2e/production-routes.e2e.ts; tests/visual/showcase.spec.ts,ACTIVE,REUSE
+GP-003,DESIGN.md:Layout,Breadcrumb is in Header,src/App.vue; src/components/common/DrpBreadcrumb.vue,tests/e2e/f3-specialized.e2e.ts; tests/accessibility/showcase.a11y.spec.ts,ACTIVE,REUSE
+F4-COMP-001,docs/fusion/F4/F4-API-CONTRACT.md,Thin public adapters preserve Nuxt UI contracts,src/components/common/DrpDataTable.vue; DrpModal.vue; DrpDrawer.vue; DrpSidebarNav.vue; DrpBreadcrumb.vue,tests/strict/f4.strict.spec.ts; tests/visual/showcase.spec.ts,ACTIVE,REUSE
+F4-PATTERN-001,docs/fusion/F4/F4-PATTERN-CONTRACT.md,Complex form uses Zod cross-field validation and async submit,src/components/patterns/ComplexFormPattern.vue; showcase/sections/PatternSection.vue,tests/visual/showcase.spec.ts,ACTIVE,REUSE
+F4-PATTERN-002,docs/fusion/F4/F4-PATTERN-CONTRACT.md,Data table uses search/filter/sort/page/actions/error/loading/empty,src/components/patterns/DataTablePattern.vue; src/components/common/DrpDataTable.vue,tests/visual/showcase.spec.ts; tests/strict/f4.strict.spec.ts,ACTIVE,REUSE
+QA-001,.codex/skills/gpustack-design-system/SKILL.md,Real evidence and human approval required, scripts/gate.py; scripts/task_state.py; docs/fusion/F4/F4-GATE-RESULT.json; docs/fusion/F4/F4-STATE.json,docs/fusion/F4/F4-TEST-REPORT.md,ACTIVE,REUSE
+QA-002,AGENTS.md,Showcase excluded from production build,showcase/vite.config.ts; quality/check_showcase_isolation.py,quality/check_showcase_isolation.py; pnpm build,ACTIVE,REUSE
+SHOW-001,DESIGN.md:Showcase,Showcase uses real components and local fixtures,showcase/App.vue; showcase/main.ts; showcase/fixtures/*,tests/visual/showcase.spec.ts; tests/strict/f4.strict.spec.ts,ACTIVE,MODIFY
+SHOW-002,DESIGN.md:Showcase,Showcase must expose Tokens/Components/States/Patterns/Accessibility/Quality,showcase/App.vue; showcase/showcase.css,tests/visual/showcase.spec.ts,ACTIVE,MODIFY
+GOV-001,DESIGN.md:authority,Only root DESIGN.md is design authority,DESIGN.md; docs/DESIGN-TRACEABILITY.csv,python3 scripts/validate_contracts.py,ACTIVE,REUSE
+GOV-002,AGENTS.md,No duplicate demo components or second theme engine,showcase/App.vue imports src/theme and src/components; no showcase component wrappers,rg audit; pnpm check:showcase-isolation,ACTIVE,REUSE

@@ -1,0 +1,1 @@
+<template><section class="gp-page" data-testid="production-deployments"><header class="gp-page-header"><div><h1 class="gp-page-title">部署任务</h1><p class="gp-secondary">跟踪模型部署任务和执行状态。</p></div></header><div class="gp-card"><p class="gp-body">暂无部署任务。</p></div></section></template>

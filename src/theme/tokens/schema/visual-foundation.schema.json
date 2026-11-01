@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpustack.local/schema/visual-foundation.json",
+  "title": "SaaS Visual Foundation",
+  "type": "object",
+  "required": ["status", "scope", "radius", "shadow", "motion", "icon", "layout", "dataViz"],
+  "properties": {
+    "status": {"const": "APPROVED"},
+    "scope": {"type": "string"},
+    "source": {"type": "string"},
+    "radius": {"type": "object", "required": ["A2", "B", "C", "D", "E"], "additionalProperties": false, "patternProperties": {"^(A2|B|C|D|E)$": {"type": "object", "required": ["sm", "md", "lg", "xl"], "additionalProperties": false, "patternProperties": {"^(sm|md|lg|xl)$": {"type": "string", "pattern": "^[0-9]+px$"}}}}},
+    "shadow": {"type": "object", "required": ["elevation0", "elevation1", "elevation2", "elevation3"], "additionalProperties": false, "properties": {"elevation0": {"const": "none"}, "elevation1": {"type": "string"}, "elevation2": {"type": "string"}, "elevation3": {"type": "string"}}},
+    "motion": {"type": "object", "required": ["standard", "overlay", "reduced", "easing"], "additionalProperties": false, "properties": {"standard": {"pattern": "^[0-9]+ms$"}, "overlay": {"pattern": "^[0-9]+ms$"}, "reduced": {"const": "0ms"}, "easing": {"type": "string"}}},
+    "icon": {"type": "object", "required": ["family", "lineWidth", "sizes"], "additionalProperties": false, "properties": {"family": {"const": "Lucide"}, "lineWidth": {"const": 2}, "sizes": {"type": "object", "required": ["xs", "sm", "md", "lg"], "additionalProperties": false, "patternProperties": {"^(xs|sm|md|lg)$": {"pattern": "^[0-9]+px$"}}}}},
+    "layout": {"type": "object", "required": ["breakpoints", "zIndex"], "additionalProperties": false, "properties": {"breakpoints": {"type": "object", "required": ["sm", "md", "lg", "xl"], "additionalProperties": false, "patternProperties": {"^(sm|md|lg|xl)$": {"pattern": "^[0-9]+px$"}}}, "zIndex": {"type": "object", "required": ["base", "header", "sidebar", "popover", "modal", "toast"], "additionalProperties": false, "patternProperties": {"^(base|header|sidebar|popover|modal|toast)$": {"type": "integer", "minimum": 0}}}}},
+    "dataViz": {"type": "object", "required": ["A2", "B", "C", "D", "E"], "additionalProperties": false, "patternProperties": {"^(A2|B|C|D|E)$": {"type": "object", "required": ["categorical6", "categorical12", "sequential5", "diverging7", "semantic", "neutral"], "properties": {"categorical6": {"type": "array", "minItems": 6, "maxItems": 6}, "categorical12": {"type": "array", "minItems": 12, "maxItems": 12}, "sequential5": {"type": "array", "minItems": 5, "maxItems": 5}, "diverging7": {"type": "array", "minItems": 7, "maxItems": 7}, "semantic": {"type": "object", "required": ["brand", "success", "warning", "danger", "info"]}, "neutral": {"type": "array", "minItems": 7, "maxItems": 7}}}}}
+  },
+  "additionalProperties": false
+}

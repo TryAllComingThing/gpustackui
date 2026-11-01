@@ -1,0 +1,1 @@
+<template><section class="gp-page" data-testid="production-node-status"><header class="gp-page-header"><div><h1 class="gp-page-title">节点状态</h1><p class="gp-secondary">查看节点连接、健康状态和资源分配。</p></div></header><div class="gp-card"><p class="gp-body">当前在线节点 12 个，全部节点状态正常。</p></div></section></template>

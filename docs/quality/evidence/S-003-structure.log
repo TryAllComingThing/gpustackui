@@ -1,0 +1,5 @@
+
+> gpustack-vue-frontend@0.2.0 check:structure /Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend
+> python3 quality/check_structure.py
+
+Checked 60 required paths; missing=0

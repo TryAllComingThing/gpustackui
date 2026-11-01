@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpustack.local/schema/component-token-map.json",
+  "title": "SaaS Component Token Mapping",
+  "type": "object",
+  "propertyNames": { "pattern": "^[a-z][a-z0-9.-]*\\.[a-z][a-zA-Z0-9.-]*$" },
+  "additionalProperties": { "type": "string", "pattern": "^(surface|border|text|action|feedback|brand)\\.[a-zA-Z][a-zA-Z0-9.-]*$" }
+}

@@ -1,0 +1,11 @@
+component_contract,canonical_component_or_adapter,production_source,showcase_source,test_source,thin_adapter,status
+Button,Nuxt UI UButton,src/theme/styles/components.css,showcase/sections/ComponentSection.vue,tests/visual/showcase.spec.ts,none,ACTIVE
+Input,Nuxt UI UInput,src/theme/styles/components.css,showcase/sections/ComponentSection.vue; showcase/sections/FormSection.vue,tests/visual/showcase.spec.ts; tests/accessibility/showcase.a11y.spec.ts,none,ACTIVE
+Select,Nuxt UI USelect,src/App.vue; src/theme/styles/components.css,showcase/App.vue; showcase/sections/FormSection.vue,tests/e2e/production-routes.e2e.ts; tests/visual/showcase.spec.ts,none,ACTIVE
+Form,Nuxt UI UForm/UFormField,src/modules/*/pages/*.vue,showcase/sections/FormSection.vue,tests/visual/showcase.spec.ts,none,CONTRACT
+Table,DrpDataTable + UTable,src/components/common/DrpDataTable.vue,showcase/App.vue,tests/visual/showcase.spec.ts,DrpDataTable,ACTIVE
+Navigation,AppSidebarNav + Router,src/components/layout/AppSidebarNav.vue; src/app/router/index.ts,showcase/DrpSidebarNav usage,tests/e2e/production-routes.e2e.ts,AppSidebarNav,ACTIVE
+Breadcrumb,AppBreadcrumb,src/components/common/AppBreadcrumb.vue; src/components/layout/AppShell.vue,showcase/DrpBreadcrumb usage,tests/e2e/production-routes.e2e.ts,AppBreadcrumb,ACTIVE
+Modal,Nuxt UI UModal,PENDING: no production Modal target registered,showcase/sections/ComponentSection.vue,tests/visual/showcase.spec.ts; tests/accessibility/showcase.a11y.spec.ts,none,PENDING-PRODUCTION
+All 23 SaaS classes,contract registry,design-system/contracts/COMPONENT_MATRIX.csv,showcase/component-matrix.ts,docs/fusion/F3/F3-TEST-REPORT.md,none,CONTRACT
+Drawer,Nuxt UI UDrawer,PENDING: no production Drawer target registered,design-system/contracts/COMPONENT_MATRIX.csv contract only,PENDING production focus/escape/restore test,none,PENDING-PRODUCTION

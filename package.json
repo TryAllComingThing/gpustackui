@@ -14,10 +14,20 @@
     "lint": "eslint .",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "test:visual": "playwright test tests/visual",
+    "test:visual": "playwright test --config playwright.showcase.config.ts",
+    "test:strict": "playwright test --config playwright.strict.config.ts",
+    "test:accessibility": "playwright test --config playwright.accessibility.config.ts",
     "check:structure": "python3 quality/check_structure.py",
     "test:showcase": "playwright test --config playwright.showcase.config.ts",
-    "check:showcase-isolation": "python3 quality/check_showcase_isolation.py"
+    "check:showcase-isolation": "python3 quality/check_showcase_isolation.py",
+    "quality:check": "python3 scripts/quality_check.py",
+    "validate:design-contract": "python3 scripts/validate_contracts.py",
+    "validate:skills": "python3 scripts/validate_skills.py",
+    "validate:f2-tokens": "python3 scripts/validate_f2_tokens.py",
+    "validate:f3-tokens": "python3 scripts/validate_f3_tokens.py",
+    "generate:saas-visual-foundation": "python3 scripts/generate_saas_visual_foundation.py",
+    "validate:saas-visual-foundation": "python3 scripts/validate_saas_visual_foundation.py",
+    "generate:theme-css": "python3 scripts/generate_theme_css.py"
   },
   "dependencies": {
     "@nuxt/ui": "^4.12.0",
@@ -31,6 +41,7 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.0.0",
     "@vitejs/plugin-vue": "^5.2.0",

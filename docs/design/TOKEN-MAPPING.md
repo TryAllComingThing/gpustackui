@@ -1,11 +1,12 @@
-# V2.4 Token Mapping · M2
-主题源：`src/theme/styles/themes/{standard,business,future}.css`；共同 Token：`src/theme/styles/tokens.css`。
-| 语义 | 变量 | 使用方 |
-|---|---|---|
-| 品牌主色 | `--gp-primary` | 按钮、导航、链接 |
-| 卡片底色 | `--gp-card-bg` | 卡片、表单 |
-| 页面底色 | `--gp-page-bg` | 页面容器 |
-| 文字 | `--gp-text-primary` | 文本 |
-| 边框 | `--gp-border-default` | 输入框、表格 |
-| 聚焦 | `--gp-focus-ring` | 键盘焦点 |
-原始色值以三主题 CSS 为准，不另造一套 HEX 常量。
+# Vue 3 SaaS Framework Token Mapping
+
+Canonical source is `src/theme/tokens/`; the frozen source manifest is `docs/fusion/FRAMEWORK/FROZEN-SOURCES.csv`. Runtime components consume `--gp-*` variables from `src/theme/styles/`.
+
+- Primitive theme values: `src/theme/tokens/themes/*.json` → `scripts/generate_theme_css.py` → `src/theme/styles/themes/*.css`;
+- Typography: `src/theme/tokens/typography.json` → `src/theme/typography.manager.ts` → `--gp-type-*`;
+- Density: `src/theme/tokens/density.json` → `data-density` selectors and `--gp-*` geometry variables;
+- Surface, text, border, radius, shadow, motion and icon aliases: `src/theme/styles/tokens.css`;
+- Component and layout semantics: `src/theme/styles/components.css` and `layout.css`.
+- Nuxt UI bridge: `src/theme/styles/nuxt-ui.bridge.css`, imported by production `main.css` and `showcase/showcase.css`.
+
+Legacy aliases remain only for compatibility and must resolve to canonical `--gp-*` values. No business component may introduce theme HEX literals or a parallel `--ds-*` runtime namespace. Unapproved radius, shadow, motion, icon-family and DataViz extensions remain `PROPOSED`/`PENDING` in `docs/fusion/FRAMEWORK/FUSION-MATRIX.csv`.

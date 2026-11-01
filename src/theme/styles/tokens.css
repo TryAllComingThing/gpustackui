@@ -5,15 +5,62 @@
   --gp-font-xl: 18px; --gp-font-title: 24px; --gp-font-kpi: 32px;
   --gp-space-1: 4px; --gp-space-2: 8px; --gp-space-3: 12px; --gp-space-4: 16px;
   --gp-space-5: 20px; --gp-space-6: 24px; --gp-space-8: 32px;
+  --gp-space-10: 40px; --gp-space-12: 48px;
   --gp-radius-none: 0px; --gp-radius-tag: 3px; --gp-radius-control: 4px;
   --gp-radius-card: 6px; --gp-radius-dialog: 8px; --gp-radius-full: 9999px;
   --gp-shadow-card: 0 1px 3px #0000000D;
   --gp-shadow-popover: 0 8px 24px #0000001A;
   --gp-shadow-modal: 0 16px 48px #00000030;
   --gp-header-height: 60px; --gp-sidebar-width: 200px; --gp-sidebar-collapsed-width: 64px;
+  --gp-layout-header-height: var(--gp-header-height); --gp-layout-sidebar-width: var(--gp-sidebar-width); --gp-layout-sidebar-collapsed-width: var(--gp-sidebar-collapsed-width);
   --gp-menu-row-height: 44px; --gp-submenu-row-height: 40px;
   --gp-menu-icon-size: 18px; --gp-submenu-icon-size: 16px;
   --gp-content-padding-x: 24px; --gp-sidebar-transition: 200ms;
+  --gp-control-height: 36px; --gp-table-row-height: 44px; --gp-card-padding: 20px;
+  --gp-field-gap: 16px; --gp-section-gap: 24px; --gp-filter-gap: 12px; --gp-content-padding: 24px;
+  --gp-type-display-size: 32px; --gp-type-display-weight: 700; --gp-type-display-line-height: 40px;
+  --gp-type-page-title-size: 24px; --gp-type-page-title-weight: 600; --gp-type-page-title-line-height: 32px;
+  --gp-type-section-title-size: 20px; --gp-type-section-title-weight: 600; --gp-type-section-title-line-height: 28px;
+  --gp-type-card-title-size: 16px; --gp-type-card-title-weight: 600; --gp-type-card-title-line-height: 24px;
+  --gp-type-body-size: 14px; --gp-type-body-weight: 400; --gp-type-body-line-height: 22px;
+  --gp-type-body-small-size: 13px; --gp-type-body-small-weight: 400; --gp-type-body-small-line-height: 20px;
+  --gp-type-caption-size: 12px; --gp-type-caption-weight: 400; --gp-type-caption-line-height: 18px;
+  --gp-type-numeric-size: 14px; --gp-type-numeric-weight: 500; --gp-type-numeric-line-height: 22px;
+  --gp-type-code-size: 13px; --gp-type-code-weight: 400; --gp-type-code-line-height: 20px;
+  /* F3 base fallbacks mirror the approved Typography source before runtime init. */
+  --gp-type-numeric-variant: tabular-nums;
+  --gp-type-code-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* F3 semantic aliases derived from approved theme layers. */
+  --gp-surface-canvas: var(--gp-page-bg);
+  --gp-surface-default: var(--gp-card-bg);
+  --gp-surface-subtle: var(--gp-background-n100);
+  --gp-surface-raised: var(--gp-surface-white);
+  --gp-surface-overlay: var(--gp-surface-white);
+  /* Approved compatibility aliases; deferred extensions do not add new values. */
+  --gp-radius-interactive: var(--gp-radius-control);
+  --gp-radius-surface: var(--gp-radius-card);
+  --gp-shadow-surface: var(--gp-shadow-card);
+  --gp-shadow-elevated: var(--gp-shadow-popover);
+  --gp-shadow-overlay: var(--gp-shadow-modal);
+  --gp-motion-layout: var(--gp-sidebar-transition);
+  --gp-motion-none: var(--gp-motion-reduced);
+  --gp-icon-size-inline: var(--gp-icon-size-sm);
+  --gp-chart-primary: var(--gp-chart-1);
+  --gp-chart-secondary: var(--gp-chart-2);
+  --gp-border-divider: var(--gp-line-n250);
+  --gp-border-subtle: var(--gp-line-n200);
+  --gp-text-tertiary: var(--gp-text-n600);
+  --gp-text-muted: var(--gp-text-n500);
+  --gp-text-disabled: var(--gp-text-n400);
+  --gp-primary-accent: var(--gp-brand-g400);
+  --gp-primary-light: var(--gp-brand-g300);
+  --gp-icon-size-sm: var(--gp-submenu-icon-size);
+  --gp-icon-size-md: var(--gp-menu-icon-size);
+  --gp-motion-standard: var(--gp-sidebar-transition);
+  --gp-motion-reduced: 0ms;
+  --gp-control-height-md: 36px;
+  --gp-table-row-height-md: 44px;
+  --gp-card-padding-md: 20px;
   --gp-alpha-black-90: #000000E6; --gp-alpha-black-60: #00000099;
   --gp-alpha-black-30: #0000004D; --gp-alpha-black-10: #0000001A; --gp-alpha-black-5: #0000000D;
   --gp-alpha-white-90: #FFFFFFE6; --gp-alpha-white-60: #FFFFFF99;
@@ -30,5 +77,27 @@
   --border-default: var(--gp-border-default); --radius-control: var(--gp-radius-control);
   --radius-card: var(--gp-radius-card); --radius-dialog: var(--gp-radius-dialog);
   --radius-tag: var(--gp-radius-tag); --shadow-card: var(--gp-shadow-card);
+  --focus-ring: var(--gp-focus-ring); --white-alpha-10: var(--gp-alpha-white-10);
+  --white-alpha-60: var(--gp-alpha-white-60);
 }
 @media (prefers-reduced-motion: reduce) { :root { --gp-sidebar-transition: 0ms; } }
+
+/* F3 density contract: density is orthogonal to data-theme. */
+:root[data-density="compact"] {
+  --gp-control-height-md: 32px; --gp-control-height: 32px;
+  --gp-table-row-height-md: 36px; --gp-table-row-height: 36px;
+  --gp-card-padding-md: 12px; --gp-card-padding: 12px;
+  --gp-field-gap: 12px; --gp-section-gap: 16px; --gp-filter-gap: 8px; --gp-content-padding: 20px;
+}
+:root[data-density="standard"] {
+  --gp-control-height-md: 36px; --gp-control-height: 36px;
+  --gp-table-row-height-md: 44px; --gp-table-row-height: 44px;
+  --gp-card-padding-md: 20px; --gp-card-padding: 20px;
+  --gp-field-gap: 16px; --gp-section-gap: 24px; --gp-filter-gap: 12px; --gp-content-padding: 24px;
+}
+:root[data-density="comfortable"] {
+  --gp-control-height-md: 40px; --gp-control-height: 40px;
+  --gp-table-row-height-md: 52px; --gp-table-row-height: 52px;
+  --gp-card-padding-md: 24px; --gp-card-padding: 24px;
+  --gp-field-gap: 20px; --gp-section-gap: 32px; --gp-filter-gap: 16px; --gp-content-padding: 32px;
+}

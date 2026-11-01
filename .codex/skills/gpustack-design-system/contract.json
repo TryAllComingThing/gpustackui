@@ -19,6 +19,7 @@
   "gates": [
     "typecheck",
     "unit",
-    "visual"
+    "visual",
+    "accessibility"
   ]
 }

@@ -1,0 +1,1 @@
+<template><section class="gp-page" data-testid="production-services"><header class="gp-page-header"><div><h1 class="gp-page-title">服务实例</h1><p class="gp-secondary">查看已发布服务实例和运行状态。</p></div></header><div class="gp-card"><p class="gp-body">暂无服务实例。</p></div></section></template>

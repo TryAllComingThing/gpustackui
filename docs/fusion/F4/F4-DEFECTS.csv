@@ -1,0 +1,8 @@
+defect_id,severity,area,description,evidence,status,owner,next_action
+F4-P1-001,P1,navigation,旧 AppSidebarNav 文件曾保留手写树实现,现已保留原 Props 并转发 DrpSidebarNav；pnpm test:e2e exit 0,CLOSED,frontend,继续使用 DrpSidebarNav 作为唯一实现
+F4-P1-002,P1,breadcrumb,旧 AppBreadcrumb 文件曾保留原生 anchor 契约,现已保留原 Props 并转发 DrpBreadcrumb；pnpm test:e2e exit 0,CLOSED,frontend,继续使用 DrpBreadcrumb 作为唯一实现
+F4-P1-003,P1,overlay,生产 Modal/Drawer 尚无通用公共契约,DrpModal/DrpDrawer 已复用 UModal/UDrawer 并固定 v-model 与 slots；Showcase Playwright exit 0,CLOSED,frontend,业务页面按契约组合
+F4-P1-004,P1,data-table,DrpDataTable 未公开远程排序和分页事件,已增加 serverSide、sorting/pagination models 与 query event；Pattern Playwright exit 0,CLOSED,frontend,业务页面传入远程 loader
+F4-P1-005,P1,test-infrastructure,test:visual 使用默认配置导致 No tests found,改为 playwright.showcase.config.ts 后 pnpm test:visual exit 0,CLOSED,frontend,保持视觉命令与 Showcase 测试目录一致
+F4-P1-006,P1,accessibility,严格 axe-core 发现 error/dimmed 对比度不足、缺少页面 title、分页 landmark 重复,修正 Nuxt UI bridge、Showcase title 和分页 aria-label；严格 Chromium/Firefox/WebKit exit 0,CLOSED,frontend,保持 axe-core 严格扫描
+F4-P1-007,P1,production-table,GPU 资源生产页面使用原生手写表格,迁移至 DrpDataTable + UTable；生产 Chromium E2E exit 0,CLOSED,frontend,继续复用 DrpDataTable

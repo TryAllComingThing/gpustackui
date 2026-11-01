@@ -1,0 +1,71 @@
+{
+  "brand": {
+    "primary": "#1769AA",
+    "pressed": "#104B80",
+    "accent": "#155F9B",
+    "light": "#ACD0E5",
+    "subtle": "#E6F2F9"
+  },
+  "success": {
+    "default": "#16734F",
+    "pressed": "#11583D",
+    "hover": "#146A49",
+    "light": "#ADDCC9",
+    "background": "#E9F7F0"
+  },
+  "warning": {
+    "default": "#955000",
+    "pressed": "#783E00",
+    "hover": "#894900",
+    "light": "#F1C99E",
+    "background": "#FCF3E8"
+  },
+  "danger": {
+    "default": "#C72E38",
+    "pressed": "#A21E28",
+    "hover": "#B52732",
+    "light": "#F1B4B8",
+    "background": "#FBEDEF"
+  },
+  "info": {
+    "default": "#087496",
+    "pressed": "#075A75",
+    "hover": "#086A89",
+    "light": "#A9DCEB",
+    "background": "#E9F6FA"
+  },
+  "text": {
+    "primary": "#1D2B38",
+    "secondary": "#354859",
+    "tertiary": "#566A7B",
+    "muted": "#617486",
+    "disabled": "#8E9EAC"
+  },
+  "border": {
+    "default": "#CEDCE6",
+    "divider": "#E1EAF0",
+    "subtle": "#EDF3F6"
+  },
+  "background": {
+    "disabled": "#EEF3F7",
+    "canvas": "#F4F8FB",
+    "subtle": "#FAFCFD",
+    "default": "#FFFFFF"
+  },
+  "alpha": {
+    "black": {
+      "90": "#000000E6",
+      "60": "#00000099",
+      "30": "#0000004C",
+      "10": "#0000001A",
+      "5": "#0000000D"
+    },
+    "white": {
+      "90": "#FFFFFFE6",
+      "60": "#FFFFFF99",
+      "30": "#FFFFFF4C",
+      "10": "#FFFFFF1A",
+      "5": "#FFFFFF0D"
+    }
+  }
+}

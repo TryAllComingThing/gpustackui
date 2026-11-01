@@ -1,0 +1,358 @@
+{
+  "$schema": "https://gpustack.local/schema/visual-foundation.json",
+  "status": "APPROVED",
+  "scope": "SaaS generic visual foundation; no GPU runtime mapping",
+  "source": "Migrated SaaS-Design-System-V1.1-M0/DESIGN.md §§5-10; src/theme/tokens/themes/A2,B,C,D,E.json",
+  "radius": {
+    "A2": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "10px",
+      "xl": "14px"
+    },
+    "B": {
+      "sm": "6px",
+      "md": "10px",
+      "lg": "14px",
+      "xl": "18px"
+    },
+    "C": {
+      "sm": "2px",
+      "md": "4px",
+      "lg": "8px",
+      "xl": "12px"
+    },
+    "D": {
+      "sm": "6px",
+      "md": "12px",
+      "lg": "16px",
+      "xl": "20px"
+    },
+    "E": {
+      "sm": "4px",
+      "md": "8px",
+      "lg": "12px",
+      "xl": "16px"
+    }
+  },
+  "shadow": {
+    "elevation0": "none",
+    "elevation1": "0 1px 3px rgba(0, 0, 0, 0.08)",
+    "elevation2": "0 8px 24px rgba(0, 0, 0, 0.12)",
+    "elevation3": "0 16px 48px rgba(0, 0, 0, 0.18)"
+  },
+  "motion": {
+    "standard": "160ms",
+    "overlay": "200ms",
+    "reduced": "0ms",
+    "easing": "cubic-bezier(0.2, 0, 0, 1)"
+  },
+  "icon": {
+    "family": "Lucide",
+    "lineWidth": 2,
+    "sizes": {
+      "xs": "14px",
+      "sm": "16px",
+      "md": "20px",
+      "lg": "24px"
+    }
+  },
+  "layout": {
+    "breakpoints": {
+      "sm": "768px",
+      "md": "1024px",
+      "lg": "1280px",
+      "xl": "1600px"
+    },
+    "zIndex": {
+      "base": 0,
+      "header": 20,
+      "sidebar": 30,
+      "popover": 40,
+      "modal": 50,
+      "toast": 60
+    }
+  },
+  "dataViz": {
+    "A2": {
+      "categorical6": [
+        "#1554B4",
+        "#155CC4",
+        "#15803D",
+        "#9A4D00",
+        "#DC2626",
+        "#596579"
+      ],
+      "categorical12": [
+        "#1554B4",
+        "#2465C5",
+        "#103F8C",
+        "#155CC4",
+        "#15803D",
+        "#9A4D00",
+        "#DC2626",
+        "#596579",
+        "#1454B2",
+        "#16783C",
+        "#914800",
+        "#C52222"
+      ],
+      "sequential5": [
+        "#E8F1FF",
+        "#A9C7F4",
+        "#2465C5",
+        "#1554B4",
+        "#103F8C"
+      ],
+      "diverging7": [
+        "#DC2626",
+        "#F5B4B2",
+        "#F5C99D",
+        "#FFFFFF",
+        "#B4D7FF",
+        "#155CC4",
+        "#1554B4"
+      ],
+      "semantic": {
+        "brand": "#1554B4",
+        "success": "#15803D",
+        "warning": "#9A4D00",
+        "danger": "#DC2626",
+        "info": "#155CC4"
+      },
+      "neutral": [
+        "#F5F8FC",
+        "#FAFBFD",
+        "#8995A6",
+        "#607086",
+        "#596579",
+        "#374151",
+        "#1F2937"
+      ]
+    },
+    "B": {
+      "categorical6": [
+        "#1469D8",
+        "#0869AD",
+        "#15803D",
+        "#A34F00",
+        "#D92D36",
+        "#56677F"
+      ],
+      "categorical12": [
+        "#1469D8",
+        "#1260C7",
+        "#0A4EAC",
+        "#0869AD",
+        "#15803D",
+        "#A34F00",
+        "#D92D36",
+        "#56677F",
+        "#08609E",
+        "#16783C",
+        "#974900",
+        "#C52630"
+      ],
+      "sequential5": [
+        "#EAF4FF",
+        "#B5D6F8",
+        "#1260C7",
+        "#1469D8",
+        "#0A4EAC"
+      ],
+      "diverging7": [
+        "#D92D36",
+        "#F6B8BB",
+        "#F8C99C",
+        "#FFFFFF",
+        "#A9DDF5",
+        "#0869AD",
+        "#1469D8"
+      ],
+      "semantic": {
+        "brand": "#1469D8",
+        "success": "#15803D",
+        "warning": "#A34F00",
+        "danger": "#D92D36",
+        "info": "#0869AD"
+      },
+      "neutral": [
+        "#F7FAFF",
+        "#FBFCFF",
+        "#91A0B3",
+        "#62748D",
+        "#56677F",
+        "#40516B",
+        "#202D40"
+      ]
+    },
+    "C": {
+      "categorical6": [
+        "#1769AA",
+        "#087496",
+        "#16734F",
+        "#955000",
+        "#C72E38",
+        "#566A7B"
+      ],
+      "categorical12": [
+        "#1769AA",
+        "#155F9B",
+        "#104B80",
+        "#087496",
+        "#16734F",
+        "#955000",
+        "#C72E38",
+        "#566A7B",
+        "#086A89",
+        "#146A49",
+        "#894900",
+        "#B52732"
+      ],
+      "sequential5": [
+        "#E6F2F9",
+        "#ACD0E5",
+        "#155F9B",
+        "#1769AA",
+        "#104B80"
+      ],
+      "diverging7": [
+        "#C72E38",
+        "#F1B4B8",
+        "#F1C99E",
+        "#FFFFFF",
+        "#A9DCEB",
+        "#087496",
+        "#1769AA"
+      ],
+      "semantic": {
+        "brand": "#1769AA",
+        "success": "#16734F",
+        "warning": "#955000",
+        "danger": "#C72E38",
+        "info": "#087496"
+      },
+      "neutral": [
+        "#F4F8FB",
+        "#FAFCFD",
+        "#8E9EAC",
+        "#617486",
+        "#566A7B",
+        "#354859",
+        "#1D2B38"
+      ]
+    },
+    "D": {
+      "categorical6": [
+        "#315CF5",
+        "#5555C9",
+        "#167A51",
+        "#9A4E00",
+        "#D42D46",
+        "#5B607A"
+      ],
+      "categorical12": [
+        "#315CF5",
+        "#2D53DF",
+        "#2546C7",
+        "#5555C9",
+        "#167A51",
+        "#9A4E00",
+        "#D42D46",
+        "#5B607A",
+        "#4D4DB9",
+        "#147049",
+        "#914900",
+        "#C12740"
+      ],
+      "sequential5": [
+        "#EDF0FF",
+        "#B9C7FF",
+        "#2D53DF",
+        "#315CF5",
+        "#2546C7"
+      ],
+      "diverging7": [
+        "#D42D46",
+        "#F5B6BF",
+        "#F6D0A8",
+        "#FFFFFF",
+        "#C7C8FF",
+        "#5555C9",
+        "#315CF5"
+      ],
+      "semantic": {
+        "brand": "#315CF5",
+        "success": "#167A51",
+        "warning": "#9A4E00",
+        "danger": "#D42D46",
+        "info": "#5555C9"
+      },
+      "neutral": [
+        "#F7F8FF",
+        "#FBFBFF",
+        "#969BB2",
+        "#696F88",
+        "#5B607A",
+        "#42465F",
+        "#24263A"
+      ]
+    },
+    "E": {
+      "categorical6": [
+        "#0D61F2",
+        "#1459BD",
+        "#167D49",
+        "#995000",
+        "#D12C38",
+        "#51637A"
+      ],
+      "categorical12": [
+        "#0D61F2",
+        "#3585FF",
+        "#084BC2",
+        "#1459BD",
+        "#167D49",
+        "#995000",
+        "#D12C38",
+        "#51637A",
+        "#1353AF",
+        "#157446",
+        "#8E4A00",
+        "#BF2733"
+      ],
+      "sequential5": [
+        "#EAF3FF",
+        "#A9CFFF",
+        "#3585FF",
+        "#0D61F2",
+        "#084BC2"
+      ],
+      "diverging7": [
+        "#D12C38",
+        "#F3B6BC",
+        "#F3CAA2",
+        "#FFFFFF",
+        "#B8D7FF",
+        "#1459BD",
+        "#0D61F2"
+      ],
+      "semantic": {
+        "brand": "#0D61F2",
+        "success": "#167D49",
+        "warning": "#995000",
+        "danger": "#D12C38",
+        "info": "#1459BD"
+      },
+      "neutral": [
+        "#F6F9FE",
+        "#FAFCFF",
+        "#8D9CB0",
+        "#5F7088",
+        "#51637A",
+        "#35445B",
+        "#202B3D"
+      ]
+    }
+  }
+}

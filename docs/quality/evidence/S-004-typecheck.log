@@ -1,0 +1,4 @@
+
+> gpustack-vue-frontend@0.2.0 typecheck /Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend
+> vue-tsc --noEmit -p tsconfig.json
+

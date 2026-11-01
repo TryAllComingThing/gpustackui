@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gpustack.local/schema/semantic-token-map.json",
+  "title": "SaaS Semantic Token Mapping",
+  "type": "object",
+  "propertyNames": { "pattern": "^(surface|border|text|action|feedback)\\.[a-zA-Z][a-zA-Z0-9.-]*$" },
+  "additionalProperties": { "type": "string", "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$" }
+}

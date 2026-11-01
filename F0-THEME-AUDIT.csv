@@ -1,0 +1,33 @@
+theme,source,token_group,required_tokens,observed,status,evidence
+standard,src/theme/styles/themes/standard.css,Brand,5,5,PRESENT,standard.css:3-7
+standard,src/theme/styles/themes/standard.css,Success,5,5,PRESENT,standard.css:8-12
+standard,src/theme/styles/themes/standard.css,Warning,5,5,PRESENT,standard.css:13-17
+standard,src/theme/styles/themes/standard.css,Danger,5,5,PRESENT,standard.css:18-22
+standard,src/theme/styles/themes/standard.css,Info,5,5,PRESENT,standard.css:23-27
+standard,src/theme/styles/themes/standard.css,Text,5,5,PRESENT,standard.css:28-32
+standard,src/theme/styles/themes/standard.css,Line,3,3,PRESENT,standard.css:33-35
+standard,src/theme/styles/themes/standard.css,Background,4,4,PRESENT,standard.css:36-39
+standard,src/theme/styles/themes/standard.css,Semantic aliases,29,29,PRESENT,standard.css:40-68
+business,src/theme/styles/themes/business.css,Brand,5,5,PRESENT,business.css:3-7
+business,src/theme/styles/themes/business.css,Success,5,5,PRESENT,business.css:8-12
+business,src/theme/styles/themes/business.css,Warning,5,5,PRESENT,business.css:13-17
+business,src/theme/styles/themes/business.css,Danger,5,5,PRESENT,business.css:18-22
+business,src/theme/styles/themes/business.css,Info,5,5,PRESENT,business.css:23-27
+business,src/theme/styles/themes/business.css,Text,5,5,PRESENT,business.css:28-32
+business,src/theme/styles/themes/business.css,Line,3,3,PRESENT,business.css:33-35
+business,src/theme/styles/themes/business.css,Background,4,4,PRESENT,business.css:36-39
+business,src/theme/styles/themes/business.css,Semantic aliases,29,29,PRESENT,business.css:40-68
+future,src/theme/styles/themes/future.css,Brand,5,5,PRESENT,future.css:3-7
+future,src/theme/styles/themes/future.css,Success,5,5,PRESENT,future.css:8-12
+future,src/theme/styles/themes/future.css,Warning,5,5,PRESENT,future.css:13-17
+future,src/theme/styles/themes/future.css,Danger,5,5,PRESENT,future.css:18-22
+future,src/theme/styles/themes/future.css,Info,5,5,PRESENT,future.css:23-27
+future,src/theme/styles/themes/future.css,Text,5,5,PRESENT,future.css:28-32
+future,src/theme/styles/themes/future.css,Line,3,3,PRESENT,future.css:33-35
+future,src/theme/styles/themes/future.css,Background,4,4,PRESENT,future.css:36-39
+future,src/theme/styles/themes/future.css,Semantic aliases,29,29,PRESENT,future.css:40-68
+shared,tokens.css,Black/white alpha,10,10,PRESENT,src/theme/styles/tokens.css:17-20
+shared,theme.types.ts,Theme IDs,3,3,PRESENT,src/theme/theme.types.ts:1
+shared,theme.manager.ts,Persistence,1,1,PRESENT,src/theme/theme.manager.ts:3,6-18
+shared,main.css,Theme import chain,3,3,PRESENT,src/theme/styles/main.css:1-4
+shared,theme.registry.ts,Registry labels,3,3,PRESENT,src/theme/theme.registry.ts:2-6

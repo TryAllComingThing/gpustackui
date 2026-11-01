@@ -1,0 +1,9 @@
+{
+  "button.primary.background": "action.primary.default",
+  "button.primary.hoverBackground": "action.primary.hover",
+  "button.primary.pressedBackground": "action.primary.pressed",
+  "input.border": "border.default",
+  "card.background": "surface.default",
+  "table.header.background": "surface.subtle",
+  "navigation.active.background": "brand.subtle"
+}

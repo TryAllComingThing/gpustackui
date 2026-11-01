@@ -1,0 +1,3 @@
+component,contract_source,production_target,current_implementation,required_states,required_evidence,status
+Modal,design-system/contracts/COMPONENT_MATRIX.csv:14,PENDING production component target,Showcase UModal only,open closing loading error focus-trap escape restore,production keyboard/focus contract and route owner,PENDING-PRODUCTION
+Drawer,design-system/contracts/COMPONENT_MATRIX.csv:15,PENDING production component target,No production target,open closing loading error focus-trap scroll restore,production keyboard/focus contract and route owner,PENDING-PRODUCTION

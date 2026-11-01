@@ -1,0 +1,5 @@
+
+> gpustack-vue-frontend@0.2.0 validate:f2-tokens /Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend
+> python3 scripts/validate_f2_tokens.py
+
+PASS: F2 primitive schema, key sets and semantic/component references validated

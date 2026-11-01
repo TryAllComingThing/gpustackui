@@ -1,0 +1,26 @@
+
+> gpustack-vue-frontend@0.2.0 test:visual /Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend
+> playwright test --config playwright.showcase.config.ts
+
+
+Running 4 tests using 1 worker
+
+  ✓  1 tests/visual/showcase.spec.ts:2:1 › five themes persist and render components (2.7s)
+  ✓  2 tests/visual/showcase.spec.ts:68:1 › M2 table, form and navigation states work with mock data (4.2s)
+  ✓  3 tests/visual/showcase.spec.ts:138:1 › reusable interaction patterns cover cross-field form and remote table states (2.0s)
+  ✓  4 tests/visual/showcase.spec.ts:168:1 › user management acceptance page covers CRUD form and data states (2.4s)
+
+  4 passed (20.7s)
+
+[WebServer] (node:88580) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88603) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88639) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88662) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:88663) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+(node:88673) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
