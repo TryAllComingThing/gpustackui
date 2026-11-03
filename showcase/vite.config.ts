@@ -20,7 +20,7 @@ const showcaseEntryRedirect = (): Plugin => ({
 })
 export default defineConfig({
   root: resolve(showcaseDir, '..'),
-  plugins: [vue(), ui(), showcaseEntryRedirect()],
+  plugins: [vue(), ui({ icon: { clientBundle: { scan: true } } }), showcaseEntryRedirect()],
   server: {
     port: 4174,
     strictPort: true,

@@ -1,6 +1,0 @@
-tests/strict/f4.strict.spec.ts-snapshots/f4-patterns-chromium-darwin.png
-tests/strict/f4.strict.spec.ts-snapshots/f4-patterns-firefox-darwin.png
-tests/strict/f4.strict.spec.ts-snapshots/f4-patterns-webkit-darwin.png
-tests/strict/f4.strict.spec.ts-snapshots/f4-states-chromium-darwin.png
-tests/strict/f4.strict.spec.ts-snapshots/f4-states-firefox-darwin.png
-tests/strict/f4.strict.spec.ts-snapshots/f4-states-webkit-darwin.png

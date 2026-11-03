@@ -67,10 +67,11 @@ async function handleSubmit() {
   clearErrors()
   submitting.value = true
   try {
-    await props.submitter?.({ ...result.data })
+    const data = result.data as Record<string, unknown>
+    await props.submitter?.({ ...data })
     submitted.value = true
-    emit('submit', { ...result.data })
-    emit('success', { ...result.data })
+    emit('submit', { ...data })
+    emit('success', { ...data })
   } catch (error) {
     formError.value = error instanceof Error ? error.message : '提交失败，请稍后重试'
     emit('error', formError.value)

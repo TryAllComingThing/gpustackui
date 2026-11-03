@@ -1,3 +1,0 @@
-overlay_id,component,source,scope,open_model,required_states,keyboard_contract,token_contract,status
-OV-001,Modal,DrpModal -> UModal,通用生产弹窗,"v-model:open:boolean",default/open/loading/error/success,Tab focus trap; Escape dismiss; restore trigger focus,--gp-* via Nuxt UI bridge,CLOSED
-OV-002,Drawer,DrpDrawer -> UDrawer,通用生产抽屉,"v-model:open:boolean",default/open/loading/error/empty,Tab focus trap; Escape dismiss; direction-aware close,--gp-* via Nuxt UI bridge,CLOSED

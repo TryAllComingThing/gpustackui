@@ -1,9 +1,0 @@
-
-> gpustack-vue-frontend@0.2.0 validate:skills /Users/kyle/Documents/AI-Innovation-RD/GPUStack/gpustack-vue-frontend
-> python3 scripts/validate_skills.py
-
-PASS: design-system structure and repository paths validated
-PASS: page-migration structure and repository paths validated
-PASS: visual-qa structure and repository paths validated
-PASS: repo-audit structure and repository paths validated
-PASS: release-gate structure and repository paths validated

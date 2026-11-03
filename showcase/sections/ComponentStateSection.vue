@@ -44,13 +44,14 @@ const tabs = [
         <template #header><strong>Tabs / Dialog / Toast</strong></template>
         <UTabs v-model="tab" :items="tabs" color="primary" variant="link" />
         <div class="demo-row f4-state-row">
-          <UButton data-testid="state-dialog-open" @click="dialogOpen = true">打开 Dialog</UButton>
+        <DrpModal v-model:open="dialogOpen" title="确认操作" description="Dialog 使用 Nuxt UI focus trap 和 Escape 行为。" data-testid="state-dialog">
+          <UButton data-testid="state-dialog-open">打开 Dialog</UButton>
+          <template #body><p>这是 F4 Dialog 状态验证。</p></template>
+        </DrpModal>
           <UButton data-testid="state-drawer-open" color="neutral" variant="outline" @click="drawerOpen = true">打开 Drawer</UButton>
           <UButton data-testid="state-toast-open" color="neutral" variant="outline" @click="toastOpen = true">显示 Toast</UButton>
         </div>
-        <DrpModal v-model:open="dialogOpen" title="确认操作" description="Dialog 使用 Nuxt UI focus trap 和 Escape 行为。" data-testid="state-dialog">
-          <template #body><p>这是 F4 Dialog 状态验证。</p></template>
-        </DrpModal>
+
         <DrpDrawer v-model:open="drawerOpen" title="筛选条件" description="Drawer 使用 Nuxt UI 的移动端焦点和 Escape 行为。" data-testid="state-drawer">
           <template #body><p>这是 F4 Drawer 状态验证。</p></template>
         </DrpDrawer>

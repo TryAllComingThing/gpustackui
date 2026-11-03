@@ -1,9 +1,0 @@
-layer,token_schema,source_assets,runtime_target,compatibility,status,notes
-Primitive,src/theme/tokens/schema/primitive.schema.json,src/theme/tokens/themes/A2.json; B.json; C.json; D.json; E.json,src/theme/styles/themes/*.css,theme CSS only,ACTIVE,五主题字典键和 HEX 格式由 Schema/契约脚本校验
-Semantic,src/theme/tokens/schema/semantic.schema.json,src/theme/tokens/SEMANTIC_MAPPING.json,src/theme/styles/tokens.css --gp-surface/text/border/action/feedback,legacy aliases retained,ACTIVE,不引入 --ds-* namespace
-Component,src/theme/tokens/schema/component.schema.json,src/theme/tokens/COMPONENT_MAPPING.json,src/theme/styles/components.css; showcase/showcase.css; Nuxt UI --ui-*,Drp adapters remain thin,ACTIVE,Nuxt UI 变量映射到 --gp-*
-Theme IDs,docs/design/THEME-CONTRACT.md,src/theme/theme.types.ts; theme.registry.ts,data-theme and localStorage,existing IDs retained,REVIEW,默认公开 standard/business/future；sky/ocean 为兼容扩展
-Typography,src/theme/tokens/typography.json,typography.json,src/theme/typography.manager.ts --gp-type-*,legacy ds selectors retained,APPROVED,九级语义
-Density,src/theme/tokens/density.json,density.json,src/theme/density.manager.ts + data-density,old gp geometry aliases retained,APPROVED,与 data-theme 正交
-Nuxt UI,component.schema.json,showcase/showcase.css, --ui-primary/secondary/success/warning/error/info/bg/text/border,none,ACTIVE,只消费 gp semantic vars
-DataViz,not approved,existing theme CSS chart-1..5,--gp-chart-1..5,none,PROPOSED,六类新色板不得自行生成

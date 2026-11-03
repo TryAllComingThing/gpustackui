@@ -1,9 +1,0 @@
-defect_id,severity,area,description,evidence,disposition,status
-F3-D-001,P2,Radius,SaaS Radius values were missing from machine-readable source,F3-SOURCE-AUDIT.csv; visual-foundation.json,Added approved SaaS source; GPU mapping intentionally excluded,CLOSED
-F3-D-002,P2,Shadow,Canonical SaaS Elevation values were missing,F3-SOURCE-AUDIT.csv; visual-foundation.json,Added approved SaaS source; GPU mapping intentionally excluded,CLOSED
-F3-D-003,P2,Motion,Only SaaS motion ranges existed,F3-SOURCE-AUDIT.csv; visual-foundation.json,Added standard/overlay/reduced values; GPU mapping intentionally excluded,CLOSED
-F3-D-004,P2,Icon,Icon family and line-width source was missing,F3-SOURCE-AUDIT.csv; visual-foundation.json,Added Lucide/2px/xs-lg source; GPU mapping intentionally excluded,CLOSED
-F3-D-005,P2,Layout,Generic z-index/breakpoint source was missing,F3-SOURCE-AUDIT.csv; visual-foundation.json,Added generic source; GPU layout remains controlled,CLOSED
-F3-D-006,P2,DataViz,Theme-derived six palette families were missing,F3-SOURCE-AUDIT.csv; visual-foundation.json,Added per-theme palettes from existing semantic colors; GPU mapping excluded,CLOSED
-F3-D-007,P1,Layout,layout.css referenced undefined z-index custom properties,Specialized computed-style audit; scripts/validate_f3_tokens.py,Add explicit noncanonical CSS fallbacks (20/30/40) while deferring a formal z-index scale,CLOSED
-F3-P0-P1,INFO,Gate,No open P0/P1 defects found in F3 scope,all final commands and Playwright exit code 0,None,CLOSED

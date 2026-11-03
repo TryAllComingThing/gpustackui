@@ -3,3 +3,7 @@ dist/
 dist-showcase/
 test-results/
 playwright-report/
+
+dist-consumer-saas/
+dist-f7-enterprise-admin/
+dist-f7-knowledge-assets/

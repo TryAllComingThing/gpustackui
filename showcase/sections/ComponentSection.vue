@@ -4,6 +4,7 @@ import { sampleRows } from '../fixtures/sample'
 const name = ref('')
 const modalOpen = ref(false)
 const count = ref(0)
+const fixtureSelected = ref(false)
 </script>
 <template>
   <section class="gp-card demo-section" data-testid="section-components" aria-labelledby="component-heading">
@@ -15,6 +16,13 @@ const count = ref(0)
       <UButton class="gp-button gp-button--outline" data-testid="button-modal-open" variant="outline" @click="modalOpen = true">打开弹窗</UButton>
     </div>
     <div class="demo-row"><label for="demo-name">模型名称</label><UInput id="demo-name" class="gp-input" v-model="name" placeholder="请输入模型名称" /><span>输入值：{{ name || '（空）' }}</span></div>
+    <div class="demo-row" data-testid="input-state-fixtures">
+      <UInput model-value="Read-only fixture" readonly aria-label="Read-only fixture" data-testid="input-readonly" />
+      <UInput model-value="Disabled fixture" disabled aria-label="Disabled fixture" data-testid="input-disabled" />
+      <USelect :items="['One', 'Two']" model-value="One" disabled aria-label="Disabled select fixture" />
+      <UCheckbox v-model="fixtureSelected" label="Fixture selection" />
+      <UCheckbox disabled label="Disabled selection fixture" />
+    </div>
     <h3>数据表格 / Mock</h3>
     <table class="gp-table"><thead><tr><th>名称</th><th>状态</th><th>利用率</th></tr></thead><tbody><tr v-for="r in sampleRows" :key="r.id"><td>{{ r.name }}</td><td>{{ r.status }}</td><td>{{ r.utilization }}</td></tr></tbody></table>
     <UModal v-model:open="modalOpen" class="gp-modal" data-testid="component-modal" title="确认操作" description="M2 模拟交互，不会请求后端。"><template #body><p>这是 Nuxt UI 弹窗兼容性验证。</p><UButton class="gp-button gp-button--primary" @click="modalOpen = false">关闭</UButton></template></UModal>

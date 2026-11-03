@@ -27,28 +27,56 @@
     "validate:f3-tokens": "python3 scripts/validate_f3_tokens.py",
     "generate:saas-visual-foundation": "python3 scripts/generate_saas_visual_foundation.py",
     "validate:saas-visual-foundation": "python3 scripts/validate_saas_visual_foundation.py",
-    "generate:theme-css": "python3 scripts/generate_theme_css.py"
+    "generate:theme-css": "python3 scripts/generate_theme_css.py",
+    "typecheck:consumer": "vue-tsc --noEmit -p consumer-saas/tsconfig.json",
+    "build:consumer": "vite build --config consumer-saas/vite.config.ts",
+    "test:consumer": "playwright test --config consumer-saas/playwright.config.ts",
+    "typecheck:f7-enterprise": "vue-tsc --noEmit -p f7-enterprise-admin/tsconfig.json",
+    "build:f7-enterprise": "vite build --config f7-enterprise-admin/vite.config.ts",
+    "test:f7-enterprise": "playwright test --config f7-enterprise-admin/playwright.config.ts",
+    "typecheck:f7-knowledge": "vue-tsc --noEmit -p f7-knowledge-assets/tsconfig.json",
+    "build:f7-knowledge": "vite build --config f7-knowledge-assets/vite.config.ts",
+    "test:f7-knowledge": "playwright test --config f7-knowledge-assets/playwright.config.ts",
+    "test:f7-visual": "playwright test --config playwright.f7-visual.config.ts",
+    "validate:f7-boundaries": "node scripts/check_f7_boundaries.mjs",
+    "baseline:f7": "node scripts/f7_baseline_manifest.mjs",
+    "verify:f7-baseline": "node scripts/f7_baseline_manifest.mjs --verify",
+    "verify:f7-phase1": "node scripts/f7_phase1_verify.mjs",
+    "verify:f7-phase4": "node scripts/f7_phase4_verify.mjs",
+    "index:f7-evidence": "node scripts/f7_evidence_index.mjs",
+    "quality:release": "node scripts/quality_release.mjs",
+    "test:acceptance": "playwright test --config playwright.acceptance.config.ts",
+    "test:release-policy": "node --test tests/policy/release-evidence.policy.mjs"
   },
   "dependencies": {
     "@nuxt/ui": "^4.12.0",
-    "@vueuse/core": "^12.0.0",
-    "axios": "^1.8.0",
-    "dayjs": "^1.11.0",
-    "pinia": "^3.0.0",
-    "vue": "^3.5.0",
-    "vue-i18n": "^11.0.0",
-    "vue-router": "^4.5.0",
-    "zod": "^3.24.0"
+    "@tanstack/vue-table": "^8.21.3",
+    "@vueuse/core": "^12.8.2",
+    "axios": "^1.21.0",
+    "dayjs": "^1.11.23",
+    "pinia": "^3.0.4",
+    "vaul-vue": "0.4.1",
+    "vue": "^3.5.44",
+    "vue-i18n": "^11.4.17",
+    "vue-router": "^4.6.4",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
-    "@playwright/test": "^1.50.0",
-    "@types/node": "^22.0.0",
-    "@vitejs/plugin-vue": "^5.2.0",
-    "eslint": "^9.0.0",
-    "typescript": "^5.7.0",
-    "vite": "^6.0.0",
-    "vitest": "^3.0.0",
-    "vue-tsc": "^2.2.0"
+    "@iconify-json/lucide": "^1.2.150",
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^22.20.5",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "eslint": "^9.39.5",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.5",
+    "vitest": "^4.1.12",
+    "vue-tsc": "^2.2.12"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild@>=0.27.3 <0.28.1": "^0.28.1",
+      "minimatch@<11.0.1": "^11.0.1"
+    }
   }
 }

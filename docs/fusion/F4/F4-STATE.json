@@ -1,6 +1,0 @@
-{
-  "stage": "F4",
-  "status": "PASS",
-  "gate": "docs/fusion/F4/F4-GATE-RESULT.json",
-  "approval": "docs/fusion/F4/F4-APPROVAL-RECORD.md"
-}
