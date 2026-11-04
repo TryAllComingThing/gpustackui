@@ -9,9 +9,9 @@ import { themeRegistry } from '../src/theme/theme.registry'
 import type { TableColumn } from '@nuxt/ui/runtime/components/Table.vue'
 import type { NavigationMenuItem } from '@nuxt/ui/runtime/components/NavigationMenu.vue'
 import UApp from '@nuxt/ui/runtime/components/App.vue'
-import DrpBreadcrumb from '../src/components/common/DrpBreadcrumb.vue'
-import DrpDataTable from '../src/components/common/DrpDataTable.vue'
-import DrpSidebarNav from '../src/components/common/DrpSidebarNav.vue'
+import UBreadcrumb from '../src/components/common/UBreadcrumb.vue'
+import UDataTable from '../src/components/common/UDataTable.vue'
+import USidebarNav from '../src/components/common/USidebarNav.vue'
 import ComponentSection from './sections/ComponentSection.vue'
 import FormSection from './sections/FormSection.vue'
 import PatternSection from './sections/PatternSection.vue'
@@ -183,31 +183,31 @@ function onDensityChange(e: Event) { setDensity((e.target as HTMLSelectElement).
 <template>
   <UApp>
     <div class="showcase-page">
-      <header class="showcase-header" data-testid="showcase-header"><div><p class="eyebrow">GPUStack · F4</p><h1>Vue SaaS Design System Showcase</h1><p>独立开发 / 验收入口，不进入生产路由或生产包</p></div><div class="theme-picker"><label for="theme-select">当前主题</label><select id="theme-select" data-testid="theme-select" :value="themeState" @change="onThemeChange"><option v-for="id in THEME_IDS" :key="id" :value="id">{{ themeRegistry[id].label }}</option></select><label for="density-select">当前密度</label><select id="density-select" data-testid="density-select" :value="densityState" @change="onDensityChange"><option v-for="id in DENSITY_IDS" :key="id" :value="id">{{ id }}</option></select></div></header>
+      <header class="showcase-header" data-testid="showcase-header"><div><p class="eyebrow">GPUStack · Design System</p><h1>Vue SaaS Design System Showcase</h1><p>独立开发 / 验收入口，不进入生产路由或生产包</p></div><div class="theme-picker"><label for="theme-select">当前主题</label><select id="theme-select" data-testid="theme-select" :value="themeState" @change="onThemeChange"><option v-for="id in THEME_IDS" :key="id" :value="id">{{ themeRegistry[id].label }}</option></select><label for="density-select">当前密度</label><select id="density-select" data-testid="density-select" :value="densityState" @change="onDensityChange"><option v-for="id in DENSITY_IDS" :key="id" :value="id">{{ id }}</option></select></div></header>
       <nav class="showcase-ia-nav" aria-label="Showcase sections" data-testid="showcase-ia-nav"><a href="#section-tokens">Tokens</a><a href="#section-components">Components</a><a href="#section-states">States</a><a href="#section-patterns">Patterns</a><a href="#section-accessibility">Accessibility</a><a href="#section-quality">Quality</a></nav>
       <main class="showcase-main">
       <section id="section-tokens" class="gp-card demo-section token-section" data-testid="section-tokens"><h2>主题色 Token</h2><div v-for="group in tokenGroups" :key="group.label" class="token-group"><h3>{{ group.label }}</h3><div class="swatches"><div v-for="token in group.tokens" :key="token.variable" class="swatch" :data-token="token.variable"><span class="swatch-color" :style="{ backgroundColor: `var(${token.variable})` }"/><strong>{{ token.name }}</strong><code>{{ token.variable }}</code></div></div></div></section>
       <section class="gp-card demo-section" data-testid="section-foundation"><h2>基础 Token</h2><div v-for="group in foundationGroups" :key="group.label" class="token-group"><h3>{{ group.label }}</h3><div class="foundation-tokens"><div v-for="token in group.tokens" :key="token.variable" class="foundation-token" :data-token="token.variable"><span class="foundation-preview" :class="`foundation-preview--${token.kind}`" :style="token.kind === 'font' ? { fontSize: `var(${token.variable})` } : token.kind === 'space' ? { width: `var(${token.variable})` } : { borderRadius: `var(${token.variable})` }">{{ token.name }}</span><code>{{ token.variable }}</code></div></div></div></section>
-      <section id="section-components" class="gp-card demo-section" data-testid="section-matrix"><div class="drp-section-heading"><div><h2>组件覆盖矩阵</h2><p>每项使用真实 Nuxt UI 或共享 Drp* 适配组件。</p></div></div><div class="matrix-list"><div v-for="row in componentMatrix" :key="row.id" class="matrix-row" :data-testid="`matrix-${row.id}`"><strong>{{ row.component }}</strong><span>{{ row.implementation }}</span><code>{{ row.states.join(' · ') }}</code></div></div></section>
+      <section id="section-components" class="gp-card demo-section" data-testid="section-matrix"><div class="gp-section-heading"><div><h2>组件覆盖矩阵</h2><p>所有登记项均绑定真实 Nuxt UI 或共享 U* 组件，并展示当前验收状态。</p></div></div><div class="matrix-list"><div v-for="row in componentMatrix" :key="row.id" class="matrix-row" :data-testid="`matrix-${row.id}`"><strong>{{ row.component }}</strong><span>{{ row.implementation }}</span><UBadge :color="row.status === 'implemented' ? 'success' : 'neutral'" variant="subtle" size="sm">{{ row.status === 'implemented' ? '已实现' : 'DEFERRED' }}</UBadge><code>{{ row.states.length ? row.states.join(' · ') : '未进入当前验收范围' }}</code></div></div></section>
       <ComponentSection />
       <div id="section-states"><ComponentStateSection /></div>
-      <section class="gp-card demo-section drp-navigation-section" data-testid="section-navigation" aria-labelledby="navigation-heading">
-        <div class="drp-section-heading"><div><h2 id="navigation-heading">导航 / 面包屑</h2><p>真实 Nuxt UI 导航，支持展开、选中、折叠和键盘访问。</p></div><button type="button" class="gp-button gp-button--outline" @click="navCollapsed = !navCollapsed">{{ navCollapsed ? '展开导航' : '折叠导航' }}</button></div>
-        <div class="drp-navigation-layout" :data-nav-collapsed="navCollapsed">
-          <DrpSidebarNav v-model:active-key="activeNavKey" v-model:open-items="openNavItems" :items="[...navItems]" :collapsed="navCollapsed" />
-          <div class="drp-navigation-content"><DrpBreadcrumb :items="breadcrumbItems" /><p>当前节点：{{ activeNavKey }}</p></div>
+      <section class="gp-card demo-section gp-navigation-section" data-testid="section-navigation" aria-labelledby="navigation-heading">
+        <div class="gp-section-heading"><div><h2 id="navigation-heading">导航 / 面包屑</h2><p>真实 Nuxt UI 导航，支持展开、选中、折叠和键盘访问。</p></div><button type="button" class="gp-app-button gp-app-button--outline" @click="navCollapsed = !navCollapsed">{{ navCollapsed ? '展开导航' : '折叠导航' }}</button></div>
+        <div class="gp-navigation-layout" :data-nav-collapsed="navCollapsed">
+          <USidebarNav v-model:active-key="activeNavKey" v-model:open-items="openNavItems" :items="[...navItems]" :collapsed="navCollapsed" />
+          <div class="gp-navigation-content"><UBreadcrumb :items="breadcrumbItems" /><p>当前节点：{{ activeNavKey }}</p></div>
         </div>
       </section>
       <section class="gp-card demo-section" data-testid="section-table" aria-labelledby="table-heading">
-        <div class="drp-section-heading"><div><h2 id="table-heading">GPU 资源表格 / UTable</h2><p>支持正常、空、加载、排序、分页和选择状态。</p></div><USelect v-model="tableMode" :items="tableModes" aria-label="表格状态" /></div>
-        <DrpDataTable :data="tableRows" :columns="tableColumns" :loading="tableMode === 'loading'" :empty="tableMode === 'empty' ? '暂无 GPU 资源' : '暂无数据'" pagination-label="GPU 资源表格分页" selectable :page-size="3" @update:selected-rows="selectedRows = $event" />
-        <p class="drp-selection-summary" role="status">已选择 {{ selectedRows.length }} 项资源</p>
+        <div class="gp-section-heading"><div><h2 id="table-heading">GPU 资源表格 / UTable</h2><p>支持正常、空、加载、排序、分页和选择状态。</p></div><USelect v-model="tableMode" :items="tableModes" aria-label="表格状态" /></div>
+        <UDataTable :data="tableRows" :columns="tableColumns" :loading="tableMode === 'loading'" :empty="tableMode === 'empty' ? '暂无 GPU 资源' : '暂无数据'" pagination-label="GPU 资源表格分页" selectable :page-size="3" @update:selected-rows="selectedRows = $event" />
+        <p class="gp-selection-summary" role="status">已选择 {{ selectedRows.length }} 项资源</p>
       </section>
       <FormSection />
       <div id="section-patterns"><PatternSection /></div>
       <UserManagementSection />
-      <section id="section-accessibility" class="gp-card demo-section showcase-contract-section" data-testid="section-accessibility" aria-labelledby="accessibility-heading"><h2 id="accessibility-heading">Accessibility</h2><p>公共组件状态和 Pattern 使用真实标签、错误关联、landmark、焦点、Escape、键盘导航与状态播报。</p><ul><li>UForm / UFormField：label、error、required 关联。</li><li>DrpSidebarNav / DrpBreadcrumb：选中、展开、aria-current 和键盘行为。</li><li>DrpModal / DrpDrawer：焦点陷阱、Escape 和恢复焦点。</li><li>DrpDataTable：排序、分页、空/加载状态和 aria-busy。</li></ul><code>pnpm test:accessibility · pnpm test:strict</code></section>
-      <section id="section-quality" class="gp-card demo-section showcase-contract-section" data-testid="section-quality" aria-labelledby="quality-heading"><h2 id="quality-heading">Quality</h2><p>Showcase 只展示本地 fixture；生产与 Showcase 共享 src/theme、Drp* 和 Pattern 实现。</p><div class="quality-grid"><span>Theme：{{ themeState }}</span><span>Density：{{ densityState }}</span><span>Typography：{{ typographyState ? 'saas-v1' : 'pending' }}</span><span>Layout：{{ layoutState.headerHeight }} / {{ layoutState.sidebarExpandedWidth }} / {{ layoutState.sidebarCollapsedWidth }}</span></div><code>pnpm typecheck · pnpm lint · pnpm test:unit · pnpm build · pnpm build:showcase · pnpm test:strict</code></section>
+      <section id="section-accessibility" class="gp-card demo-section showcase-contract-section" data-testid="section-accessibility" aria-labelledby="accessibility-heading"><h2 id="accessibility-heading">Accessibility</h2><p>公共组件状态和 Pattern 使用真实标签、错误关联、landmark、焦点、Escape、键盘导航与状态播报。</p><ul><li>UForm / UFormField：label、error、required 关联。</li><li>USidebarNav / UBreadcrumb：选中、展开、aria-current 和键盘行为。</li><li>UModal / UDrawer：焦点陷阱、Escape 和恢复焦点。</li><li>UDataTable：排序、分页、空/加载状态和 aria-busy。</li></ul><code>npm run test:accessibility · npm run test:strict</code></section>
+      <section id="section-quality" class="gp-card demo-section showcase-contract-section" data-testid="section-quality" aria-labelledby="quality-heading"><h2 id="quality-heading">Quality</h2><p>Showcase 只展示本地 fixture；生产与 Showcase 共享 src/theme、U* 和 Pattern 实现。</p><div class="quality-grid"><span>Theme：{{ themeState }}</span><span>Density：{{ densityState }}</span><span>Typography：{{ typographyState ? 'saas-v1' : 'pending' }}</span><span>Layout：{{ layoutState.headerHeight }} / {{ layoutState.sidebarExpandedWidth }} / {{ layoutState.sidebarCollapsedWidth }}</span></div><code>npm run typecheck · npm run lint · npm run test:unit · npm run build · npm run build:showcase · npm run test:strict</code></section>
       <footer>主题：{{ themeState }} · 数据为本地 Mock · 不依赖 GPUStack 后端</footer>
       </main>
     </div>

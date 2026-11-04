@@ -2,8 +2,12 @@ node_modules/
 dist/
 dist-showcase/
 test-results/
-playwright-report/
-
-dist-consumer-saas/
-dist-f7-enterprise-admin/
-dist-f7-knowledge-assets/
+playwright-report*/
+storybook-static/
+coverage/
+.lighthouseci/
+.DS_Store
+**/.DS_Store
+.husky/
+playwright*/
+__pycache__/

@@ -1,6 +1,7 @@
 {
   "brand": {
     "primary": "#0D61F2",
+    "hover": "#0C5EEB",
     "pressed": "#084BC2",
     "accent": "#3585FF",
     "light": "#A9CFFF",
@@ -42,7 +43,7 @@
     "disabled": "#8D9CB0"
   },
   "border": {
-    "default": "#C9D7E8",
+    "default": "#88929D",
     "divider": "#E0E9F4",
     "subtle": "#EDF3FA"
   },

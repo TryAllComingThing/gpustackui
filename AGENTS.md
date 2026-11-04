@@ -1,15 +1,15 @@
-通用 Vue 3 + TypeScript SaaS 前端框架。
+通用 Vue 3 + TypeScript前端框架。
 
 ## 设计权威
 
-- 根目录 `DESIGN.md` 是唯一活动设计规范；`docs/fusion/archive/` 只用于追溯，不是活动权威。
-- 遵循 `docs/architecture/ARCHITECTURE.md`、`docs/quality/QUALITY-GATES.md` 和 `.codex/skills/` 下五个 Skill 契约。
+- 根目录 `DESIGN.md` 是唯一活动设计规范。
+- 遵循 `docs/architecture/ARCHITECTURE.md` 和 `.codex/skills/` 下五个 Skill 契约。
 - 不得创建第二套 DESIGN.md、项目 Profile、平行主题引擎或平行 `--ds-*` 运行时变量。
 - 未审批的规范冲突必须标记 `PROPOSED`、`PENDING` 或 `DEFERRED`；不得自行冻结。
 
 ## 组件与主题规则
 
-- 优先直接复用 Nuxt UI 4；跨页面能力只能通过薄 `Drp*` 适配器提供。
+- 优先直接复用 Nuxt UI 4；跨页面能力只能通过薄 `U*` 适配器提供。
 - 生产组件与 Showcase 必须复用同一 `src/components`、`src/theme`、Theme manager、Density manager 和 Typography/Layout manager。
 - 所有组件必须遵循 `--gp-*` Token、`data-theme`、`data-density` 和现有公共 API；不得硬编码主题 HEX。
 - Showcase 只使用本地 fixtures，不调用后端，不进入生产路由或生产包。

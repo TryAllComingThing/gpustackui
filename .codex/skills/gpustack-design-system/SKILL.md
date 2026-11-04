@@ -9,7 +9,7 @@ description: Implement GPUStack UI Design System V2.4 with multi-theme token con
 
 - The only active design authority is the root [`DESIGN.md`](../../../DESIGN.md); archived documents are traceability evidence only.
 - Read `AGENTS.md`, the real source, and the configured test scripts before editing. Never invent a second DESIGN.md, project Profile, theme engine, or `--ds-*` runtime namespace.
-- Prefer Nuxt UI 4 primitives. Create or use a thin `Drp*` adapter only for cross-page routing, state, accessibility, stable test IDs, or project layout behavior.
+- Prefer Nuxt UI 4 primitives. Create or use a thin `U*` adapter only for cross-page routing, state, accessibility, stable test IDs, or project layout behavior.
 - Components and Showcase must share `src/theme`, `src/components`, the Theme/Density/Typography/Layout managers, and `--gp-*` tokens. Showcase uses local fixtures and never enters production routes or bundles.
 - A quality report must include command, exit code, environment, artifact/report paths, failures, and repairs. Missing or unexecuted evidence is never PASS.
 

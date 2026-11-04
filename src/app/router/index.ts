@@ -2,13 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/', redirect: '/dashboard' },
-  { path: '/dashboard', component: () => import('../../modules/dashboard/pages/DashboardPage.vue'), meta: { title: '概览', breadcrumbs: [{ label: '概览' }] } },
-  { path: '/resources/gpus', component: () => import('../../modules/resources/pages/GpuResourcesPage.vue'), meta: { title: 'GPU 资源', breadcrumbs: [{ label: '资源管理' }, { label: 'GPU 资源' }] } },
-  { path: '/resources/nodes', component: () => import('../../modules/resources/pages/NodeStatusPage.vue'), meta: { title: '节点状态', breadcrumbs: [{ label: '资源管理' }, { label: '节点状态' }] } },
-  { path: '/models', component: () => import('../../modules/models/pages/ModelsPage.vue'), meta: { title: '模型服务', breadcrumbs: [{ label: '模型服务' }] } },
-  { path: '/deployments', component: () => import('../../modules/deployments/pages/DeploymentsPage.vue'), meta: { title: '部署任务', breadcrumbs: [{ label: '部署任务' }] } },
-  { path: '/services', component: () => import('../../modules/services/pages/ServicesPage.vue'), meta: { title: '服务实例', breadcrumbs: [{ label: '服务实例' }] } },
-  { path: '/settings', component: () => import('../../modules/settings/pages/SettingsPage.vue'), meta: { title: '系统设置', breadcrumbs: [{ label: '系统设置' }] } },
+  { path: '/dashboard', component: () => import('../../modules/dashboard/pages/DashboardPage.vue'), meta: { titleKey: 'page.dashboard.title', breadcrumbKeys: ['nav.dashboard'] } },
+  { path: '/resources/gpus', component: () => import('../../modules/resources/pages/GpuResourcesPage.vue'), meta: { titleKey: 'page.gpus.title', breadcrumbKeys: ['nav.resources', 'nav.gpus'] } },
+  { path: '/resources/nodes', component: () => import('../../modules/resources/pages/NodeStatusPage.vue'), meta: { titleKey: 'page.nodes.title', breadcrumbKeys: ['nav.resources', 'nav.nodes'] } },
+  { path: '/models', component: () => import('../../modules/models/pages/ModelsPage.vue'), meta: { titleKey: 'page.models.title', breadcrumbKeys: ['nav.models'] } },
+  { path: '/deployments', component: () => import('../../modules/deployments/pages/DeploymentsPage.vue'), meta: { titleKey: 'page.deployments.title', breadcrumbKeys: ['nav.deployments'] } },
+  { path: '/services', component: () => import('../../modules/services/pages/ServicesPage.vue'), meta: { titleKey: 'page.services.title', breadcrumbKeys: ['nav.services'] } },
+  { path: '/settings', component: () => import('../../modules/settings/pages/SettingsPage.vue'), meta: { titleKey: 'page.settings.title', breadcrumbKeys: ['nav.settings'] } },
+  { path: '/403', name: 'forbidden', component: () => import('../pages/ForbiddenPage.vue'), meta: { titleKey: 'error.forbidden', breadcrumbKeys: ['error.forbidden'] } },
   { path: '/:pathMatch(.*)*', redirect: '/dashboard' },
 ]
 

@@ -1,6 +1,7 @@
 {
   "brand": {
     "primary": "#1469D8",
+    "hover": "#1265D1",
     "pressed": "#0A4EAC",
     "accent": "#1260C7",
     "light": "#B5D6F8",
@@ -21,7 +22,7 @@
     "background": "#FFF5EA"
   },
   "danger": {
-    "default": "#D92D36",
+    "default": "#CE2B33",
     "pressed": "#B4232C",
     "hover": "#C52630",
     "light": "#F6B8BB",
@@ -42,7 +43,7 @@
     "disabled": "#91A0B3"
   },
   "border": {
-    "default": "#D1DDEC",
+    "default": "#89919B",
     "divider": "#E5ECF5",
     "subtle": "#F0F4FA"
   },

@@ -18,7 +18,7 @@
   "$defs": {
     "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6,8}$" },
     "semantic": { "type": "object", "required": ["default", "pressed", "hover", "light", "background"], "additionalProperties": false, "properties": { "default": { "$ref": "#/$defs/color" }, "pressed": { "$ref": "#/$defs/color" }, "hover": { "$ref": "#/$defs/color" }, "light": { "$ref": "#/$defs/color" }, "background": { "$ref": "#/$defs/color" } } },
-    "brand": { "type": "object", "required": ["primary", "pressed", "accent", "light", "subtle"], "additionalProperties": false, "properties": { "primary": { "$ref": "#/$defs/color" }, "pressed": { "$ref": "#/$defs/color" }, "accent": { "$ref": "#/$defs/color" }, "light": { "$ref": "#/$defs/color" }, "subtle": { "$ref": "#/$defs/color" } } },
+    "brand": { "type": "object", "required": ["primary", "hover", "pressed", "accent", "light", "subtle"], "additionalProperties": false, "properties": { "primary": { "$ref": "#/$defs/color" }, "hover": { "$ref": "#/$defs/color" }, "pressed": { "$ref": "#/$defs/color" }, "accent": { "$ref": "#/$defs/color" }, "light": { "$ref": "#/$defs/color" }, "subtle": { "$ref": "#/$defs/color" } } },
     "alphaSet": { "type": "object", "required": ["90", "60", "30", "10", "5"], "additionalProperties": false, "properties": { "90": { "$ref": "#/$defs/color" }, "60": { "$ref": "#/$defs/color" }, "30": { "$ref": "#/$defs/color" }, "10": { "$ref": "#/$defs/color" }, "5": { "$ref": "#/$defs/color" } } }
   }
 }

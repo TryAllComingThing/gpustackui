@@ -42,8 +42,9 @@ const columns: TableColumn<DemoRow>[] = [
 ]
 const tableKey = ref(0)
 const tableError = ref(false)
-const tableMessage = ref('')
-const actions: DataTableRowAction<DemoRow>[] = [{ label: '查看', color: 'primary', onSelect: (row) => { tableMessage.value = `已选择：${row.name}` } }]
+const viewModalOpen = ref(false)
+const selectedRow = ref<DemoRow | null>(null)
+const actions: DataTableRowAction<DemoRow>[] = [{ label: '查看', icon: 'i-lucide-eye', color: 'primary', onSelect: (row) => { selectedRow.value = row; viewModalOpen.value = true } }]
 async function loadRows(query: DataTableQuery): Promise<DataTableResult<DemoRow>> {
   await new Promise((resolve) => setTimeout(resolve, 120))
   if (tableError.value) throw new Error('模拟数据源暂时不可用')
@@ -57,18 +58,27 @@ function retryTable() { tableError.value = false; tableKey.value++ }
 
 <template>
   <section class="gp-card demo-section pattern-section" data-testid="section-patterns" aria-labelledby="pattern-heading">
-    <div class="drp-section-heading"><div><h2 id="pattern-heading">通用交互 Pattern</h2><p>复杂表单和数据表格只组合已有公共组件，不依赖业务 API。</p></div></div>
+    <div class="gp-section-heading"><div><h2 id="pattern-heading">通用交互 Pattern</h2><p>复杂表单和数据表格只组合已有公共组件，不依赖业务 API。</p></div></div>
     <div class="pattern-grid">
       <div class="pattern-panel" data-testid="pattern-form">
         <h3>复杂表单</h3>
         <ComplexFormPattern :schema="formSchema" :initial-state="{ project: '', environment: '', callback: '', callbackConfirm: '' }" :fields="formFields" :submitter="submitForm" success-message="配置已保存" submit-label="异步提交" @success="submittedForm = true" />
-        <p v-if="submittedForm" class="drp-form-result" role="status">异步提交完成</p>
+        <p v-if="submittedForm" class="gp-form-result" role="status">异步提交完成</p>
       </div>
       <div class="pattern-panel" data-testid="pattern-table">
         <div class="pattern-panel__header"><div><h3>数据表格</h3><p class="pattern-hint">支持搜索、筛选、排序、分页和行操作。</p></div><UButton size="xs" color="neutral" variant="outline" @click="tableError = !tableError; tableKey++">{{ tableError ? '恢复数据' : '模拟错误' }}</UButton></div>
         <DataTablePattern :key="tableKey" :rows="rows" :columns="columns" :search-keys="['name', 'owner', 'region']" :filters="[{ key: 'region', label: '区域', options: [{ label: '华东', value: '华东' }, { label: '华南', value: '华南' }, { label: '华北', value: '华北' }] }]" :row-actions="actions" :load="loadRows" :page-size="3" />
         <UButton v-if="tableError" size="xs" color="primary" variant="outline" @click="retryTable">重试</UButton>
-        <p v-if="tableMessage" class="pattern-hint" role="status">{{ tableMessage }}</p>
+        <UModal v-model:open="viewModalOpen" title="资源详情" :description="selectedRow ? `${selectedRow.name} · ${selectedRow.id}` : '未选择资源'" data-testid="pattern-view-modal">
+          <template #body>
+            <dl v-if="selectedRow" class="pattern-detail-list">
+              <div><dt>名称</dt><dd>{{ selectedRow.name }}</dd></div>
+              <div><dt>状态</dt><dd>{{ selectedRow.status }}</dd></div>
+              <div><dt>负责人</dt><dd>{{ selectedRow.owner }}</dd></div>
+              <div><dt>区域</dt><dd>{{ selectedRow.region }}</dd></div>
+            </dl>
+          </template>
+        </UModal>
       </div>
     </div>
   </section>

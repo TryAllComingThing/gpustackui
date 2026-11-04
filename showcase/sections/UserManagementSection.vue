@@ -4,7 +4,6 @@ import { z } from 'zod'
 import type { TableColumn } from '@nuxt/ui/runtime/components/Table.vue'
 import ComplexFormPattern, { type ComplexFormField } from '../../src/components/patterns/ComplexFormPattern.vue'
 import DataTablePattern, { type DataTableQuery, type DataTableResult } from '../../src/components/patterns/DataTablePattern.vue'
-import DrpModal from '../../src/components/common/DrpModal.vue'
 import { showcaseUsers, type ShowcaseUser } from '../fixtures/users'
 
 const users = ref<ShowcaseUser[]>([...showcaseUsers])
@@ -62,8 +61,8 @@ const formFields: ComplexFormField[] = [
   { name: 'name', label: '姓名', placeholder: '例如 小孙', required: true },
   { name: 'email', label: '邮箱', type: 'text', placeholder: 'user@example.com', required: true },
   { name: 'role', label: '角色', type: 'select', placeholder: '选择角色', required: true, options: userFilters[0].options },
-  { name: 'password', label: '密码', type: 'text', placeholder: '至少 8 位', required: true },
-  { name: 'passwordConfirm', label: '确认密码', type: 'text', placeholder: '再次输入密码', required: true },
+  { name: 'password', label: '密码', type: 'password', placeholder: '至少 8 位', required: true },
+  { name: 'passwordConfirm', label: '确认密码', type: 'password', placeholder: '再次输入密码', required: true },
 ]
 
 async function createUser(state: Record<string, unknown>) {
@@ -83,15 +82,15 @@ function retryUsers() {
 
 <template>
   <section class="gp-card demo-section user-management-section" data-testid="section-user-management" aria-labelledby="user-management-heading">
-    <div class="drp-section-heading">
+    <div class="gp-section-heading">
       <div><h2 id="user-management-heading">通用用户管理</h2><p>独立验收页面：本地模拟数据，不连接 GPU 业务接口。</p></div>
       <div class="user-management-actions"><UButton data-testid="user-add-open" @click="modalOpen = true">新增用户</UButton><UButton data-testid="user-error-toggle" color="neutral" variant="outline" @click="simulateError = !simulateError; tableKey++">{{ simulateError ? '恢复列表' : '模拟错误' }}</UButton></div>
     </div>
     <div class="user-management-status" role="status"><span>列表、搜索、筛选、排序、分页</span><span v-if="simulateLoading">加载中…</span><span v-if="feedback">{{ feedback }}</span></div>
     <DataTablePattern :key="tableKey" :rows="users" :columns="columns" :search-keys="['name', 'email', 'role']" :filters="userFilters" :load="loadUsers" :page-size="3" empty-message="暂无匹配用户" aria-label="用户管理数据表格" />
     <UButton v-if="simulateError" data-testid="user-error-retry" size="sm" variant="outline" color="primary" @click="retryUsers">重试</UButton>
-    <DrpModal v-model:open="modalOpen" title="新增用户" description="使用 Zod 校验并模拟异步提交。" data-testid="user-add-modal">
+    <UModal v-model:open="modalOpen" title="新增用户" description="使用 Zod 校验并模拟异步提交。" data-testid="user-add-modal">
       <template #body><ComplexFormPattern :schema="userSchema" :initial-state="{ name: '', email: '', role: '', password: '', passwordConfirm: '' }" :fields="formFields" submit-label="保存用户" success-message="用户已保存" :submitter="createUser" /></template>
-    </DrpModal>
+    </UModal>
   </section>
 </template>

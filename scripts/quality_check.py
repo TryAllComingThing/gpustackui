@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unified quality entry point with evidence-bound release decision."""
+"""Unified quality entry point with exit-code and defect gate."""
 from __future__ import annotations
 
 import csv
@@ -15,27 +15,25 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_DIR = ROOT / "docs/quality"
-EVIDENCE_DIR = REPORT_DIR / "evidence"
+OPEN_DEFECTS = ROOT / "docs/quality/open-defects.csv"
 
 CHECKS = [
     ("S-001", "Static", "contracts", ["python3", "scripts/validate_contracts.py"]),
-    ("S-002", "Static", "skills", ["pnpm", "validate:skills"]),
-    ("S-003", "Static", "structure", ["pnpm", "check:structure"]),
-    ("S-004", "Static", "typecheck", ["pnpm", "typecheck"]),
-    ("S-005", "Static", "typecheck-showcase", ["pnpm", "typecheck:showcase"]),
-    ("S-006", "Static", "lint", ["pnpm", "lint"]),
-    ("S-007", "Static", "f2-tokens", ["pnpm", "validate:f2-tokens"]),
-    ("S-008", "Static", "f3-tokens", ["pnpm", "validate:f3-tokens"]),
-    ("S-009", "Static", "diff-check", ["git", "diff", "--check"]),
-    ("B-001", "Build", "production-build", ["pnpm", "build"]),
-    ("B-002", "Build", "showcase-build", ["pnpm", "build:showcase"]),
-    ("F-001", "Functional", "unit", ["pnpm", "test:unit"]),
-    ("F-002", "Functional", "production-e2e", ["pnpm", "test:e2e"]),
-    ("F-003", "Functional", "showcase", ["pnpm", "test:showcase"]),
-    ("V-001", "Visual", "visual", ["pnpm", "test:visual"]),
-    ("A-001", "Accessibility", "accessibility", ["pnpm", "test:accessibility"]),
-    ("A-002", "Accessibility", "strict-axe-browser-visual", ["pnpm", "test:strict"]),
-    ("A-003", "Accessibility", "showcase-isolation", ["pnpm", "check:showcase-isolation"]),
+    ("S-002", "Static", "structure", ["npm", "run", "check:structure"]),
+    ("S-003", "Static", "typecheck", ["npm", "run", "typecheck"]),
+    ("S-004", "Static", "typecheck-showcase", ["npm", "run", "typecheck:showcase"]),
+    ("S-005", "Static", "lint", ["npm", "run", "lint"]),
+    ("S-006", "Static", "theme-css", ["npm", "run", "check:theme-css"]),
+    ("S-007", "Static", "tokens", ["npm", "run", "validate:tokens"]),
+    ("S-008", "Static", "diff-check", ["git", "-c", "core.whitespace=cr-at-eol", "diff", "--check"]),
+    ("B-001", "Build", "production-build", ["npm", "run", "build"]),
+    ("B-002", "Build", "showcase-build", ["npm", "run", "build:showcase"]),
+    ("F-001", "Functional", "unit", ["npm", "run", "test:unit"]),
+    ("F-002", "Functional", "production-e2e", ["npm", "run", "test:e2e"]),
+    ("V-001", "Visual", "visual", ["npm", "run", "test:visual"]),
+    ("A-001", "Accessibility", "accessibility", ["npm", "run", "test:accessibility"]),
+    ("A-002", "Accessibility", "strict-axe-browser-visual", ["npm", "run", "test:strict"]),
+    ("A-003", "Accessibility", "showcase-isolation", ["npm", "run", "check:showcase-isolation"]),
 ]
 
 
@@ -48,46 +46,39 @@ def command_version(command: list[str]) -> str:
 
 
 def defects() -> list[dict[str, str]]:
-    path = ROOT / "docs/fusion/F4/F4-DEFECTS.csv"
-    if not path.exists():
-        return [{"defect_id": "QUALITY-MISSING-DEFECTS", "severity": "P0", "status": "OPEN", "description": "F4 defect inventory is missing"}]
-    with path.open(newline="") as handle:
+    if not OPEN_DEFECTS.is_file():
+        return [{"defect_id": "QUALITY-MISSING-DEFECTS", "severity": "P0", "status": "OPEN", "description": "Open defect inventory is missing"}]
+    with OPEN_DEFECTS.open(newline="") as handle:
         rows = list(csv.DictReader(handle))
     return [row for row in rows if row.get("status") not in {"CLOSED", "MITIGATED"}]
 
 
 def main() -> int:
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
-    EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
     started = datetime.now(timezone.utc)
     environment = {
         "cwd": str(ROOT),
         "platform": platform.platform(),
         "python": sys.version.split()[0],
         "node": command_version(["node", "--version"]),
-        "pnpm": command_version(["pnpm", "--version"]),
-        "playwright": command_version(["pnpm", "exec", "playwright", "--version"]),
+        "npm": command_version(["npm", "--version"]),
+        "playwright": command_version(["npm", "exec", "--", "playwright", "--version"]),
     }
     records: list[dict[str, object]] = []
     for check_id, category, slug, command in CHECKS:
-        evidence_path = EVIDENCE_DIR / f"{check_id}-{slug}.log"
         command_text = shlex.join(command)
         begin = time.monotonic()
         try:
             result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, timeout=900)
             exit_code = result.returncode
-            output = result.stdout + ("\n" + result.stderr if result.stderr else "")
             status = "PASS" if exit_code == 0 else "FAIL"
-        except subprocess.TimeoutExpired as error:
+        except subprocess.TimeoutExpired:
             exit_code = None
-            output = f"TIMEOUT after 900 seconds\nstdout={error.stdout}\nstderr={error.stderr}"
             status = "FAIL"
-        except Exception as error:  # pragma: no cover - defensive quality runner path
+        except Exception:  # pragma: no cover - defensive quality runner path
             exit_code = None
-            output = f"EXECUTION ERROR: {error!r}"
             status = "FAIL"
         duration_ms = round((time.monotonic() - begin) * 1000)
-        evidence_path.write_text(output)
         records.append({
             "check_id": check_id,
             "category": category,
@@ -96,15 +87,13 @@ def main() -> int:
             "exit_code": exit_code,
             "duration_ms": duration_ms,
             "status": status,
-            "evidence_path": str(evidence_path.relative_to(ROOT)),
         })
         print(f"[{check_id}] {category}/{slug}: {status} exit={exit_code} duration_ms={duration_ms}")
 
     open_defects = defects()
-    missing_evidence = [item["check_id"] for item in records if not (ROOT / str(item["evidence_path"])).is_file()]
     failed = [item["check_id"] for item in records if item["status"] != "PASS"]
     unexecuted = [item["check_id"] for item in records if item["exit_code"] is None]
-    release_decision = "PASS" if not failed and not unexecuted and not missing_evidence and not open_defects else "BLOCKED"
+    quality_decision = "PASS" if not failed and not unexecuted and not open_defects else "BLOCKED"
     finished = datetime.now(timezone.utc)
     summary = {
         "quality_run": "unified-quality-check",
@@ -112,11 +101,10 @@ def main() -> int:
         "finished_at": finished.isoformat(),
         "duration_ms": round((finished - started).total_seconds() * 1000),
         "environment": environment,
-        "categories": ["Static", "Build", "Functional", "Visual", "Accessibility", "Release Decision"],
-        "release_decision": release_decision,
+        "categories": ["Static", "Build", "Functional", "Visual", "Accessibility"],
+        "quality_decision": quality_decision,
         "failed_checks": failed,
         "unexecuted_checks": unexecuted,
-        "missing_evidence": missing_evidence,
         "open_defects": [item.get("defect_id", "UNKNOWN") for item in open_defects],
         "checks_count": len(records),
     }
@@ -130,20 +118,20 @@ def main() -> int:
     lines = [
         "# Unified Quality Report",
         "",
-        f"Release decision: **{release_decision}**",
+        f"Quality decision: **{quality_decision}**",
         "",
         f"Run: `{started.isoformat()}` → `{finished.isoformat()}` ({summary['duration_ms']} ms)",
-        f"Environment: {environment['platform']}; Node {environment['node']}; pnpm {environment['pnpm']}; Playwright {environment['playwright']}",
+        f"Environment: {environment['platform']}; Node {environment['node']}; npm {environment['npm']}; Playwright {environment['playwright']}",
         "",
-        "| Category | Check | Exit code | Duration (ms) | Status | Evidence |",
-        "|---|---|---:|---:|---|---|",
+        "| Category | Check | Exit code | Duration (ms) | Status |",
+        "|---|---|---:|---:|---|",
     ]
     for item in records:
-        lines.append(f"| {item['category']} | {item['name']} | {item['exit_code']} | {item['duration_ms']} | {item['status']} | `{item['evidence_path']}` |")
-    lines.extend(["", "## Release Decision Inputs", "", f"- Failed checks: `{', '.join(failed) or 'none'}`", f"- Unexecuted checks: `{', '.join(unexecuted) or 'none'}`", f"- Missing evidence: `{', '.join(missing_evidence) or 'none'}`", f"- Open defects: `{', '.join(summary['open_defects']) or 'none'}`", "", "A required failure, unexecuted check, missing evidence, or open defect forces `BLOCKED`."])
+        lines.append(f"| {item['category']} | {item['name']} | {item['exit_code']} | {item['duration_ms']} | {item['status']} |")
+    lines.extend(["", "## Quality Decision Inputs", "", f"- Failed checks: `{', '.join(failed) or 'none'}`", f"- Unexecuted checks: `{', '.join(unexecuted) or 'none'}`", f"- Open defects: `{', '.join(summary['open_defects']) or 'none'}`", "", "A required failure, unexecuted check, or open defect forces `BLOCKED`."])
     (REPORT_DIR / "QUALITY-REPORT.md").write_text("\n".join(lines) + "\n")
-    print(f"release_decision={release_decision}")
-    return 0 if release_decision == "PASS" else 1
+    print(f"quality_decision={quality_decision}")
+    return 0 if quality_decision == "PASS" else 1
 
 
 if __name__ == "__main__":

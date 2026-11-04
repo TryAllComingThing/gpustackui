@@ -12,12 +12,12 @@
   --ui-bg-elevated: var(--gp-page-bg);
   --ui-bg-accented: var(--gp-background-disabled);
   --ui-text: var(--gp-text-primary);
-  --ui-text-toned: var(--gp-text-n800);
-  --ui-text-muted: var(--gp-text-secondary);
-  --ui-text-dimmed: var(--gp-text-secondary);
+  --ui-text-toned: var(--gp-text-secondary);
+  --ui-text-muted: var(--gp-text-tertiary);
+  --ui-text-dimmed: var(--gp-text-muted);
   --ui-text-highlighted: var(--gp-text-primary);
   --ui-border: var(--gp-border-default);
-  --ui-border-muted: var(--gp-border-default);
+  --ui-border-muted: var(--gp-border-divider);
   --ui-border-accented: var(--gp-line-n300);
 }
 

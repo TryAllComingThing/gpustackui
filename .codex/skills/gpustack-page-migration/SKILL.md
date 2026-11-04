@@ -9,7 +9,7 @@ description: Migrate one GPUStack frontend page at a time preserving API contrac
 
 - The only active design authority is the root [`DESIGN.md`](../../../DESIGN.md); archived documents are not active requirements.
 - Read `AGENTS.md`, real page/API sources, and test scripts before editing. Preserve existing API, auth, permission, async, and route semantics.
-- Prefer Nuxt UI 4 and existing `Drp*` adapters; reuse `src/theme` managers and `--gp-*` tokens. Do not create a page-local theme engine, Profile, or demo-only component copy.
+- Prefer Nuxt UI 4 and existing `U*` adapters; reuse `src/theme` managers and `--gp-*` tokens. Do not create a page-local theme engine, Profile, or demo-only component copy.
 - Showcase may be used for acceptance with local fixtures, but it cannot replace production page verification or enter the production bundle.
 - Reports must contain real commands, exit codes, environment, artifacts, failures, repairs, and rollback information.
 

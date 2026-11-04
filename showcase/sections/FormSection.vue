@@ -60,31 +60,31 @@ function clearFieldErrors() {
 </script>
 
 <template>
-  <section class="gp-card demo-section drp-form-section" data-testid="section-form" aria-labelledby="form-heading">
-    <div class="drp-section-heading">
+  <section class="gp-card demo-section gp-form-section" data-testid="section-form" aria-labelledby="form-heading">
+    <div class="gp-section-heading">
       <div>
         <h2 id="form-heading">表单状态 / Zod + Nuxt UI</h2>
         <p>覆盖必填、格式校验、提交、重置和禁用状态。</p>
       </div>
       <UCheckbox v-model="formDisabled" label="禁用表单" />
     </div>
-    <UForm :schema="schema" :state="state" :disabled="formDisabled" :loading-auto="false" class="drp-form" @submit="submitForm" @error="onError">
-      <div class="drp-form-grid">
+    <UForm :schema="schema" :state="state" :disabled="formDisabled" :loading-auto="false" class="gp-form" @submit="submitForm" @error="onError">
+      <div class="gp-form-grid">
         <UFormField label="模型名称" name="modelName" :error="fieldErrors.modelName" required>
           <UInput v-model="state.modelName" placeholder="例如 llama-3-8b" />
         </UFormField>
         <UFormField label="资源规格" name="profile" :error="fieldErrors.profile" required>
           <USelect v-model="state.profile" :items="profiles" placeholder="选择 GPU 规格" />
         </UFormField>
-        <UFormField label="API 地址" name="endpoint" :error="fieldErrors.endpoint" required class="drp-form-field--wide">
+        <UFormField label="API 地址" name="endpoint" :error="fieldErrors.endpoint" required class="gp-form-field--wide">
           <UInput v-model="state.endpoint" type="url" placeholder="https://api.example.com/v1" />
         </UFormField>
       </div>
-      <div class="drp-form-actions">
+      <div class="gp-form-actions">
         <UButton type="button" color="primary" @click="submitForm">提交表单</UButton>
         <UButton type="button" color="neutral" variant="outline" @click="resetForm">重置</UButton>
-        <span v-if="submitted" class="drp-form-result" role="status">{{ submitted }}</span>
-        <span v-if="formError" class="drp-form-error" role="alert" data-testid="form-error">{{ formError }}</span>
+        <span v-if="submitted" class="gp-form-result" role="status">{{ submitted }}</span>
+        <span v-if="formError" class="gp-form-error" role="alert" data-testid="form-error">{{ formError }}</span>
       </div>
     </UForm>
   </section>

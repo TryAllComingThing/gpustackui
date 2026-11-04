@@ -1,8 +1,7 @@
-# Vue 3 SaaS Frontend Design System
+# Vue Frontend Design System
 
-状态：**FRAMEWORK-CONSOLIDATION / REVIEW**
 
-本文件是仓库唯一的设计规范入口。它融合 SaaS Design System V1.1-M0 与当前 Vue 3 工程已经验证的视觉基础；旧版双层文件已原样归档到 `docs/fusion/archive/`。本次只冻结文档、契约和映射，不改变 Vue、CSS、Theme Engine、Showcase、依赖、业务 API 或权限实现。
+本文件是仓库唯一活动设计规范入口。本次只冻结文档、契约和映射，不改变 Vue、CSS、Theme Engine、Showcase、依赖、业务 API 或权限实现。
 
 ## 1. 适用范围与权威顺序
 
@@ -15,9 +14,9 @@
 3. 已批准的框架默认布局和运行时兼容约束；
 4. Nuxt UI 默认值和页面局部样式。
 
-所有来源、目标路径、处理关系和状态见 `docs/fusion/FRAMEWORK/SOURCE-INVENTORY.csv`、`FUSION-MATRIX.csv`、`TOKEN-SOURCE-MAP.csv` 和 `COMPONENT-SOURCE-MAP.csv`。
+当前活动来源与目标路径见 `src/theme/tokens/`、`src/theme/styles/`、`docs/design/TOKEN-MAPPING.md` 和 `docs/design/COMPONENT-MATRIX.md`。
 
-视觉扩展批准流程见 `docs/fusion/FRAMEWORK/VISUAL-EXTENSION-APPROVAL.md`；扩展登记见 `VISUAL-EXTENSION-REGISTER.csv`。生产 Modal/Drawer 登记见 `PRODUCTION-OVERLAY-REGISTER.csv`。
+视觉扩展必须先标记 `PROPOSED`/`PENDING` 并取得人工批准；推荐值登记见 `docs/design/TOKEN-MAPPING.md`。生产 Modal/Drawer 当前直接使用 Nuxt UI 原语。
 
 未审批的冲突必须标记 `PROPOSED`、`PENDING` 或 `DEFERRED`，不得当作冻结值。任何命令没有实际退出码时不得宣称通过。
 
@@ -25,7 +24,7 @@
 
 主题 Token 唯一工程来源为 `src/theme/tokens/`，包含合并后的五主题、Schema、Typography、Density、Semantic/Component mapping 和 SaaS visual foundation。SaaS 与旧 design-system 目录为迁移前来源，移除后不影响生成和运行时。`scripts/generate_theme_css.py` 生成运行时 CSS，运行时只消费 `--gp-*` 变量。业务组件不得硬编码主题 HEX，不得引入平行 `--ds-*` 运行时变量。
 
-框架默认公开主题 ID 保留 `standard`、`business`、`future`。当前源码还包含 `sky`、`ocean` 兼容扩展；它们是已存在的运行时资产，不改变默认三主题契约。新增、删除或重命名主题必须形成 ADR，状态为 `PROPOSED` 之前不得实施。
+框架公开一等主题 ID 为 `standard`、`business`、`future`、`sky`、`ocean`，五套主题在运行时选择器、registry、生成 CSS 与持久化契约中一视同仁，无兼容/扩展分级。新增、删除或重命名主题必须形成 ADR，状态为 `PROPOSED` 之前不得实施。
 
 主题与 Density、Appearance、Locale、Motion 独立存储。主题切换不得改变表单值、滚动位置、权限、业务逻辑或组件 API。
 
@@ -33,7 +32,7 @@ Token 层级：
 
 - Primitive：`src/theme/tokens/themes/*.json`、`src/theme/tokens/typography.json`、`src/theme/tokens/density.json`；
 - Semantic：`src/theme/styles/themes/*.css` 和 `src/theme/styles/tokens.css` 中的 `--gp-*`；
-- Component：`src/theme/styles/components.css`、共享 Drp 适配和 Nuxt UI 变量；
+- Component：`src/theme/styles/components.css`、共享 U 适配和 Nuxt UI 变量；
 - Compatibility：旧变量别名只能指向 `--gp-*`，不得复制第二套值。
 
 ## 3. Typography、Spacing 与 Density
@@ -58,7 +57,7 @@ Spacing 基于 4px 网格。Density 使用 `compact`、`standard`、`comfortable
 
 ## 5. Surface、Radius、Border、Shadow、Motion 与 Icon
 
-Surface 语义为 `canvas`、`default`、`subtle`、`raised`、`overlay`，当前通过 `--gp-surface-*` 从已批准主题层派生。SaaS 通用视觉基础位于 `src/theme/tokens/visual-foundation.json`，明确不映射到 GPU `--gp-*` runtime。GPU 仍保留现有兼容几何和阴影变量。
+Surface 语义为 `canvas`、`default`、`subtle`、`raised`、`overlay`，当前通过 `--gp-surface-*` 从已批准主题层派生。通用视觉基础位于 `src/theme/tokens/visual-foundation.json`，明确不映射到 `--gp-*` runtime。仍保留现有兼容几何和阴影变量。
 
 Motion 使用现有 Sidebar transition 和 `prefers-reduced-motion` 规则；新的时长分级必须先审批。Icon 保留现有 Nuxt UI/Lucide 使用和已登记尺寸别名；Icon family、线宽和语义集合扩展为 `PROPOSED`。
 
@@ -66,11 +65,11 @@ Motion 使用现有 Sidebar transition 和 `prefers-reduced-motion` 规则；新
 
 组件契约见 `design-system/contracts/COMPONENT_MATRIX.csv` 和 `docs/design/COMPONENT-MATRIX.md`。状态按适用性覆盖 default、hover、pressed、focus-visible、selected、disabled、readonly、loading、error、success、empty。
 
-Form 必须有 label/help/error 关联和状态播报；Table 必须支持排序、分页、选择、空、加载、错误和溢出；Navigation 必须支持选中、展开、嵌套、键盘和焦点；Modal/Drawer/Popover 必须处理 Escape、焦点恢复和外部交互。跨页面能力只允许薄 Drp 适配，不复制 Nuxt UI 原语。
+Form 必须有 label/help/error 关联和状态播报；Table 必须支持排序、分页、选择、空、加载、错误和溢出；Navigation 必须支持选中、展开、嵌套、键盘和焦点；Modal/Drawer/Popover 必须处理 Escape、焦点恢复和外部交互。跨页面能力只允许薄 U 适配，不复制 Nuxt UI 原语。
 
 ## 7. Data Visualization
 
-现有 `--gp-chart-1` 至 `--gp-chart-5` 继续兼容。Categorical、Sequential、Diverging、Semantic、Neutral 等完整图表色板没有批准的具体源值，保持 `PROPOSED`，不得自行生成。图表不得只依赖颜色，必须提供标签、线型、符号或数据表替代。
+现有 `--gp-chart-1` 至 `--gp-chart-5` 继续兼容。Categorical、Sequential、Diverging、Semantic、Neutral 等完整图表色板。图表不得只依赖颜色，必须提供标签、线型、符号或数据表替代。
 
 ## 8. Accessibility 与质量范围
 
@@ -78,10 +77,15 @@ Form 必须有 label/help/error 关联和状态播报；Table 必须支持排序
 
 ## 9. Showcase
 
-Showcase 是独立 Vite 入口和本地 fixtures，只用于开发验收，不进入生产路由或生产包。它必须展示真实 Nuxt UI/Drp 组件、Token、主题持久化、Density、状态矩阵和稳定 `data-testid`。Showcase 通过不能替代生产业务契约通过。
+Showcase 是独立 Vite 入口和本地 fixtures，只用于开发验收，不进入生产路由或生产包。它必须展示真实 Nuxt UI/U 组件、Token、主题持久化、Density、状态矩阵和稳定 `data-testid`。Showcase 通过不能替代生产业务契约通过。
 
 ## 10. 工程治理
 
-`AGENTS.md`、本文件、`docs/architecture/ARCHITECTURE.md`、`docs/quality/QUALITY-GATES.md` 和 `docs/fusion/FRAMEWORK/*` 构成文档治理入口。变更必须附来源、目标、状态、影响 Token、组件状态、兼容性风险、回滚方式和真实验证命令。
+`AGENTS.md`、本文件、`docs/README.md`、`docs/architecture/ARCHITECTURE.md`、`docs/design/FRAMEWORK-GUIDE.md`。变更必须附来源、目标、状态、影响 Token、组件状态、兼容性风险、回滚方式和真实验证命令。
 
-本次融合状态为 **REVIEW**：文档和契约已建立，所有未审批冲突仍显式标记，不能宣称 F1-PASS 或其他阶段 PASS。
+
+## 11. 框架全景与落地入口
+
+- 架构：Vite 入口初始化 Theme/Density/Typography/Layout；`UApp` 提供 Nuxt UI Provider；`AppShell` 组织 Header/`UBreadcrumb`/`USidebarNav`/Main；页面按 `src/modules` 组织；Showcase 独立入口但复用 `src/`。
+- 设计思路：直接复用 Nuxt UI 4，跨页面状态使用薄 `U*` adapter；业务只消费 `--gp-*`；Token 按 Primitive → Semantic → Component → Compatibility 单向流动。
+- 设计理念：一致性、可访问性、正交性、可逆性、最小适配和证据驱动；Theme、Density、Typography、Layout 独立。

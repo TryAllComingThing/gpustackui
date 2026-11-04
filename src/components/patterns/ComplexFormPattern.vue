@@ -5,7 +5,7 @@ import { z } from 'zod'
 export interface ComplexFormField {
   name: string
   label: string
-  type?: 'text' | 'url' | 'select'
+  type?: 'text' | 'url' | 'password' | 'select'
   placeholder?: string
   required?: boolean
   options?: Array<{ label: string; value: string }>
@@ -89,18 +89,18 @@ function reset() {
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" :disabled="submitting" :loading-auto="false" class="drp-complex-form" @submit="handleSubmit" @error="onNuxtFormError">
-    <div class="drp-complex-form__grid">
-      <UFormField v-for="field in fields" :key="field.name" :label="field.label" :name="field.name" :required="field.required" :error="fieldErrors[field.name]" class="drp-complex-form__field">
+  <UForm :schema="schema" :state="state" :disabled="submitting" :loading-auto="false" class="gp-complex-form" @submit="handleSubmit" @error="onNuxtFormError">
+    <div class="gp-complex-form__grid">
+      <UFormField v-for="field in fields" :key="field.name" :label="field.label" :name="field.name" :required="field.required" :error="fieldErrors[field.name]" class="gp-complex-form__field">
         <USelect v-if="field.type === 'select'" v-model="state[field.name]" :items="field.options ?? []" :placeholder="field.placeholder" />
-        <UInput v-else v-model="state[field.name]" :type="field.type === 'url' ? 'url' : 'text'" :placeholder="field.placeholder" />
+        <UInput v-else v-model="state[field.name]" :type="field.type === 'url' ? 'url' : field.type === 'password' ? 'password' : 'text'" :placeholder="field.placeholder" />
       </UFormField>
     </div>
-    <div class="drp-complex-form__actions">
+    <div class="gp-complex-form__actions">
       <UButton type="submit" :loading="submitting" :disabled="submitting">{{ submitLabel }}</UButton>
       <UButton type="button" color="neutral" variant="outline" :disabled="submitting" @click="reset">{{ resetLabel }}</UButton>
-      <span v-if="submitted" class="drp-complex-form__success" role="status">{{ successMessage }}</span>
-      <span v-if="formError" class="drp-complex-form__error" role="alert">{{ formError }}</span>
+      <span v-if="submitted" class="gp-complex-form__success" role="status">{{ successMessage }}</span>
+      <span v-if="formError" class="gp-complex-form__error" role="alert">{{ formError }}</span>
     </div>
   </UForm>
 </template>

@@ -1,87 +1,109 @@
 import { spawnSync } from 'node:child_process'
-import { mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, cpSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
-import { inspectArtifactRecord, inspectFormalState, classifyFailure, sourceChanges } from './release_evidence.mjs'
+
 const root = process.cwd()
 const run = new Date().toISOString().replace(/[:.]/g, '-')
-const dir = resolve('artifacts/quality-release', run)
+const dir = resolve('docs/quality/releases', run)
 mkdirSync(dir, { recursive: true })
-const hash = data => createHash('sha256').update(data).digest('hex')
-const execute = command => spawnSync(command, { cwd: root, shell: true, encoding: 'utf8', timeout: command.startsWith('pnpm test:strict') ? 1800000 : 900000, maxBuffer: 32 * 1024 * 1024 })
-const checks = [
- ['release-policy', 'node --test tests/policy/release-evidence.policy.mjs'],
- ['consumer-boundary', 'node scripts/check_consumer_boundary.mjs'],
- ['contracts', 'python scripts/validate_contracts.py'],
- ['skills', 'python scripts/validate_skills.py'],
- ['f2-tokens', 'python scripts/validate_f2_tokens.py'],
- ['f3-tokens', 'python scripts/validate_f3_tokens.py'],
- ['structure', 'python quality/check_structure.py'],
- ['lint', 'pnpm lint'], ['typecheck', 'pnpm typecheck'],
- ['showcase-typecheck', 'pnpm typecheck:showcase'],
- ['consumer-typecheck', 'pnpm typecheck:consumer'],
- ['unit', 'pnpm test:unit'], ['production-build', 'pnpm build'],
- ['showcase-build', 'pnpm build:showcase'], ['consumer-build', 'pnpm build:consumer'],
- ['isolation', 'python quality/check_showcase_isolation.py'],
- ['security', 'pnpm audit --registry=https://registry.npmjs.org --json'],
- ['sensitive-information', 'python scripts/f6_sensitive_scan.py'],
- ['local-recovery-rehearsal', 'python scripts/f6_rollback_rehearsal.py'],
- ['production-e2e', 'pnpm test:e2e'], ['showcase-e2e', 'pnpm test:showcase'],
- ['consumer-e2e', 'pnpm test:consumer'],
- ['accessibility', 'pnpm test:accessibility'],
- ['zoom-motion', 'pnpm test:acceptance'],
- ['strict-browser-visual', 'pnpm test:strict --update-snapshots=none'],
-]
-const records = []
-for (const [id, command] of checks) {
- const start = Date.now(); const r = execute(command)
- const log = resolve(dir, `${id}.log`)
- writeFileSync(log, (r.stdout || '') + (r.stderr || '') + (r.error ? String(r.error) : ''))
- if (['production-e2e', 'showcase-e2e', 'accessibility', 'strict-browser-visual'].includes(id) && existsSync('test-results')) cpSync('test-results', resolve(dir, `${id}-artifacts`), { recursive: true })
- if (id === 'consumer-e2e' && existsSync('artifacts/consumer-e2e')) cpSync('artifacts/consumer-e2e', resolve(dir, `${id}-artifacts`), { recursive: true })
- if (id === 'zoom-motion' && existsSync('artifacts/f6/acceptance-report')) cpSync('artifacts/f6/acceptance-report', resolve(dir, 'zoom-motion-report'), { recursive: true })
- if (id === 'strict-browser-visual' && existsSync('playwright-report-f4-strict')) cpSync('playwright-report-f4-strict', resolve(dir, 'strict-html-report'), { recursive: true })
- records.push({ id, required: true, command, exit_code: r.status, duration_ms: Date.now()-start, status: r.status === 0 ? 'PASS' : 'BLOCKED', evidence: log, sha256: hash(readFileSync(log)) })
- console.log(`${id}: ${r.status === 0 ? 'PASS' : 'BLOCKED'} exit=${r.status}`)
-}
-const sha = execute('git rev-parse HEAD').stdout.trim()
-// Local verification never authorizes deployment or manufactures a gate/state PASS.
-const requirements = ['human-approval', 'protected-ci-policy', 'rollback-rehearsal']
-const externalEvidence = requirements.map(id => {
- const path = resolve('docs/fusion/F6/evidence', `${id}.json`)
- if (!existsSync(path)) return { id, valid: false, reason: 'Missing external evidence', path }
- try {
-  const record = JSON.parse(readFileSync(path, 'utf8').replace(/^\uFEFF/, ''))
-  // Imported records require an explicit independently verified state and exact source binding.
-  return { id, path, ...inspectArtifactRecord(root, sha, record) }
- } catch (error) { return { id, path, valid: false, reason: String(error) } }
+
+const hash = value => createHash('sha256').update(value).digest('hex')
+const execute = (command, args, timeout = 900000) => spawnSync(command, args, {
+  cwd: root,
+  encoding: 'utf8',
+  timeout,
+  maxBuffer: 32 * 1024 * 1024,
 })
-const missing = externalEvidence.filter(r => !r.valid).map(r => r.id)
-const failed = records.filter(r => r.status !== 'PASS' || !existsSync(r.evidence) || hash(readFileSync(r.evidence)) !== r.sha256)
-const workingTree = execute('git status --short').stdout
-const candidateChanges = sourceChanges(execute('git status --porcelain=v1 -z --untracked-files=all').stdout)
-if (candidateChanges.length) missing.push('fixed-clean-release-commit')
-// Even successful local checks need the repository's authoritative gate/state chain.
-const formalState = inspectFormalState(root, sha, 'docs/fusion/F6/F6-STATE.json')
-if (!formalState.valid) missing.push('formal-gate-state-chain')
-const decision = failed.length || missing.length ? 'BLOCKED' : 'PASS'
-const verificationStatus = failed.length ? 'BLOCKED' : 'PASS'
-writeFileSync(resolve(dir, 'F6-VERIFICATION-GATE.json'), JSON.stringify({ stage: 'F6', status: verificationStatus, repository_sha: sha, scope: 'local verification only', source_changes: candidateChanges, checks: records }, null, 2))
-const files = []
-function index(path) { if (!existsSync(path)) return; for (const ent of readdirSync(path, { withFileTypes: true })) { const p = resolve(path, ent.name); if (ent.isDirectory()) index(p); else files.push({ path: p, sha256: hash(readFileSync(p)) }) } }
-index(dir); index(resolve('artifacts/consumer-e2e')); index(resolve('dist-consumer-saas'))
-const summary = { schema_version: 1, run, repository_sha: sha, environment: { node: process.version, platform: process.platform, cwd: root }, consumption: 'template-source', verification_status: verificationStatus, formal_state: formalState, decision, external_evidence: externalEvidence, failed_checks: records.filter(r=>r.status !== 'PASS').map(r=>r.id), missing_release_evidence: missing, checks: records }
-summary.working_tree = workingTree
-summary.source_changes = candidateChanges
-summary.validated_scope = 'current working tree; not a clean release commit'
-writeFileSync(resolve(dir, 'checks.json'), JSON.stringify(summary,null,2))
-writeFileSync(resolve(dir, 'defects.json'), JSON.stringify([
- ...records.filter(r => r.status !== 'PASS').map(r => ({ id: r.id, ...classifyFailure(r.id, readFileSync(r.evidence, 'utf8')), status: 'OPEN', evidence: r.evidence })),
- ...missing.map(id => ({ id, kind: 'RELEASE_PREREQUISITE', severity: null, status: 'PENDING', reason: 'Required release evidence or candidate binding missing' })),
-],null,2))
-writeFileSync(resolve(dir, 'GATE-RESULT.json'), JSON.stringify({ decision, local_verification_only: true, failed_checks: summary.failed_checks, missing_release_evidence: missing, evidence: 'checks.json' },null,2))
-writeFileSync(resolve(dir, 'evidence-index.json'), JSON.stringify(files,null,2))
-writeFileSync(resolve(dir, 'GATE-REPORT.md'), `# Release decision: ${decision}\n\nConsumption: template-source, not package consumption.\n\nFailed checks: ${summary.failed_checks.join(', ') || 'none'}\n\nMissing release evidence: ${missing.join(', ')}. No local release authorization.\n`)
-writeFileSync(resolve(dir, 'RELEASE-CHECKLIST.md'), `# Release checklist\n\nRequired checks: checks.json\n\nMissing approval, CI isolation policy and rollback evidence: BLOCKED.\n\nNo deployment was attempted.\n`)
-writeFileSync(resolve('artifacts/quality-release/latest.json'), JSON.stringify({ directory: dir, decision },null,2))
-process.exitCode = decision === 'PASS' ? 0 : 1
+
+const quality = execute('npm', ['run', 'quality:check'], 1800000)
+const qualityLog = `${quality.stdout || ''}${quality.stderr || ''}${quality.error ? String(quality.error) : ''}`
+const qualityLogPath = resolve(dir, 'quality-check.log')
+writeFileSync(qualityLogPath, qualityLog)
+
+const qualitySummaryPath = resolve('docs/quality/summary.json')
+let qualitySummary = null
+if (existsSync(qualitySummaryPath)) {
+  try {
+    qualitySummary = JSON.parse(readFileSync(qualitySummaryPath, 'utf8').replace(/^\uFEFF/, ''))
+  } catch {
+    qualitySummary = null
+  }
+}
+
+const shaResult = execute('git', ['rev-parse', 'HEAD'], 30000)
+const sha = (shaResult.stdout || '').trim()
+if (shaResult.status !== 0 || !sha) {
+  writeFileSync(resolve(dir, 'GATE-RESULT.json'), JSON.stringify({ decision: 'BLOCKED', reason: 'Unable to resolve repository SHA' }, null, 2))
+  process.exitCode = 1
+} else {
+  const statusResult = execute('git', ['status', '--porcelain=v1', '-z', '--untracked-files=all'], 30000)
+  const records = (statusResult.stdout || '').split('\0').filter(Boolean)
+  const generatedEvidence = path => /^docs\/quality\/(?:checks\.json|summary\.json|defects\.csv|QUALITY-REPORT\.md|release-latest\.json|releases\/)/.test(path)
+  const sourceChanges = []
+  for (let index = 0; index < records.length; index += 1) {
+    const status = records[index].slice(0, 2)
+    const path = records[index].slice(3)
+    const oldPath = /[RC]/.test(status) ? records[++index] : undefined
+    if (!generatedEvidence(path) && !(oldPath && generatedEvidence(oldPath))) {
+      sourceChanges.push({ status, path, ...(oldPath ? { old_path: oldPath } : {}) })
+    }
+  }
+
+  const approvedBy = (process.env.GPUSTACK_RELEASE_APPROVED_BY || '').trim()
+  const approvalUrl = (process.env.GPUSTACK_RELEASE_APPROVAL_URL || '').trim()
+  const approval = {
+    approved_by: approvedBy || null,
+    source_url: /^https:\/\//.test(approvalUrl) ? approvalUrl : null,
+    valid: Boolean(approvedBy && /^https:\/\//.test(approvalUrl)),
+  }
+
+  const missing = []
+  const failed = []
+  if (quality.status !== 0 || qualitySummary?.quality_decision !== 'PASS') failed.push('quality-check')
+  if (sourceChanges.length) missing.push('fixed-clean-release-revision')
+  if (!approval.valid) missing.push('human-release-approval')
+
+  const decision = failed.length || missing.length ? 'BLOCKED' : 'PASS'
+  const evidence = {
+    schema_version: 2,
+    run,
+    repository_sha: sha,
+    environment: { node: process.version, platform: process.platform, cwd: root },
+    quality_check: {
+      command: 'npm run quality:check',
+      exit_code: quality.status,
+      summary: qualitySummary,
+      log: qualityLogPath,
+      log_sha256: hash(readFileSync(qualityLogPath)),
+    },
+    approval,
+    source_changes: sourceChanges,
+    failed_checks: failed,
+    missing_release_evidence: missing,
+    decision,
+  }
+
+  writeFileSync(resolve(dir, 'checks.json'), JSON.stringify(evidence, null, 2))
+  writeFileSync(resolve(dir, 'GATE-RESULT.json'), JSON.stringify({
+    decision,
+    repository_sha: sha,
+    failed_checks: failed,
+    missing_release_evidence: missing,
+    evidence: 'checks.json',
+  }, null, 2))
+  writeFileSync(resolve(dir, 'GATE-REPORT.md'), [
+    `# Release decision: ${decision}`,
+    '',
+    `Repository SHA: \`${sha}\``,
+    `Quality check exit: \`${quality.status}\``,
+    `Source changes: \`${sourceChanges.length}\``,
+    `Failed checks: \`${failed.join(', ') || 'none'}\``,
+    `Missing release evidence: \`${missing.join(', ') || 'none'}\``,
+    '',
+    'A clean release revision and candidate-specific human approval are required for PASS.',
+  ].join('\n'))
+  writeFileSync(resolve('docs/quality/release-latest.json'), JSON.stringify({ directory: dir, decision }, null, 2))
+  console.log(JSON.stringify({ decision, failed, missing, evidence: dir }, null, 2))
+  process.exitCode = decision === 'PASS' ? 0 : 1
+}

@@ -1,0 +1,36 @@
+name: Frontend rules quality
+on: [push, pull_request]
+permissions:
+  contents: read
+env:
+  HUSKY: '0'
+  STORYBOOK_DISABLE_TELEMETRY: '1'
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run validate:design-contract
+      - run: npm run validate:f2-tokens
+      - run: npm run validate:f3-tokens
+      - run: npm run check:structure
+      - run: npm run check:showcase-isolation
+      - run: npm run check:theme-css
+      - run: npm run typecheck
+      - run: npm run typecheck:showcase
+      - run: npm run lint
+      - run: npm run test:unit
+      - run: npm run build
+      - run: npm run build:showcase
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - run: npm run test:visual
+      - run: npm run test:accessibility
+      - run: npm run test:strict

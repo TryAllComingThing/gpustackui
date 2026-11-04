@@ -7,7 +7,7 @@
   "text.primary": "text.primary",
   "text.secondary": "text.secondary",
   "action.primary.default": "brand.primary",
-  "action.primary.hover": "brand.pressed",
+  "action.primary.hover": "brand.hover",
   "action.primary.pressed": "brand.pressed",
   "action.primary.accent": "brand.accent",
   "feedback.success": "success.default",
