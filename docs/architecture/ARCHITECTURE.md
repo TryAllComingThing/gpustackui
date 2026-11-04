@@ -1,6 +1,6 @@
 # GPUStack Vue 3 SaaS Framework Architecture
 
-状态：`REVIEW`；发布门禁：`BLOCKED`。本文件描述当前真实实现与落地边界，不替代根 `DESIGN.md`。
+状态：`APPROVED / PENDING CLEAN CANDIDATE COMMIT`；基线：`0.2.0-internal-template-baseline`；发布门禁：`BLOCKED`。本文件描述当前真实实现与落地边界，不替代根 `DESIGN.md`。
 
 ## 1. 架构总览
 
@@ -18,6 +18,8 @@ index.html
                   ├─ Sidebar：USidebarNav
                   └─ Main：RouterView
                       └─ src/modules/*/pages/*.vue
+                          ├─ src/api/<domain> (backend contract)
+                          ├─ module-private components/composables/types
                           └─ Nuxt UI primitives + thin U* adapters + patterns
 
 showcase/index.html → showcase/main.ts → showcase/App.vue
@@ -33,9 +35,10 @@ showcase/index.html → showcase/main.ts → showcase/App.vue
 |---|---|---|---|
 | Entry/Bootstrap | `index.html`、`src/main.ts`、`showcase/main.ts` | 创建 Vue 应用、注册 vue-i18n/Router/Nuxt UI、初始化五个 manager、加载统一 CSS 入口。 | 不在入口写业务状态或页面特例。 |
 | App Shell | `src/App.vue`、`src/components/layout/AppShell.vue` | 提供 `UApp` Provider、Header、Breadcrumb、Sidebar、Main 的稳定布局和移动端折叠行为。 | 不在页面重复渲染 Breadcrumb；不绕过 Provider。 |
-| Shared Components | `src/components/common/` | Nuxt UI 原语之上的薄适配：`USidebarNav`、`UDataTable`、`UBreadcrumb`。 | 不做纯 prop 透传；不复制 Nuxt UI 原语。 |
+| API Contracts | `src/api/<domain>/` | 领域端点、响应 Schema 与契约类型；页面通过 API 层消费后端。 | 不导入 `src/modules` 或 `src/components`；不虚构未冻结端点。 |
+| Shared Components | `src/components/common/`、`src/components/feedback/`、`src/components/layout/` | Nuxt UI 薄适配、统一反馈状态、应用壳层。 | 不做纯 prop 透传；不复制 Nuxt UI 原语；不依赖业务模块。 |
 | Patterns | `src/components/patterns/` | 跨页面组合能力：筛选、远程加载、表格操作、复杂表单。 | 不承载页面私有业务规则。 |
-| Modules | `src/modules/` | 按业务域组织页面、局部状态和 API 调用。 | 不跨模块导入私有实现；不修改后端契约。 |
+| Modules | `src/modules/` | 按业务域组织页面、`routes.ts`、公共 `index.ts`、私有组件、私有 composable 和类型。 | 不跨模块导入私有实现；不修改后端契约；公共 UI 不上移则不得跨模块复用。 |
 | Theme Runtime | `src/theme/` | Theme、Density、Typography、Layout 的初始化、持久化、fallback 和 `data-*` 属性。 | 主题切换不得改变表单值、权限、滚动位置或后端语义。 |
 | Token Source | `src/theme/tokens/` | Primitive、semantic mapping、density、typography、visual foundation。 | 不出现第二套 runtime namespace。 |
 | Generated Styles | `src/theme/styles/themes/*.css` | `scripts/generate_theme_css.py` 从主题 JSON 可重复生成。 | 不手动维护生成文件为独立事实来源。 |
@@ -52,6 +55,9 @@ showcase/index.html → showcase/main.ts → showcase/App.vue
    - `UBreadcrumb`：统一 `aria-label`、`data-testid` 和 `gp-breadcrumb` class。
 4. `UBreadcrumb` 与 Nuxt UI 原语同名。适配器内部必须显式导入原语并命名为 `NuxtBreadcrumb`，模板绑定该别名；禁止在适配器模板里裸写 `<UBreadcrumb>`，否则会自递归。
 5. `UApp` 是运行时 Provider 前置条件。折叠 Sidebar 的 tooltip、overlay 和 toast 不能在没有 `UApp` 的树中工作。
+6. 跨模块公共 UI 统一上移到 `src/components/`；模块私有 UI 保留在 `src/modules/<domain>/components/`。跨模块公共 UI 不得反向依赖业务模块。
+7. 领域 API 与响应 Schema 统一放在 `src/api/<domain>/`；`src/services/http/` 只保留传输、错误归一化和 `Result`。
+8. 每个模块通过 `src/modules/<domain>/index.ts` 暴露公共入口；应用路由只从模块公共入口汇总，不直接引用模块内部 `routes.ts`。
 
 ## 4. 主题、Density、Typography 与 Layout
 
@@ -103,8 +109,10 @@ Token 层级：
 
 - 旧组件前缀已全部改为 `U*`，源码引用已扫描清零；`components.d.ts` 由构建重新生成。
 - 兼容 API 的最佳值已获人工批准并落地，详见 `docs/design/TOKEN-MAPPING.md`；五主题与三密度浏览器复验通过。
-- 当前有效来源是根 `DESIGN.md`、本文件、`docs/design/`、`docs/quality/`、`docs/quality/open-defects.csv` 与真实源码。
-- 产品消费形态未决（`PENDING`）：根包 `package.json` 仍为 `private: true`，无 `exports`/`peerDependencies`/`files`/库构建脚本，当前只能复制源码复用；需决策“复制模板”还是“可安装 npm 包”，决策前不得对外宣称可安装复用或提供升级承诺。
+- 认证/权限契约已按 GPUStack 2.x 冻结为 HttpOnly Cookie + `is_admin`；路由保护保持 opt-in，业务路由尚未启用元数据。详见 `docs/architecture/AUTH-AND-PERMISSIONS.md`。
+- GPU 设备 API 已按 `GET /v2/gpu-devices` 与分页响应冻结，页面仍使用本地 fixture，等待独立接入验收。详见 `docs/architecture/API-CONTRACT.md`。
+- 当前有效来源是根 `DESIGN.md`、本文件、`docs/design/`、`docs/quality/` 与真实源码。
+- 0.2.0 基线的消费形态已确定为复制模板；根包 `package.json` 保持 `private: true`，无 `exports`/`peerDependencies`/`files`/库构建脚本。可安装 npm 包形态 `DEFERRED`，未经新决策不得对外宣称可安装复用或提供升级承诺。
 - 发布门禁要求干净候选版本、统一质量检查通过和候选版本对应的人工批准；未满足时保持 `BLOCKED`。
 
 框架全景：架构见本文件；设计思路与设计理念见本文第 5-6 节及 `docs/design/FRAMEWORK-GUIDE.md`；门禁见 `docs/quality/QUALITY-GATES.md`。

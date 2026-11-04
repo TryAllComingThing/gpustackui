@@ -11,9 +11,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppHeaderActions: typeof import('./src/components/layout/AppHeaderActions.vue')['default']
     AppShell: typeof import('./src/components/layout/AppShell.vue')['default']
     ComplexFormPattern: typeof import('./src/components/patterns/ComplexFormPattern.vue')['default']
     DataTablePattern: typeof import('./src/components/patterns/DataTablePattern.vue')['default']
+    EmptyState: typeof import('./src/components/feedback/EmptyState.vue')['default']
+    ErrorState: typeof import('./src/components/feedback/ErrorState.vue')['default']
+    LoadingState: typeof import('./src/components/feedback/LoadingState.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UAlert: typeof import('./node_modules/@nuxt/ui/dist/runtime/components/Alert.vue')['default']

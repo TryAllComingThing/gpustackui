@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, h, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { THEME_IDS, type ThemeId } from '../src/theme/theme.types'
 import { themeState, setTheme } from '../src/theme/theme.manager'
 import { DENSITY_IDS, densityState, setDensity } from '../src/theme/density.manager'

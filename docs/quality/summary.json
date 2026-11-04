@@ -1,8 +1,8 @@
 {
   "quality_run": "unified-quality-check",
-  "started_at": "2026-11-04T03:01:08.894470+00:00",
-  "finished_at": "2026-11-04T03:02:14.385714+00:00",
-  "duration_ms": 65491,
+  "started_at": "2026-11-04T08:38:02.426663+00:00",
+  "finished_at": "2026-11-04T08:39:16.374408+00:00",
+  "duration_ms": 73948,
   "environment": {
     "cwd": "/Users/kyle/Documents/AI-Innovation-RD/gpustackui-temp",
     "platform": "macOS-15.2-arm64-arm-64bit",
@@ -21,6 +21,5 @@
   "quality_decision": "PASS",
   "failed_checks": [],
   "unexecuted_checks": [],
-  "open_defects": [],
   "checks_count": 16
 }

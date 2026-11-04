@@ -1,6 +1,1 @@
-export interface AuthUser {
-  id: string
-  name: string
-  roles: string[]
-  permissions: string[]
-}
+export type { AuthUser } from '../api/auth'

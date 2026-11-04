@@ -11,3 +11,4 @@ coverage/
 .husky/
 playwright*/
 __pycache__/
+planning/

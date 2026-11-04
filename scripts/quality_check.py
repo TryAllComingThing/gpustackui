@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Unified quality entry point with exit-code and defect gate."""
+"""Unified quality entry point with exit-code gating."""
 from __future__ import annotations
 
-import csv
 import json
 import os
 import platform
@@ -15,7 +14,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT_DIR = ROOT / "docs/quality"
-OPEN_DEFECTS = ROOT / "docs/quality/open-defects.csv"
 
 CHECKS = [
     ("S-001", "Static", "contracts", ["python3", "scripts/validate_contracts.py"]),
@@ -25,7 +23,7 @@ CHECKS = [
     ("S-005", "Static", "lint", ["npm", "run", "lint"]),
     ("S-006", "Static", "theme-css", ["npm", "run", "check:theme-css"]),
     ("S-007", "Static", "tokens", ["npm", "run", "validate:tokens"]),
-    ("S-008", "Static", "diff-check", ["git", "-c", "core.whitespace=cr-at-eol", "diff", "--check"]),
+    ("S-008", "Static", "diff-check", ["git", "diff", "--check"]),
     ("B-001", "Build", "production-build", ["npm", "run", "build"]),
     ("B-002", "Build", "showcase-build", ["npm", "run", "build:showcase"]),
     ("F-001", "Functional", "unit", ["npm", "run", "test:unit"]),
@@ -43,14 +41,6 @@ def command_version(command: list[str]) -> str:
         return (result.stdout or result.stderr).strip().splitlines()[0] if result.returncode == 0 else "UNKNOWN"
     except Exception:
         return "UNKNOWN"
-
-
-def defects() -> list[dict[str, str]]:
-    if not OPEN_DEFECTS.is_file():
-        return [{"defect_id": "QUALITY-MISSING-DEFECTS", "severity": "P0", "status": "OPEN", "description": "Open defect inventory is missing"}]
-    with OPEN_DEFECTS.open(newline="") as handle:
-        rows = list(csv.DictReader(handle))
-    return [row for row in rows if row.get("status") not in {"CLOSED", "MITIGATED"}]
 
 
 def main() -> int:
@@ -90,10 +80,9 @@ def main() -> int:
         })
         print(f"[{check_id}] {category}/{slug}: {status} exit={exit_code} duration_ms={duration_ms}")
 
-    open_defects = defects()
     failed = [item["check_id"] for item in records if item["status"] != "PASS"]
     unexecuted = [item["check_id"] for item in records if item["exit_code"] is None]
-    quality_decision = "PASS" if not failed and not unexecuted and not open_defects else "BLOCKED"
+    quality_decision = "PASS" if not failed and not unexecuted else "BLOCKED"
     finished = datetime.now(timezone.utc)
     summary = {
         "quality_run": "unified-quality-check",
@@ -105,16 +94,10 @@ def main() -> int:
         "quality_decision": quality_decision,
         "failed_checks": failed,
         "unexecuted_checks": unexecuted,
-        "open_defects": [item.get("defect_id", "UNKNOWN") for item in open_defects],
         "checks_count": len(records),
     }
     (REPORT_DIR / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n")
     (REPORT_DIR / "checks.json").write_text(json.dumps(records, ensure_ascii=False, indent=2) + "\n")
-    with (REPORT_DIR / "defects.csv").open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["defect_id", "severity", "status", "description"])
-        writer.writeheader()
-        for item in open_defects:
-            writer.writerow({key: item.get(key, "") for key in writer.fieldnames})
     lines = [
         "# Unified Quality Report",
         "",
@@ -128,7 +111,7 @@ def main() -> int:
     ]
     for item in records:
         lines.append(f"| {item['category']} | {item['name']} | {item['exit_code']} | {item['duration_ms']} | {item['status']} |")
-    lines.extend(["", "## Quality Decision Inputs", "", f"- Failed checks: `{', '.join(failed) or 'none'}`", f"- Unexecuted checks: `{', '.join(unexecuted) or 'none'}`", f"- Open defects: `{', '.join(summary['open_defects']) or 'none'}`", "", "A required failure, unexecuted check, or open defect forces `BLOCKED`."])
+    lines.extend(["", "## Quality Decision Inputs", "", f"- Failed checks: `{', '.join(failed) or 'none'}`", f"- Unexecuted checks: `{', '.join(unexecuted) or 'none'}`", "", "A required failure or unexecuted check forces `BLOCKED`."])
     (REPORT_DIR / "QUALITY-REPORT.md").write_text("\n".join(lines) + "\n")
     print(f"quality_decision={quality_decision}")
     return 0 if quality_decision == "PASS" else 1

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { toApiError } from '../../src/services/http/errors'
-import { GpuResourceSchema } from '../../src/services/schemas/gpu-resource'
+import { GpuDeviceListSchema, GpuDeviceSchema, toGpuDeviceQuery } from '../../src/api/resources/gpu-device'
 
 describe('http error normalization', () => {
   it('maps an unauthorized response to UNAUTHORIZED with the server message', () => {
@@ -18,14 +18,47 @@ describe('http error normalization', () => {
   })
 })
 
-describe('gpu resource response schema', () => {
-  it('accepts a valid payload', () => {
-    const parsed = GpuResourceSchema.safeParse({ id: 'g1', name: 'g1', model: 'A100', status: '运行中', utilization: '68%' })
+const gpuDevice = {
+  id: 'gpu-1',
+  worker_id: 1,
+  worker_name: 'worker-a',
+  worker_ip: '10.0.0.1',
+  worker_ifname: 'eth0',
+  cluster_id: 1,
+  name: 'NVIDIA A100-SXM4-80GB',
+  vendor: 'nvidia',
+  index: 0,
+  core: { total: 100, utilization_rate: 68 },
+  memory: { total: 81920, utilization_rate: 42, is_unified_memory: false, used: 34406, allocated: 34406 },
+  temperature: 51,
+}
+
+describe('gpu device response schema', () => {
+  it('accepts the GPUStack gpu-devices payload', () => {
+    const parsed = GpuDeviceSchema.safeParse(gpuDevice)
     expect(parsed.success).toBe(true)
   })
 
   it('rejects schema drift', () => {
-    const parsed = GpuResourceSchema.safeParse({ id: 'g1', name: 'g1' })
+    const parsed = GpuDeviceSchema.safeParse({ id: 'gpu-1', name: 'A100' })
     expect(parsed.success).toBe(false)
+  })
+
+  it('accepts the paginated list envelope', () => {
+    const parsed = GpuDeviceListSchema.safeParse({
+      items: [gpuDevice],
+      pagination: { page: 1, perPage: 100, total: 1, totalPage: 1 },
+    })
+    expect(parsed.success).toBe(true)
+  })
+
+  it('maps public query names to the GPUStack API contract', () => {
+    expect(toGpuDeviceQuery({ page: 2, perPage: 20, search: 'A100', clusterId: 3, sortBy: '-memory.utilization_rate' })).toEqual({
+      page: 2,
+      perPage: 20,
+      search: 'A100',
+      cluster_id: 3,
+      sort_by: '-memory.utilization_rate',
+    })
   })
 })

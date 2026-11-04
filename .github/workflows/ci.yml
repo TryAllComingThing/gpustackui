@@ -18,8 +18,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validate:design-contract
-      - run: npm run validate:f2-tokens
-      - run: npm run validate:f3-tokens
+      - run: npm run validate:tokens
       - run: npm run check:structure
       - run: npm run check:showcase-isolation
       - run: npm run check:theme-css

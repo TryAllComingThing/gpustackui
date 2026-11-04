@@ -53,6 +53,11 @@ export default {
     sortBy: 'Sort by {label}',
     pagination: 'Table pagination',
   },
+  feedback: {
+    loadFailed: 'Failed to load',
+    retry: 'Retry',
+    loading: 'Loading',
+  },
   error: { forbidden: 'Access denied', forbiddenBody: 'The current account does not have permission to access this page.' },
   aria: { sidebar: 'Primary navigation', breadcrumb: 'Current location' },
 }

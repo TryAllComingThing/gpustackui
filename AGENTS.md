@@ -4,6 +4,7 @@
 
 - 根目录 `DESIGN.md` 是唯一活动设计规范。
 - 遵循 `docs/architecture/ARCHITECTURE.md` 和 `.codex/skills/` 下五个 Skill 契约。
+- Codex 开始任务前必须读取 `docs/ai/CODEX-WORKFLOW.md`、`docs/ai/CONTEXT-MAP.md` 和 `docs/ai/TASK-CONTRACT.md`。
 - 不得创建第二套 DESIGN.md、项目 Profile、平行主题引擎或平行 `--ds-*` 运行时变量。
 - 未审批的规范冲突必须标记 `PROPOSED`、`PENDING` 或 `DEFERRED`；不得自行冻结。
 
@@ -27,5 +28,6 @@
 ## 变更边界
 
 - 先读取根 `DESIGN.md`、相关 Skill、真实源码和测试配置，再修改。
+- 每个任务必须有验收标准、允许修改路径、测试命令和证据路径；缺失时不得进入实现。
 - 组件、Pattern、Theme、Density 或 Showcase 变更必须补充源码映射、状态矩阵和验证证据。
 - 失败时保留日志和报告；不得自动接受视觉基线或删除失败证据。

@@ -53,6 +53,11 @@ export default {
     sortBy: '按 {label} 排序',
     pagination: '表格分页',
   },
+  feedback: {
+    loadFailed: '加载失败',
+    retry: '重新加载',
+    loading: '正在加载',
+  },
   error: { forbidden: '无权访问', forbiddenBody: '当前账号没有访问该页面的权限。' },
   aria: { sidebar: '主导航', breadcrumb: '当前位置' },
 }

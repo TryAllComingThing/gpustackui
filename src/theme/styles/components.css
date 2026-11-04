@@ -60,3 +60,14 @@
 .gp-data-table-pattern__search { min-width:180px; flex:1; }
 .gp-data-table-pattern__actions { display:flex; flex-wrap:wrap; gap:var(--gp-space-1); }
 @media(max-width:650px){.gp-complex-form__grid{grid-template-columns:1fr}}
+
+/* Shared feedback states for modules and patterns. */
+.gp-feedback { display:grid; justify-items:center; gap:var(--gp-space-2); padding:var(--gp-space-6); text-align:center; color:var(--gp-text-primary); }
+.gp-feedback__mark { display:inline-grid; place-items:center; width:32px; height:32px; border-radius:50%; background:var(--gp-surface-subtle); color:var(--gp-text-secondary); font-weight:700; }
+.gp-feedback__title { font:var(--gp-type-card-title-weight) var(--gp-type-card-title-size)/var(--gp-type-card-title-line-height) var(--gp-font-family); }
+.gp-feedback__description { margin:0; color:var(--gp-text-secondary); font-size:var(--gp-type-body-small-size); line-height:var(--gp-type-body-small-line-height); }
+.gp-feedback--empty .gp-feedback__mark { background:var(--gp-success-bg); color:var(--gp-success-fg); }
+.gp-feedback--error .gp-feedback__mark { background:var(--gp-danger-bg); color:var(--gp-danger-fg); }
+.gp-feedback__spinner { width:24px; height:24px; border:2px solid var(--gp-border-default); border-top-color:var(--gp-primary); border-radius:50%; animation:gp-feedback-spin 800ms linear infinite; }
+@keyframes gp-feedback-spin { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .gp-feedback__spinner { animation:none; } }
