@@ -17,7 +17,7 @@ Read this skill contract and validate it with `python3 scripts/validate_contract
 Read repository `AGENTS.md`, `DESIGN.md`, task manifest and real source files. Do not claim tests passed without executable evidence. Do not alter backend API or permissions.
 
 ## Workflow
-1. Read root DESIGN.md, immutable task manifest, baseline and evidence; verify repository SHA and environment.
+1. Read root DESIGN.md, immutable task manifest, baseline and evidence; verify version identifier and environment.
 2. Run configured commands and record exit codes, duration, logs and output hashes.
 3. Reject missing evidence, P0/P1 defects, unapproved API drift or baseline changes.
 4. Produce PASS, REVISE or BLOCKED with reasons; PASS requires explicit human approval.
@@ -45,4 +45,4 @@ At most three repair cycles. On repeated failure stop, preserve logs, report roo
 
 ## Isolated release execution
 
-Release execution must use an externally approved immutable CI policy with repository SHA, image digest and exact argv matching. This checkout does not provide a local release executor; local commands are verification evidence only and cannot authorize deployment. Protected CI must attach its isolation policy and rollback evidence to the release report.
+Release execution must use an externally approved immutable CI policy with version identifier, image digest and exact argv matching. This checkout does not provide a local release executor; local commands are verification evidence only and cannot authorize deployment. Protected CI must attach its isolation policy and rollback evidence to the release report.

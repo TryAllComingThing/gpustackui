@@ -36,12 +36,12 @@ Detailed behavior and port allocation are documented in `docs/quality/PLAYWRIGHT
 
 ## Baseline Approval
 
-基线冻结必须在干净候选提交上完成，并同时满足：
+基线冻结必须在干净工作树上完成，并同时满足：
 
 1. `npm run quality:check` 退出码为 `0`，`docs/quality/summary.json` 的 `quality_decision` 为 `PASS`。
 2. 质量脚本不得创建额外质量产物；批准的例外必须记录在 `BASELINE.md`。
-3. 候选提交 SHA 与 `BASELINE.md`、`docs/quality/BASELINE-REVIEW.md` 和当次质量报告一致。
+3. 版本标识与 `BASELINE.md`、`docs/quality/BASELINE-REVIEW.md` 和当次质量报告一致；不使用 Git SHA 作为版本绑定。
 4. 人工批准记录包含批准人、日期、证据路径、决定和例外；仅有口头同意不算批准。
 5. 自动化视觉/axe 通过不得写成人工 WCAG 通过；未执行项写 `NOT EXECUTED`。
 
-当前 `0.2.0-internal-template-baseline` 的各角色人工批准已于 2026-11-04 记录。干净候选提交与 SHA 绑定仍待完成，因此基线状态为 `APPROVED / PENDING CLEAN CANDIDATE COMMIT`，发布门禁保持 `BLOCKED`。
+当前 `0.2.0-internal-template-baseline` 的各角色人工批准已于 2026-11-04 记录。干净工作树与发布门禁审批证据仍待完成，因此基线状态为 `APPROVED / PENDING RELEASE GATE`，发布门禁保持 `BLOCKED`。

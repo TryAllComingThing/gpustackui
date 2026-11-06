@@ -22,13 +22,11 @@ if (existsSync(qualitySummaryPath)) {
   }
 }
 
-const shaResult = execute('git', ['rev-parse', 'HEAD'], 30000)
-const sha = (shaResult.stdout || '').trim()
-if (shaResult.status !== 0 || !sha) {
-  console.log(JSON.stringify({ decision: 'BLOCKED', reason: 'Unable to resolve repository SHA' }, null, 2))
+const statusResult = execute('git', ['status', '--porcelain=v1', '-z', '--untracked-files=all'], 30000)
+if (statusResult.status !== 0) {
+  console.log(JSON.stringify({ decision: 'BLOCKED', reason: 'Unable to read working tree status' }, null, 2))
   process.exitCode = 1
 } else {
-  const statusResult = execute('git', ['status', '--porcelain=v1', '-z', '--untracked-files=all'], 30000)
   const records = (statusResult.stdout || '').split('\0').filter(Boolean)
   const generatedEvidence = path => /^docs\/quality\/(?:checks\.json|summary\.json|QUALITY-REPORT\.md)$/.test(path)
   const sourceChanges = []
@@ -52,13 +50,12 @@ if (shaResult.status !== 0 || !sha) {
   const missing = []
   const failed = []
   if (quality.status !== 0 || qualitySummary?.quality_decision !== 'PASS') failed.push('quality-check')
-  if (sourceChanges.length) missing.push('fixed-clean-release-revision')
+  if (sourceChanges.length) missing.push('clean-working-tree')
   if (!approval.valid) missing.push('human-release-approval')
 
   const decision = failed.length || missing.length ? 'BLOCKED' : 'PASS'
   console.log(JSON.stringify({
     decision,
-    repository_sha: sha,
     quality_check: {
       command: 'npm run quality:check',
       exit_code: quality.status,

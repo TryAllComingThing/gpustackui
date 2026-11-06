@@ -11,7 +11,7 @@
 ## 基线消费边界
 
 - 0.2.0 基线以复制模板交付，不提供 npm 安装包、库导出或跨项目自动升级承诺。
-- 复制后应将 `BASELINE.md` 中的基线 ID 与候选提交 SHA 记录到业务工程，作为后续人工 diff 的锚点。
+- 复制后应将 `BASELINE.md` 中的 Baseline ID 与 `package.json` 版本记录到业务工程，作为后续人工 diff 的锚点；不使用 Git SHA 作为版本绑定。
 - 业务工程可以替换页面、API 领域和 locale，但不得复制出第二套 `DESIGN.md`、主题引擎或 `--ds-*` 运行时变量。
 
 ## 复制模板接入
@@ -33,7 +33,7 @@
 
 ## 基线与回滚
 
-- 冻结基线必须先有干净候选提交、绑定 SHA 的 `npm run quality:check` 证据和人工批准；未满足时状态为 `BLOCKED`。
-- 升级前记录当前 `package.json` 版本、`BASELINE.md` 基线 ID 和候选提交 SHA。
+- 冻结基线必须先有干净工作树、`npm run quality:check` 通过证据和人工批准；未满足时状态为 `BLOCKED`。
+- 升级前记录当前 `package.json` 版本和 `BASELINE.md` Baseline ID；不使用 Git SHA 作为版本绑定。
 - 回滚时保留业务 `src/modules`、后端契约和用户数据，按提交回退框架文件、Token、组件、API 传输层和依赖锁文件；不得删除失败证据。
 - 全仓库已跟踪文本文件已完成 LF 归一化，包括 `.codex/skills/`。升级 diff 中发现 CRLF 变化时，应与功能变更分开审查。

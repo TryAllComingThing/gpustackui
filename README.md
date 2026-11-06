@@ -2,7 +2,7 @@
 
 原 React 2.3.0 不变。Theme 使用 Design System V2.4 的 standard/business/future 原始资源；Showcase 是独立开发/验收入口。
 
-本包已完成依赖安装、生产/Showcase 类型检查、Lint 和真实构建验证。当前基线为 `0.2.0-internal-template-baseline`（`APPROVED / PENDING CLEAN CANDIDATE COMMIT`），各角色人工批准已记录，范围与证据见 `BASELINE.md`；产品形态为**复制模板**（非 npm 安装包），接入与升级见 `docs/UPGRADING.md`；新增业务模块用 `npm run create:module -- <name>`。统一质量入口为 `npm run quality:check`；发布门禁要求干净候选版本、质量检查通过和候选版本对应的人工批准。详见 `docs/quality/QUALITY-GATES.md`。
+本包已完成依赖安装、生产/Showcase 类型检查、Lint 和真实构建验证。当前基线为 `0.2.0-internal-template-baseline`（`APPROVED / PENDING RELEASE GATE`），各角色人工批准已记录，范围与证据见 `BASELINE.md`；产品形态为**复制模板**（非 npm 安装包），接入与升级见 `docs/UPGRADING.md`；新增业务模块用 `npm run create:module -- <name>`。统一质量入口为 `npm run quality:check`；发布门禁要求干净工作树、质量检查通过和版本对应的人工批准。详见 `docs/quality/QUALITY-GATES.md`。
 
 命令：`npm install` → `npm run typecheck` → `npm run build` → `npm run build:showcase` → `npm run check:structure`。生产仅部署 dist，不部署 dist-showcase。
 

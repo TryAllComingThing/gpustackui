@@ -1,6 +1,6 @@
 # GPUStack Vue Framework Baseline
 
-状态：`APPROVED / PENDING CLEAN CANDIDATE COMMIT`
+状态：`APPROVED / PENDING RELEASE GATE`
 
 本文件定义一个可复制、可验证、可回滚的内部框架基线，不等同于生产发布承诺。根 `DESIGN.md` 仍是唯一活动设计规范；本文件只记录基线范围、证据和审批状态。
 
@@ -11,8 +11,8 @@
 | Baseline ID | `0.2.0-internal-template-baseline` |
 | Package version | `0.2.0` |
 | 消费形态 | 复制模板（copy template），不是 npm 安装包 |
-| 候选提交 | `PENDING`：当前 `HEAD` 为 `d068c4e23dfe4cd93154bbc81a3d8c533eba0888`，工作树未提交，不能作为冻结提交 |
-| 基线状态 | `APPROVED`（内部复制模板）；干净候选提交完成前不得打 tag |
+| 版本绑定 | 使用 `Baseline ID` 与 `Package version`；Git SHA 不作为版本绑定 |
+| 基线状态 | `APPROVED`（内部复制模板）；发布门禁通过前不得打 tag |
 | 发布门禁 | `BLOCKED`，以 `docs/quality/QUALITY-GATES.md` 为准 |
 
 ## 基线包含
@@ -42,16 +42,16 @@
 |---|---|
 | 命令 | `npm run quality:check` |
 | 结果 | `PASS`，16/16 检查通过，0 失败，0 未执行 |
-| 运行时间 | `2026-11-04T08:38:02.426663+00:00` → `2026-11-04T08:39:16.374408+00:00` |
+| 运行时间 | `2026-11-06T01:09:24.493071+00:00` → `2026-11-06T01:10:41.205175+00:00` |
 | 环境 | macOS-15.2-arm64-arm-64bit；Node `v22.22.0`；npm `11.10.1`；Playwright `1.64.1` |
 | 汇总 | `docs/quality/summary.json` |
 | 逐项检查 | `docs/quality/checks.json` |
 | 报告 | `docs/quality/QUALITY-REPORT.md` |
 | 基线评审 | `docs/quality/BASELINE-REVIEW.md` |
 | 差异卫生 | `git diff --check`，退出码 `0` |
-| 发布门禁 | `BLOCKED`；人工批准已记录，当前阻断项为缺少干净候选提交 |
+| 发布门禁 | `BLOCKED`；等待干净工作树与发布脚本要求的人工审批证据 |
 
-统一门禁的 `PASS` 只表示当前检查范围内通过；它不能替代人工批准、生产安全配置、人工 WCAG 检查或干净提交验证。
+统一门禁的 `PASS` 只表示当前检查范围内通过；它不能替代人工批准、生产安全配置、人工 WCAG 检查或干净工作树验证。
 
 ## 已知限制
 
@@ -65,13 +65,13 @@
 ## 冻结条件
 
 1. **已完成**：全仓库文本 LF 归一化，包括 `.codex/skills/`；提交时仍应与功能改动拆分。
-2. **待完成**：创建干净候选提交，记录完整 SHA，并在该 SHA 上重新执行 `npm run quality:check`。
+2. **待完成**：保持干净工作树，并在最终版本状态上执行 `npm run quality:check`。
 3. **已完成**：各角色人工批准已记录；P1 项作为内部基线的已接受限制保留，不代表生产就绪。
-4. **待完成**：由发布负责人将审批记录绑定干净候选提交 SHA，再更新发布门禁并打 tag。
+4. **待完成**：由发布负责人按 Baseline ID 记录发布审批证据，再更新发布门禁并打 tag；不使用 Git SHA 作为版本绑定。
 
 ## 回滚
 
-- 未发布：直接回退候选提交或删除复制出的模板工程；不涉及数据迁移。
+- 未发布：直接回退发布版本或删除复制出的模板工程；不涉及数据迁移。
 - 已复制到业务工程：按 `docs/UPGRADING.md` 的人工 diff 规则保留 `src/modules` 业务实现，回退框架文件与 `package-lock.json`。
 - 不得通过删除失败证据或自动接受视觉基线隐藏回归。
 
@@ -86,4 +86,4 @@
 | 质量/测试负责人 | 用户确认（各角色） | 2026-11-04 | 本次对话确认；本文件与 `docs/quality/BASELINE-REVIEW.md` | `APPROVED` |
 | 发布负责人 | 用户确认（各角色） | 2026-11-04 | 本次对话确认；本文件与 `docs/quality/BASELINE-REVIEW.md` | `APPROVED` |
 
-批准范围限于内部复制模板基线。人工 WCAG、人工渗透测试、真实生产反向代理配置、真实 GPUStack 后端联调仍未执行；批准不构成生产发布许可。干净候选提交 SHA 仍是 `PENDING`，因此发布门禁保持 `BLOCKED`。
+批准范围限于内部复制模板基线。人工 WCAG、人工渗透测试、真实生产反向代理配置、真实 GPUStack 后端联调仍未执行；批准不构成生产发布许可。版本绑定使用 Baseline ID 与 Package version，不使用 Git SHA；发布门禁仍等待可验证的审批证据。

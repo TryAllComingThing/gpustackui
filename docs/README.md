@@ -1,6 +1,6 @@
 # GPUStack Vue 3 SaaS Framework Documentation
 
-状态：`APPROVED / PENDING CLEAN CANDIDATE COMMIT`。当前基线为 `0.2.0-internal-template-baseline`，各角色人工批准已记录；根 `DESIGN.md` 是唯一活动设计权威，本目录提供架构、设计、交付和质量的可追溯入口。发布门禁仍为 `BLOCKED`，直到干净候选提交绑定 SHA。
+状态：`APPROVED / PENDING RELEASE GATE`。当前基线为 `0.2.0-internal-template-baseline`，各角色人工批准已记录；根 `DESIGN.md` 是唯一活动设计权威，本目录提供架构、设计、交付和质量的可追溯入口。发布门禁仍为 `BLOCKED`，直到发布审批证据完成；版本绑定使用 Baseline ID 与 Package version，不使用 Git SHA。
 
 ## 文档索引
 
@@ -35,5 +35,5 @@
 
 - 旧组件前缀与旧 class 前缀已收敛到 `U*`/`gp-*`；`UBreadcrumb` 与 Nuxt UI 原语同名，内部使用 `NuxtBreadcrumb` 别名避免自递归。
 - 当前以根 `DESIGN.md`、本目录和真实源码为准。
-- 内部基线采用复制模板形态，不承诺 npm 安装；正式发布门禁要求干净候选版本、`npm run quality:check` 通过和候选版本对应的人工批准；未满足时保持 `BLOCKED`。
+- 内部基线采用复制模板形态，不承诺 npm 安装；正式发布门禁要求干净工作树、`npm run quality:check` 通过和版本对应的人工批准；未满足时保持 `BLOCKED`。
 

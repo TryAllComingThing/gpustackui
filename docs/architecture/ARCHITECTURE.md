@@ -1,6 +1,6 @@
 # GPUStack Vue 3 SaaS Framework Architecture
 
-状态：`APPROVED / PENDING CLEAN CANDIDATE COMMIT`；基线：`0.2.0-internal-template-baseline`；发布门禁：`BLOCKED`。本文件描述当前真实实现与落地边界，不替代根 `DESIGN.md`。
+状态：`APPROVED / PENDING RELEASE GATE`；基线：`0.2.0-internal-template-baseline`；发布门禁：`BLOCKED`。本文件描述当前真实实现与落地边界，不替代根 `DESIGN.md`。
 
 ## 1. 架构总览
 
@@ -113,7 +113,7 @@ Token 层级：
 - GPU 设备 API 已按 `GET /v2/gpu-devices` 与分页响应冻结，页面仍使用本地 fixture，等待独立接入验收。详见 `docs/architecture/API-CONTRACT.md`。
 - 当前有效来源是根 `DESIGN.md`、本文件、`docs/design/`、`docs/quality/` 与真实源码。
 - 0.2.0 基线的消费形态已确定为复制模板；根包 `package.json` 保持 `private: true`，无 `exports`/`peerDependencies`/`files`/库构建脚本。可安装 npm 包形态 `DEFERRED`，未经新决策不得对外宣称可安装复用或提供升级承诺。
-- 发布门禁要求干净候选版本、统一质量检查通过和候选版本对应的人工批准；未满足时保持 `BLOCKED`。
+- 发布门禁要求干净工作树、统一质量检查通过和版本对应的人工批准；未满足时保持 `BLOCKED`。
 
 框架全景：架构见本文件；设计思路与设计理念见本文第 5-6 节及 `docs/design/FRAMEWORK-GUIDE.md`；门禁见 `docs/quality/QUALITY-GATES.md`。
 
