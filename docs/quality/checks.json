@@ -5,7 +5,7 @@
     "name": "contracts",
     "command": "python3 scripts/validate_contracts.py",
     "exit_code": 0,
-    "duration_ms": 95,
+    "duration_ms": 97,
     "status": "PASS"
   },
   {
@@ -14,7 +14,7 @@
     "name": "structure",
     "command": "npm run check:structure",
     "exit_code": 0,
-    "duration_ms": 135,
+    "duration_ms": 155,
     "status": "PASS"
   },
   {
@@ -23,7 +23,7 @@
     "name": "typecheck",
     "command": "npm run typecheck",
     "exit_code": 0,
-    "duration_ms": 2403,
+    "duration_ms": 2253,
     "status": "PASS"
   },
   {
@@ -32,7 +32,7 @@
     "name": "typecheck-showcase",
     "command": "npm run typecheck:showcase",
     "exit_code": 0,
-    "duration_ms": 3781,
+    "duration_ms": 3441,
     "status": "PASS"
   },
   {
@@ -41,7 +41,7 @@
     "name": "lint",
     "command": "npm run lint",
     "exit_code": 0,
-    "duration_ms": 1320,
+    "duration_ms": 1459,
     "status": "PASS"
   },
   {
@@ -50,7 +50,7 @@
     "name": "theme-css",
     "command": "npm run check:theme-css",
     "exit_code": 0,
-    "duration_ms": 135,
+    "duration_ms": 137,
     "status": "PASS"
   },
   {
@@ -59,7 +59,7 @@
     "name": "tokens",
     "command": "npm run validate:tokens",
     "exit_code": 0,
-    "duration_ms": 139,
+    "duration_ms": 128,
     "status": "PASS"
   },
   {
@@ -68,7 +68,7 @@
     "name": "diff-check",
     "command": "git diff --check",
     "exit_code": 0,
-    "duration_ms": 18,
+    "duration_ms": 15,
     "status": "PASS"
   },
   {
@@ -77,7 +77,7 @@
     "name": "production-build",
     "command": "npm run build",
     "exit_code": 0,
-    "duration_ms": 5326,
+    "duration_ms": 6247,
     "status": "PASS"
   },
   {
@@ -86,7 +86,7 @@
     "name": "showcase-build",
     "command": "npm run build:showcase",
     "exit_code": 0,
-    "duration_ms": 7629,
+    "duration_ms": 8803,
     "status": "PASS"
   },
   {
@@ -95,7 +95,7 @@
     "name": "unit",
     "command": "npm run test:unit",
     "exit_code": 0,
-    "duration_ms": 633,
+    "duration_ms": 773,
     "status": "PASS"
   },
   {
@@ -104,7 +104,7 @@
     "name": "production-e2e",
     "command": "npm run test:e2e",
     "exit_code": 0,
-    "duration_ms": 8454,
+    "duration_ms": 8929,
     "status": "PASS"
   },
   {
@@ -113,7 +113,7 @@
     "name": "visual",
     "command": "npm run test:visual",
     "exit_code": 0,
-    "duration_ms": 14847,
+    "duration_ms": 14972,
     "status": "PASS"
   },
   {
@@ -122,7 +122,7 @@
     "name": "accessibility",
     "command": "npm run test:accessibility",
     "exit_code": 0,
-    "duration_ms": 13696,
+    "duration_ms": 12434,
     "status": "PASS"
   },
   {
@@ -131,7 +131,7 @@
     "name": "strict-axe-browser-visual",
     "command": "npm run test:strict",
     "exit_code": 0,
-    "duration_ms": 11837,
+    "duration_ms": 11731,
     "status": "PASS"
   },
   {
@@ -140,7 +140,7 @@
     "name": "showcase-isolation",
     "command": "npm run check:showcase-isolation",
     "exit_code": 0,
-    "duration_ms": 132,
+    "duration_ms": 136,
     "status": "PASS"
   }
 ]
