@@ -1,0 +1,33 @@
+{
+  "status": "active",
+  "default": "system",
+  "resolutions": ["light", "dark"],
+  "dark": {
+    "background": {
+      "canvas": "#0B1220",
+      "subtle": "#111827",
+      "disabled": "#1F2937",
+      "default": "#111827"
+    },
+    "surfaceWhite": "#111827",
+    "text": {
+      "n900": "#F8FAFC",
+      "n800": "#E2E8F0",
+      "n600": "#94A3B8",
+      "n500": "#94A3B8",
+      "n400": "#64748B"
+    },
+    "border": {
+      "n300": "#334155",
+      "n250": "#273449",
+      "n200": "#1E293B"
+    },
+    "headerBg": "#0F172A",
+    "headerFg": "#F8FAFC",
+    "sidebarBg": "#020617",
+    "sidebarFg": "#F8FAFC",
+    "sidebarHoverBg": "#172554",
+    "sidebarSubActiveBg": "rgba(255, 255, 255, 0.10)",
+    "sidebarSubActiveFg": "#F8FAFC"
+  }
+}

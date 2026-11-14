@@ -1,34 +1,34 @@
 {
   "$schema": "https://gpustack.local/schema/visual-foundation.json",
-  "status": "APPROVED",
+  "status": "active",
   "scope": "SaaS generic visual foundation; no GPU runtime mapping",
-  "source": "Migrated SaaS-Design-System-V1.1-M0/DESIGN.md §§5-10; src/theme/tokens/themes/A2,B,C,D,E.json",
+  "source": "Migrated SaaS-Design-System-V1.1-M0/DESIGN.md §§5-10; src/theme/tokens/themes/{standard,business,future,sky,ocean}.json",
   "radius": {
-    "A2": {
+    "business": {
       "sm": "4px",
       "md": "6px",
       "lg": "10px",
       "xl": "14px"
     },
-    "B": {
+    "sky": {
       "sm": "6px",
       "md": "10px",
       "lg": "14px",
       "xl": "18px"
     },
-    "C": {
+    "ocean": {
       "sm": "2px",
       "md": "4px",
       "lg": "8px",
       "xl": "12px"
     },
-    "D": {
+    "future": {
       "sm": "6px",
       "md": "12px",
       "lg": "16px",
       "xl": "20px"
     },
-    "E": {
+    "standard": {
       "sm": "4px",
       "md": "8px",
       "lg": "12px",
@@ -74,7 +74,7 @@
     }
   },
   "dataViz": {
-    "A2": {
+    "business": {
       "categorical6": [
         "#1554B4",
         "#155CC4",
@@ -130,7 +130,7 @@
         "#1F2937"
       ]
     },
-    "B": {
+    "sky": {
       "categorical6": [
         "#1469D8",
         "#0869AD",
@@ -186,7 +186,7 @@
         "#202D40"
       ]
     },
-    "C": {
+    "ocean": {
       "categorical6": [
         "#1769AA",
         "#087496",
@@ -242,7 +242,7 @@
         "#1D2B38"
       ]
     },
-    "D": {
+    "future": {
       "categorical6": [
         "#315CF5",
         "#5555C9",
@@ -298,7 +298,7 @@
         "#24263A"
       ]
     },
-    "E": {
+    "standard": {
       "categorical6": [
         "#0D61F2",
         "#1459BD",

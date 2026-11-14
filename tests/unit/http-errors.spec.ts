@@ -15,6 +15,54 @@ describe('http error normalization', () => {
 
   it('maps a timeout to TIMEOUT', () => {
     expect(toApiError({ isAxiosError: true, code: 'ECONNABORTED', message: 'timeout of 15000ms exceeded' }).code).toBe('TIMEOUT')
+    expect(toApiError({ isAxiosError: true, code: 'ERR_BAD_REQUEST', message: 'timeout', response: { status: 408, data: {}, headers: {} } }).code).toBe('TIMEOUT')
+    expect(toApiError({ isAxiosError: true, code: 'ERR_BAD_RESPONSE', message: 'gateway timeout', response: { status: 504, data: {}, headers: {} } }).code).toBe('TIMEOUT')
+  })
+
+  it('only exposes a string server message and never copies the response body as details', () => {
+    const error = {
+      isAxiosError: true,
+      code: 'ERR_BAD_REQUEST',
+      message: 'Request failed with status code 400',
+      response: {
+        status: 400,
+        data: { message: { secret: 'do-not-render' }, details: { token: 'sensitive' } },
+        headers: {},
+      },
+    }
+    const normalized = toApiError(error)
+    expect(normalized.message).toBe('Request failed with status code 400')
+    expect(normalized.details).toBeUndefined()
+    expect(JSON.stringify(normalized)).not.toContain('sensitive')
+  })
+
+  it('maps a rate limit to RATE_LIMIT and preserves Retry-After seconds', () => {
+    const error = {
+      isAxiosError: true,
+      code: 'ERR_BAD_REQUEST',
+      message: 'Request failed',
+      response: { status: 429, data: { message: 'Too many requests' }, headers: { 'retry-after': '120' } },
+    }
+    const normalized = toApiError(error)
+    expect(normalized.code).toBe('RATE_LIMIT')
+    expect(normalized.retryAfterSeconds).toBe(120)
+  })
+
+  it('keeps conflict responses mapped to CONFLICT', () => {
+    const error = {
+      isAxiosError: true,
+      code: 'ERR_BAD_REQUEST',
+      message: 'Request failed',
+      response: { status: 409, data: { message: 'Conflict' }, headers: {} },
+    }
+    expect(toApiError(error).code).toBe('CONFLICT')
+  })
+
+  it('omits retryAfterSeconds when the rate limit header is absent or invalid', () => {
+    const absent = { isAxiosError: true, code: 'ERR_BAD_REQUEST', message: 'Request failed', response: { status: 429, data: {}, headers: {} } }
+    const invalid = { isAxiosError: true, code: 'ERR_BAD_REQUEST', message: 'Request failed', response: { status: 429, data: {}, headers: { 'retry-after': 'later' } } }
+    expect(toApiError(absent).retryAfterSeconds).toBeUndefined()
+    expect(toApiError(invalid).retryAfterSeconds).toBeUndefined()
   })
 })
 

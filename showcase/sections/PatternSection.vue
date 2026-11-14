@@ -42,10 +42,12 @@ const columns: TableColumn<DemoRow>[] = [
 ]
 const tableKey = ref(0)
 const tableError = ref(false)
+const tableLoadCount = ref(0)
 const viewModalOpen = ref(false)
 const selectedRow = ref<DemoRow | null>(null)
 const actions: DataTableRowAction<DemoRow>[] = [{ label: '查看', icon: 'i-lucide-eye', color: 'primary', onSelect: (row) => { selectedRow.value = row; viewModalOpen.value = true } }]
 async function loadRows(query: DataTableQuery): Promise<DataTableResult<DemoRow>> {
+  tableLoadCount.value += 1
   await new Promise((resolve) => setTimeout(resolve, 120))
   if (tableError.value) throw new Error('模拟数据源暂时不可用')
   const search = query.search.toLowerCase()
@@ -66,7 +68,7 @@ function retryTable() { tableError.value = false; tableKey.value++ }
         <p v-if="submittedForm" class="gp-form-result" role="status">异步提交完成</p>
       </div>
       <div class="pattern-panel" data-testid="pattern-table">
-        <div class="pattern-panel__header"><div><h3>数据表格</h3><p class="pattern-hint">支持搜索、筛选、排序、分页和行操作。</p></div><UButton size="xs" color="neutral" variant="outline" @click="tableError = !tableError; tableKey++">{{ tableError ? '恢复数据' : '模拟错误' }}</UButton></div>
+        <div class="pattern-panel__header"><div><h3>数据表格</h3><p class="pattern-hint">支持防抖搜索、筛选、排序、分页和行操作。</p><p class="pattern-hint" data-testid="pattern-load-count">远程加载次数：{{ tableLoadCount }}</p></div><UButton size="xs" color="neutral" variant="outline" @click="tableError = !tableError; tableKey++">{{ tableError ? '恢复数据' : '模拟错误' }}</UButton></div>
         <DataTablePattern :key="tableKey" :rows="rows" :columns="columns" :search-keys="['name', 'owner', 'region']" :filters="[{ key: 'region', label: '区域', options: [{ label: '华东', value: '华东' }, { label: '华南', value: '华南' }, { label: '华北', value: '华北' }] }]" :row-actions="actions" :load="loadRows" :page-size="3" />
         <UButton v-if="tableError" size="xs" color="primary" variant="outline" @click="retryTable">重试</UButton>
         <UModal v-model:open="viewModalOpen" title="资源详情" :description="selectedRow ? `${selectedRow.name} · ${selectedRow.id}` : '未选择资源'" data-testid="pattern-view-modal">

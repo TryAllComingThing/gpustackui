@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
-test('strict Chromium gate covers axe, reduced motion, and keyboard focus', async ({ page }) => {
+test('strict Chromium checks cover axe, reduced motion, and keyboard focus', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/showcase/index.html', { waitUntil: 'networkidle' })
 

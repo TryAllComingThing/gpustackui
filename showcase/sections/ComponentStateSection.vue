@@ -47,14 +47,14 @@ function showToast() {
         <div class="showcase-state-actions">
           <UModal v-model:open="dialogOpen" title="确认操作" description="Dialog 使用 Nuxt UI focus trap 和 Escape 行为。" data-testid="state-dialog">
             <UButton class="showcase-state-action" data-testid="state-dialog-open">打开 Dialog</UButton>
-            <template #body><p>这是 Dialog 状态验证。</p></template>
+            <template #body><p>这是 Dialog 状态演示。</p></template>
           </UModal>
           <UButton class="showcase-state-action" data-testid="state-drawer-open" color="neutral" variant="outline" @click="drawerOpen = true">打开 Drawer</UButton>
           <UButton class="showcase-state-action showcase-state-action--wide" data-testid="state-toast-open" color="neutral" variant="outline" @click="showToast">显示 Toast</UButton>
         </div>
 
         <UDrawer v-model:open="drawerOpen" title="筛选条件" description="Drawer 使用 Nuxt UI 的移动端焦点和 Escape 行为。" close data-testid="state-drawer">
-          <template #body><p>这是 Drawer 状态验证。</p></template>
+            <template #body><p>这是 Drawer 状态演示。</p></template>
         </UDrawer>
       </UCard>
     </div>

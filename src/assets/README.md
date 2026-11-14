@@ -6,4 +6,4 @@
 设计思路：图标优先 Lucide，主题色只通过 `--gp-*`，不把颜色烘焙进静态图。
 设计理念：可替换、可访问、可重复构建。
 落地路径：资产登记 → 引用检查 → 生产/Showcase 构建。
-落地方案：新增资产需标记用途、来源和回滚方式。详见 `docs/design/FRAMEWORK-GUIDE.md`。
+落地方案：新增资产需标记用途、来源和替代方式。详见 `docs/design/FRAMEWORK-GUIDE.md`。

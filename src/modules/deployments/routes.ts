@@ -6,6 +6,7 @@ export const deploymentsRoutes: RouteRecordRaw[] = [
     name: 'deployments',
     component: () => import('./pages/DeploymentsPage.vue'),
     meta: {
+      requiresAuth: true,
       titleKey: 'page.deployments.title',
       breadcrumbKeys: ['nav.deployments'],
       nav: { key: 'deployments', labelKey: 'nav.deployments', icon: 'i-lucide-rocket', order: 40 },

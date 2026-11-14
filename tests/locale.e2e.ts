@@ -1,4 +1,9 @@
 import { expect, test } from '@playwright/test'
+import { mockAuthenticatedSession } from './e2e/support/auth'
+
+test.beforeEach(async ({ page }) => {
+  await mockAuthenticatedSession(page)
+})
 
 test('locale switching, persistence, html lang, and translated labels', async ({ page }) => {
   await page.goto('/dashboard', { waitUntil: 'networkidle' })

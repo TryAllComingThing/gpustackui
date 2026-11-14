@@ -4,10 +4,11 @@
 @import './themes/future.css';
 @import './themes/sky.css';
 @import './themes/ocean.css';
+@import './themes/appearance.css';
 @import './nuxt-ui.bridge.css';
 @import './typography.css';
 @import './layout.css';
 @import './components.css';
-:root:not([data-theme]), :root[data-theme="standard"] { color-scheme: light; }
+:root { color-scheme: light; }
 html, body, #app { min-height: 100%; }
 body { background: var(--gp-page-bg); color: var(--gp-text-primary); }

@@ -1,10 +1,26 @@
-# Showcase · M2
-独立开发与验收入口，不属于生产路由。使用 `npm run dev:showcase`，主题与组件引用 `src/`。模拟数据仅放 `fixtures/`。生产构建不得引用 showcase。组件覆盖和浏览器测试属于 M2 待验收项。
+# Showcase
 
-## 框架全景
+独立开发与组件预览入口，不属于生产路由。使用 `npm run dev:showcase`，主题、组件和 manager 均引用 `src/`，模拟数据只放在 `fixtures/`。
 
-- 架构：独立 Vite 入口 `showcase/main.ts` + 内存 Router，直接复用生产 `src/components`、`src/theme` 与 Theme/Density/Typography/Layout manager。
-- 设计思路：真实 Nuxt UI/U* 组件 + 本地 fixtures，不做第二套组件语义；生产与 Showcase 同源。
-- 设计理念：可复现、可访问、状态矩阵完整、证据驱动，不使用后端或生产权限。
-- 落地路径：fixtures → 状态矩阵 → 五主题/三密度 → 浏览器烟测 → 与生产构建边界核对。
-- 落地方案：Showcase 构建独立输出；所有交互记录命令、退出码和证据路径。质量入口见 `docs/quality/QUALITY-GATES.md`。
+## 命令
+
+```bash
+npm run dev:showcase
+npm run build:showcase
+npm run test:showcase-smoke
+```
+
+## 结构
+
+- `showcase/main.ts`：独立 Vite 入口与内存 Router。
+- `showcase/App.vue`：主题、密度、外观、Token、组件、Pattern 和运行时状态总览。
+- `showcase/sections/`：组件、状态、表格、表单、Pattern 与用户管理示例。
+- `showcase/fixtures/`：本地数据，不调用后端。
+- `showcase/component-matrix.ts`：当前 Showcase 覆盖的组件、状态与真实 fixture `data-testid`。
+
+## 约束
+
+- 生产与 Showcase 使用同一 `src/components`、`src/theme` 和 Theme/Density/Appearance/Typography/Layout manager；外观选择器使用 `#appearance-select` 与 `data-testid="appearance-select"`。
+- 不创建第二套组件语义或只存在于 Showcase 的样式实现。
+- Showcase 构建输出为 `dist-showcase/`，生产构建不得引用它。
+- 新增组件覆盖时使用真实组件、本地 fixture、稳定 `data-testid` 和适用状态，并同步矩阵绑定。

@@ -6,6 +6,7 @@ export const servicesRoutes: RouteRecordRaw[] = [
     name: 'services',
     component: () => import('./pages/ServicesPage.vue'),
     meta: {
+      requiresAuth: true,
       titleKey: 'page.services.title',
       breadcrumbKeys: ['nav.services'],
       nav: { key: 'services', labelKey: 'nav.services', icon: 'i-lucide-panels-top-left', order: 50 },

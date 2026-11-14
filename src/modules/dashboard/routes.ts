@@ -6,6 +6,7 @@ export const dashboardRoutes: RouteRecordRaw[] = [
     name: 'dashboard',
     component: () => import('./pages/DashboardPage.vue'),
     meta: {
+      requiresAuth: true,
       titleKey: 'page.dashboard.title',
       breadcrumbKeys: ['nav.dashboard'],
       nav: { key: 'dashboard', labelKey: 'nav.dashboard', icon: 'i-lucide-layout-dashboard', order: 10 },

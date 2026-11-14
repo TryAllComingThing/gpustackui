@@ -83,7 +83,7 @@ function retryUsers() {
 <template>
   <section class="gp-card demo-section user-management-section" data-testid="section-user-management" aria-labelledby="user-management-heading">
     <div class="gp-section-heading">
-      <div><h2 id="user-management-heading">通用用户管理</h2><p>独立验收页面：本地模拟数据，不连接 GPU 业务接口。</p></div>
+      <div><h2 id="user-management-heading">通用用户管理</h2><p>独立示例页面：本地模拟数据，不连接 GPU 业务接口。</p></div>
       <div class="user-management-actions"><UButton data-testid="user-add-open" @click="modalOpen = true">新增用户</UButton><UButton data-testid="user-error-toggle" color="neutral" variant="outline" @click="simulateError = !simulateError; tableKey++">{{ simulateError ? '恢复列表' : '模拟错误' }}</UButton></div>
     </div>
     <div class="user-management-status" role="status"><span>列表、搜索、筛选、排序、分页</span><span v-if="simulateLoading">加载中…</span><span v-if="feedback">{{ feedback }}</span></div>

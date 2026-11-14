@@ -17,6 +17,7 @@ const emit = defineEmits<{ select: [item: NavigationMenuItem] }>()
 function decorate(item: NavigationMenuItem): NavigationMenuItem {
   return {
     ...item,
+    'aria-label': item['aria-label'] ?? item.label,
     active: item.value === activeKey.value,
     children: item.children?.map(decorate),
     onSelect: (event: Event) => {

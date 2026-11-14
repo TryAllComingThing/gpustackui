@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { mockAuthenticatedSession } from './e2e/support/auth'
 
 const THEME_HOVER: Record<string, string> = {
   standard: '#0C5EEB',
@@ -13,6 +14,10 @@ const DENSITY_GEOMETRY: Record<string, Record<string, string>> = {
   comfortable: { control: '40px', row: '52px', card: '24px', content: '32px' },
 }
 
+test.beforeEach(async ({ page }) => {
+  await mockAuthenticatedSession(page)
+})
+
 test('production shell, adapters, themes, density, and responsive navigation work', async ({ page }) => {
   const errors: string[] = []
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()) })
@@ -20,6 +25,7 @@ test('production shell, adapters, themes, density, and responsive navigation wor
 
   await page.goto('/dashboard', { waitUntil: 'networkidle' })
   await expect(page.locator('.gp-sidebar-nav')).toHaveCount(1)
+  await expect(page.locator('.gp-app-header__brand')).toHaveText('Vue SaaS Framework')
   await expect(page.locator('[data-testid="breadcrumb"]')).toHaveCount(1)
   await expect(page.locator('[data-testid="breadcrumb"]')).toContainText('概览')
 

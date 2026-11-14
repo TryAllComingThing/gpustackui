@@ -6,6 +6,7 @@ export const settingsRoutes: RouteRecordRaw[] = [
     name: 'settings',
     component: () => import('./pages/SettingsPage.vue'),
     meta: {
+      requiresAuth: true,
       titleKey: 'page.settings.title',
       breadcrumbKeys: ['nav.settings'],
       nav: { key: 'settings', labelKey: 'nav.settings', icon: 'i-lucide-settings', order: 60 },

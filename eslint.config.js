@@ -3,7 +3,17 @@ import vue from 'eslint-plugin-vue'
 import tseslint from 'typescript-eslint'
 
 export default [
-  { ignores: ['dist/**', 'dist-showcase/**', 'node_modules/**'] },
+  {
+    ignores: [
+      'dist/**',
+      'dist-showcase/**',
+      'dist-e2e/**',
+      'node_modules/**',
+      'test-results/**',
+      'playwright-report*/**',
+      'coverage/**',
+    ],
+  },
   {
     files: ['**/*.{js,mjs,cjs}'],
     ...js.configs.recommended,
@@ -21,6 +31,7 @@ export default [
         clearTimeout: 'readonly',
         setInterval: 'readonly',
         clearInterval: 'readonly',
+        fetch: 'readonly',
       },
     },
   },

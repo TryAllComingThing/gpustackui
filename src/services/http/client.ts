@@ -1,10 +1,24 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import type { ZodType } from 'zod'
+import { notifyForbidden, notifyUnauthorized } from '../auth/session-events'
+import { currentAuthEpoch } from '../auth/request-epoch'
+import { applyCsrfHeader } from './csrf'
 import { toApiError, type ApiError, type Result } from './errors'
 
 export interface HttpClientOptions {
   baseURL?: string
   timeout?: number
+}
+
+function requestPathname(url: string | undefined): string {
+  const value = url ?? ''
+  try {
+    const path = new URL(value, 'http://localhost').pathname
+    return path.length > 1 ? path.replace(/\/+$/, '') : path
+  } catch {
+    const path = value.split(/[?#]/, 1)[0] ?? ''
+    return path.length > 1 ? path.replace(/\/+$/, '') : path
+  }
 }
 
 export function createHttpClient(options: HttpClientOptions = {}) {
@@ -15,7 +29,22 @@ export function createHttpClient(options: HttpClientOptions = {}) {
   })
   client.interceptors.request.use((config) => {
     config.headers.set('X-Request-Id', typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Date.now()))
+    ;(config as AxiosRequestConfig & { gpustackAuthEpoch?: number }).gpustackAuthEpoch = currentAuthEpoch()
+    applyCsrfHeader(config)
     return config
+  })
+  client.interceptors.response.use(undefined, (error: unknown) => {
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status
+      const pathname = requestPathname(error.config?.url)
+      const isCredentialLogin = /\/auth\/login$/.test(pathname)
+      const isSessionProbe = /(?:^|\/)users\/me$/.test(pathname)
+      const isLogout = /\/auth\/logout$/.test(pathname)
+      const epoch = (error.config as (AxiosRequestConfig & { gpustackAuthEpoch?: number }) | undefined)?.gpustackAuthEpoch
+      if (status === 401 && !isCredentialLogin && !isSessionProbe && !isLogout) void notifyUnauthorized(epoch)
+      if (status === 403 && !isCredentialLogin && !isSessionProbe && !isLogout) void notifyForbidden(epoch)
+    }
+    return Promise.reject(error)
   })
   return client
 }

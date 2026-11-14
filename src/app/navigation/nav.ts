@@ -43,6 +43,9 @@ export function buildNavItems(t: Translate): NavigationMenuItem[] {
     }
 
     if (nav.parentKey) {
+      if (!NAV_GROUPS.some((group) => group.key === nav.parentKey)) {
+        throw new Error(`Navigation route ${route.path} references unknown parentKey: ${nav.parentKey}`)
+      }
       const children = groupItems.get(nav.parentKey) ?? []
       children.push(item)
       groupItems.set(nav.parentKey, children)

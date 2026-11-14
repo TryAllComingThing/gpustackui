@@ -1,6 +1,6 @@
 {
-  "status": "APPROVED",
-  "source": "DESIGN.md:25-29; archive/SAAS-DESIGN-original.md:28-43",
+  "status": "active",
+  "source": "DESIGN.md §3 Typography、Spacing 与 Density",
   "fontFamily": "Inter, PingFang SC, Microsoft YaHei, Noto Sans CJK SC, sans-serif",
   "levels": {
     "display": { "fontSize": "32px", "fontWeight": 700, "lineHeight": "40px" },

@@ -1,6 +1,6 @@
 {
   "name": "gpustack-design-system",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "inputs": [
     "design_authority",
     "theme_contract",
@@ -8,18 +8,20 @@
   ],
   "constraints": {
     "use_design_tokens": true,
-    "require_real_evidence": true
+    "preserve_public_api": true,
+    "production_showcase_same_implementation": true
   },
   "outputs": [
-    "TOKEN-MAPPING.md",
-    "THEME-CONTRACT.md",
-    "COMPONENT-MATRIX.md",
-    "THEME-TEST-REPORT.md"
+    "token_source_changes",
+    "component_or_pattern_changes",
+    "showcase_coverage",
+    "documentation_updates"
   ],
-  "gates": [
+  "checks": [
+    "check:theme-css",
+    "check:tokens",
     "typecheck",
-    "unit",
-    "visual",
-    "accessibility"
+    "test:unit",
+    "build:showcase"
   ]
 }

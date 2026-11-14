@@ -1,47 +1,35 @@
 ---
 name: gpustack-page-migration
-description: Migrate one GPUStack frontend page at a time preserving API contracts and business behavior.
+description: Migrate or implement one frontend page while preserving API contracts, auth behavior, and module boundaries.
 ---
 
 # gpustack-page-migration
 
-## Shared repository contract
+## When to use
 
-- The only active design authority is the root [`DESIGN.md`](../../../DESIGN.md); archived documents are not active requirements.
-- Read `AGENTS.md`, real page/API sources, and test scripts before editing. Preserve existing API, auth, permission, async, and route semantics.
-- Prefer Nuxt UI 4 and existing `U*` adapters; reuse `src/theme` managers and `--gp-*` tokens. Do not create a page-local theme engine, Profile, or demo-only component copy.
-- Showcase may be used for acceptance with local fixtures, but it cannot replace production page verification or enter the production bundle.
-- Reports must contain real commands, exit codes, environment, artifacts, failures, repairs, and rollback information.
+Use for a single page migration, page refactor, or new module page that must keep backend and business behavior intact.
 
-## Authority and preconditions
-Read this skill contract and validate it with `python3 scripts/validate_contracts.py` before execution. The contract is descriptive; enforcement is via schemas and Harness. Never self-approve.
-Read repository `AGENTS.md`, `DESIGN.md`, task manifest and real source files. Do not claim tests passed without executable evidence. Do not alter backend API or permissions.
+## Read first
+
+- Root `AGENTS.md` and `DESIGN.md`.
+- `docs/architecture/ARCHITECTURE.md`, `API-CONTRACT.md`, and `AUTH-AND-PERMISSIONS.md`.
+- The source page, target module, API contracts, router metadata, locale files, and tests.
 
 ## Workflow
-1. Identify source page and target specification from root DESIGN.md; freeze API, auth, async states and acceptance cases.
-2. Create file-level plan and allowlist before edits; stop if required evidence is missing.
-3. Implement Vue3 TypeScript page using shared tokens and UI adapters; avoid unapproved dependencies.
-4. Run typecheck, unit, integration, E2E and visual tests using configured scripts.
-5. Report changed files, API parity, failed tests, visual differences and rollback steps.
 
-## Required deliverables
-- `MIGRATION-REPORT.md`
-- `API-PARITY.md`
-- `TEST-RESULTS.md`
-- `VISUAL-DIFF.md`
-- `RISK-REPORT.md`
+1. Identify the source page, target module, route metadata, and API contract.
+2. Freeze observable behavior: request shape, auth, permissions, loading/empty/error states, filters, pagination, and navigation.
+3. Search existing components, composables, utils, services, and module public exports with `npm run reuse:search -- <capability>`.
+4. Decide REUSE, EXTEND, or ADD for each candidate and keep page-private logic inside the module.
+5. Implement with Nuxt UI primitives, shared `U*` adapters, `--gp-*` tokens, and existing managers.
+6. Add or update unit, integration, and E2E coverage for the affected behavior.
+7. Update routes, navigation metadata, i18n, and documentation.
+8. Run typecheck, lint, unit tests, and the affected E2E or build commands.
 
-## Decision rules
-- `BLOCKED`: missing prerequisite, unapproved change, P0/P1, critical test failure or missing required evidence.
-- `REVISE`: noncritical remediable findings; keep changes in allowed scope.
-- `PASS`: all required checks verified and human approval recorded; no automatic merge or release.
+## Boundaries
 
-## Recovery
-At most three repair cycles. On repeated failure stop, preserve logs, report root cause and request human intervention.
-
-## V1.1 contract chain
-1. Validate `contract.json` with `schemas/skill-contract.schema.json`.
-2. Validate task manifest with `schemas/task-manifest.schema.json`.
-3. Generate evidence via trusted tools and validate against `schemas/evidence.schema.json`.
-4. Run `scripts/gate.py` and validate its result with `schemas/gate-result.schema.json`.
-5. Only `scripts/task_state.py` can enter PASS, referencing a valid PASS gate result.
+- Do not invent endpoints or change API/auth/permission semantics.
+- Do not create a page-local theme engine or copy a Showcase-only component into production.
+- Do not import another module's private implementation.
+- Keep loading, empty, error, retry, disabled, keyboard, and focus behavior intact.
+- Report changed files, behavior parity, reuse decisions, commands run, and remaining risks.

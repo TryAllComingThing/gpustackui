@@ -1,33 +1,33 @@
-通用 Vue 3 + TypeScript前端框架。
+通用 Vue 3 + TypeScript + Vite + Nuxt UI 前端框架，同时作为 AI 编码知识库。
 
-## 设计权威
+## 权威来源
 
 - 根目录 `DESIGN.md` 是唯一活动设计规范。
-- 遵循 `docs/architecture/ARCHITECTURE.md` 和 `.codex/skills/` 下五个 Skill 契约。
-- Codex 开始任务前必须读取 `docs/ai/CODEX-WORKFLOW.md`、`docs/ai/CONTEXT-MAP.md` 和 `docs/ai/TASK-CONTRACT.md`。
-- 不得创建第二套 DESIGN.md、项目 Profile、平行主题引擎或平行 `--ds-*` 运行时变量。
-- 未审批的规范冲突必须标记 `PROPOSED`、`PENDING` 或 `DEFERRED`；不得自行冻结。
+- 架构与边界以 `docs/architecture/ARCHITECTURE.md` 为准。
+- 三个 Skill 位于 `.codex/skills/`：设计系统、页面迁移、仓库审计。
+- 开始任务前必须读取 `docs/ai/CODEX-WORKFLOW.md`、`docs/ai/CONTEXT-MAP.md` 和 `docs/ai/TASK-CONTRACT.md`。
+- 不得创建第二套 `DESIGN.md`、项目 Profile、平行主题引擎或平行 `--ds-*` 运行时变量。
 
-## 组件与主题规则
+## 组件与主题
 
 - 优先直接复用 Nuxt UI 4；跨页面能力只能通过薄 `U*` 适配器提供。
-- 生产组件与 Showcase 必须复用同一 `src/components`、`src/theme`、Theme manager、Density manager 和 Typography/Layout manager。
-- 所有组件必须遵循 `--gp-*` Token、`data-theme`、`data-density` 和现有公共 API；不得硬编码主题 HEX。
+- 生产组件与 Showcase 必须复用同一 `src/components`、`src/theme`、Theme/Density/Appearance manager 和 Typography/Layout manager。
+- 所有组件必须遵循 `--gp-*` Token、`data-theme`、`data-density`、`data-appearance` 和现有公共 API；不得硬编码主题 HEX。
 - Showcase 只使用本地 fixtures，不调用后端，不进入生产路由或生产包。
-- 不得修改既有业务 API、权限、认证、后端契约语义。
+- 不得修改既有业务 API、权限、认证或后端契约语义。
 
-## 质量与证据
+## 开发流程
 
-- 不得未经实际退出码宣称测试、构建、视觉或无障碍通过。
-- 每个质量报告必须记录命令、退出码、环境、报告/截图路径、失败证据和修复结果。
-- `BLOCKED`：缺少前置条件、未批准决策、P0/P1、关键检查失败或证据缺失。
-- `REVISE`：可修复的非关键问题；修复后重新执行受影响检查。
-- `PASS`：所有必需检查真实通过、P0/P1 已关闭、人工批准已记录，并由有效 gate/state 证据写入。
-- 浏览器、axe-core、截图和人工 WCAG 检查按当前任务要求执行；若任务明确豁免，必须记录 `NOT EXECUTED`，不得写成 PASS。
+- 先确认目标、非目标、完成条件和允许修改的路径，再开始实现。
+- 新增组件、Composable、Utils 或 Service 前运行 `npm run reuse:search -- <能力关键词>`，优先 REUSE / EXTEND。
+- 按模块切片实现：API 放 `src/api/<domain>/`，模块公共出口放 `src/modules/<domain>/index.ts`，跨模块 UI 放 `src/components/`。
+- 改动后运行受影响的 typecheck、lint、unit、E2E、accessibility 或 build 命令；只描述实际执行过的结果。
+- 同步相关文档、i18n、路由、API 契约和测试。
 
 ## 变更边界
 
-- 先读取根 `DESIGN.md`、相关 Skill、真实源码和测试配置，再修改。
-- 每个任务必须有验收标准、允许修改路径、测试命令和证据路径；缺失时不得进入实现。
-- 组件、Pattern、Theme、Density 或 Showcase 变更必须补充源码映射、状态矩阵和验证证据。
-- 失败时保留日志和报告；不得自动接受视觉基线或删除失败证据。
+- 不虚构后端端点、权限、认证行为或测试结果。
+- 不跨模块导入私有实现；不复制 Nuxt UI 原语。
+- 不手改生成主题 CSS；先修改 Token 源和映射，再运行生成脚本。
+- 不把页面私有逻辑上移到公共层，除非已有两个以上模块的真实复用需求。
+- 保留现有可访问性、键盘行为和失败关闭语义。

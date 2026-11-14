@@ -1,29 +1,33 @@
 # Codex 开发工作流
 
-状态：`APPROVED`。本文件规定 Codex 在本仓库执行任务时的最小流程；不替代根 `DESIGN.md`、`AGENTS.md` 或 `.codex/skills/` 契约。
+本文件规定 Codex 在本仓库执行任务时的最小流程，不替代 `AGENTS.md`、`DESIGN.md`、架构文档或 Skill 契约。
 
 ## 阅读顺序
 
 1. 根 `AGENTS.md` 与 `DESIGN.md`。
 2. `docs/ai/CONTEXT-MAP.md`。
-3. 与本任务相关的 `.codex/skills/<skill>/SKILL.md` 与 `contract.json`。
-4. 真实源码、测试、`package.json` 脚本和 CI 配置。
-5. 本任务的 PRD/Spec、任务清单和允许修改路径。
+3. 本文件、`TASK-CONTRACT.md` 和 `TASK-LEVELS.md`。
+4. 与本任务相关的 `.codex/skills/<skill>/SKILL.md`。
+5. 真实源码、测试、`package.json` 脚本和构建配置。
+6. 本任务的 PRD/Spec、技术设计和任务清单。
 
 ## 执行流程
 
-1. 确认目标、非目标、验收标准和风险。
-2. 冻结 API、权限、认证、路由、异步状态和设计参考。
-3. 写出允许修改文件清单；不在清单内的文件不得修改。
-4. 按模块切片实现；API 放 `src/api/<domain>/`，跨模块公共 UI 放 `src/components/`。
-5. 运行受影响检查，保留真实命令、退出码、日志和证据路径。
-6. 更新文档、i18n、路由、API 契约和测试。
-7. 输出变更摘要、失败证据、未执行检查和回滚方式。
+1. 明确目标、非目标、完成条件和风险。
+2. 按 `TASK-LEVELS.md` 声明 `L1`、`L2` 或 `L3`；高风险变更不得降级。
+3. 确认现有 API、权限、认证、路由、异步状态和设计契约；未提供契约时只做 Schema 或占位，不虚构请求。
+4. 运行 `npm run reuse:search -- <能力关键词>`，检查现有组件、Composable、Utils、Service 和模块能力；优先 REUSE / EXTEND。
+5. 列出计划修改的文件或目录，保持变更范围聚焦。
+6. 按模块切片实现；API 放 `src/api/<domain>/`，跨模块公共 UI 放 `src/components/`，页面私有逻辑留在模块内。
+7. 运行受影响检查：typecheck、lint、unit、integration、E2E、showcase、accessibility 或 build。
+8. 同步文档、i18n、路由、导航、API 契约和测试。
+9. 输出变更摘要、已执行命令、未执行项和已知风险；未运行的检查不得描述为通过。
 
 ## 禁止事项
 
 - 不虚构后端端点、权限、认证行为或测试结果。
 - 不创建第二套设计系统、主题引擎、`--ds-*` 命名空间或平行组件层。
-- 不自动接受视觉基线、删除失败证据或把未执行检查写成 PASS。
+- 不把页面私有逻辑复制到公共层。
 - 不跨模块导入私有实现；模块公共入口为 `src/modules/<domain>/index.ts`。
-- 不在没有任务契约和验收标准时直接开始业务实现。
+- 不手改 `src/theme/styles/themes/*.css`；先改 Token 源并运行生成脚本。
+- 不在缺少目标或完成条件时直接开始大范围重构。

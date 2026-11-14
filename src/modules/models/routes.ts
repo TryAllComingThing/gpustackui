@@ -6,6 +6,7 @@ export const modelsRoutes: RouteRecordRaw[] = [
     name: 'models',
     component: () => import('./pages/ModelsPage.vue'),
     meta: {
+      requiresAuth: true,
       titleKey: 'page.models.title',
       breadcrumbKeys: ['nav.models'],
       nav: { key: 'models', labelKey: 'nav.models', icon: 'i-lucide-box', order: 30 },

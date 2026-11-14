@@ -1,7 +1,7 @@
 import { readonly, ref } from 'vue'
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, i18n, type Locale } from './index'
+import { readStoredPreference, writeStoredPreference } from '../utils/preferences'
 
-const STORAGE_KEY = 'gpustack-locale'
 const current = ref<Locale>(DEFAULT_LOCALE)
 
 const valid = (value: unknown): value is Locale =>
@@ -17,19 +17,14 @@ function apply(locale: Locale) {
 }
 
 export function initLocale() {
-  let saved: string | null = null
-  if (typeof localStorage !== 'undefined') {
-    try { saved = localStorage.getItem(STORAGE_KEY) } catch { /* storage may be blocked */ }
-  }
+  const saved = readStoredPreference('locale')
   apply(valid(saved) ? saved : DEFAULT_LOCALE)
 }
 
 export function setLocale(locale: Locale) {
   if (!valid(locale)) return
   apply(locale)
-  if (typeof localStorage !== 'undefined') {
-    try { localStorage.setItem(STORAGE_KEY, locale) } catch { /* ignore blocked storage */ }
-  }
+  writeStoredPreference('locale', locale)
 }
 
 export const localeState = readonly(current)

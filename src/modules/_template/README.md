@@ -1,6 +1,6 @@
 # 模块模板
 
-复制本目录结构新增业务域模块，禁止跨模块导入私有实现。
+使用 `npm run create:module -- <name>` 新增业务域模块；本目录仅保留模块约定，不直接作为复制源。
 
 约定：
 - 页面放在 `src/modules/<域>/pages/`，根节点带 `data-testid="production-<域>"`。

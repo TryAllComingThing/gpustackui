@@ -1,21 +1,33 @@
+import { getCurrentUser } from '../../api/auth'
 import type { AuthUser } from '../../types/auth'
+import type { Result } from '../http'
 
-const USER_KEY = 'gpustack-auth-user'
+const LEGACY_AUTH_KEYS = ['gpustack-auth-user', 'gpustack-auth-token'] as const
+let pendingConfirmation: Promise<Result<AuthUser>> | null = null
+let pendingController: AbortController | null = null
 
-export function getStoredUser(): AuthUser | null {
-  if (typeof localStorage === 'undefined') return null
+export function abandonPendingSession() {
+  pendingController?.abort()
+  pendingController = null
+  pendingConfirmation = null
+}
+
+export function clearLegacyAuthCache() {
+  if (typeof localStorage === 'undefined') return
   try {
-    const raw = localStorage.getItem(USER_KEY)
-    return raw ? JSON.parse(raw) as AuthUser : null
-  } catch { return null }
+    for (const key of LEGACY_AUTH_KEYS) localStorage.removeItem(key)
+  } catch { /* storage may be blocked */ }
 }
 
-export function setStoredUser(user: AuthUser) {
-  if (typeof localStorage === 'undefined') return
-  try { localStorage.setItem(USER_KEY, JSON.stringify(user)) } catch { /* ignore blocked storage */ }
-}
-
-export function clearStoredUser() {
-  if (typeof localStorage === 'undefined') return
-  try { localStorage.removeItem(USER_KEY) } catch { /* ignore blocked storage */ }
+export function confirmSession(): Promise<Result<AuthUser>> {
+  if (!pendingConfirmation) {
+    const controller = typeof AbortController === 'undefined' ? null : new AbortController()
+    pendingController = controller
+    const request: Promise<Result<AuthUser>> = getCurrentUser({ signal: controller?.signal }).finally(() => {
+      if (pendingConfirmation === request) pendingConfirmation = null
+      if (pendingController === controller) pendingController = null
+    })
+    pendingConfirmation = request
+  }
+  return pendingConfirmation
 }

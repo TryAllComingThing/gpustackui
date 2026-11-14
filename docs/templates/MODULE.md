@@ -10,5 +10,5 @@
 - 私有组件：`src/modules/<domain>/components/`
 - 私有 composable：`src/modules/<domain>/composables/`
 - i18n key：
-- 测试与证据：
-- 回滚方式：
+- 测试：
+- 风险：

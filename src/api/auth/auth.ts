@@ -1,5 +1,12 @@
 import { z } from 'zod'
-import { authHttp, requestValidatedWithClient, type Result } from '../../services/http'
+import {
+  authHttp,
+  hasCsrfToken,
+  isCsrfRequired,
+  requestValidatedWithClient,
+  requestWithClient,
+  type Result,
+} from '../../services/http'
 import { AuthUserSchema, type AuthUser } from './user'
 
 export const AuthConfigSchema = z.object({
@@ -10,8 +17,9 @@ export const AuthConfigSchema = z.object({
 })
 
 export const LogoutResponseSchema = z.union([
-  z.object({ logout_url: z.string().nullable().optional() }),
+  z.strictObject({ logout_url: z.string().nullable().optional() }),
   z.literal(''),
+  z.null(),
 ])
 
 export const EmptyResponseSchema = z.union([z.literal(''), z.null()])
@@ -19,7 +27,22 @@ export const EmptyResponseSchema = z.union([z.literal(''), z.null()])
 export type AuthConfig = z.infer<typeof AuthConfigSchema>
 export type LogoutResponse = z.infer<typeof LogoutResponseSchema>
 
-export function login(username: string, password: string): Promise<Result<void>> {
+async function ensureLoginCsrf(): Promise<Result<void>> {
+  if (!isCsrfRequired() || hasCsrfToken()) return { ok: true, data: undefined }
+  const bootstrap = await requestWithClient<unknown>(authHttp, { method: 'GET', url: '/auth/config' })
+  if (!bootstrap.ok) return { ok: false, error: bootstrap.error }
+  if (!hasCsrfToken()) {
+    return {
+      ok: false,
+      error: { code: 'CSRF', message: 'CSRF bootstrap did not provide a readable token cookie' },
+    }
+  }
+  return { ok: true, data: undefined }
+}
+
+export async function login(username: string, password: string): Promise<Result<void>> {
+  const csrf = await ensureLoginCsrf()
+  if (!csrf.ok) return csrf
   const body = new URLSearchParams({ username, password })
   return requestValidatedWithClient(
     authHttp,
@@ -49,6 +72,10 @@ export function updatePassword(currentPassword: string, newPassword: string): Pr
   ).then((result) => result.ok ? { ok: true, data: null } : result)
 }
 
-export function getCurrentUser(): Promise<Result<AuthUser>> {
-  return requestValidatedWithClient(authHttp, { method: 'GET', url: '/v2/users/me' }, AuthUserSchema)
+export function getCurrentUser(options: { signal?: AbortSignal } = {}): Promise<Result<AuthUser>> {
+  return requestValidatedWithClient(
+    authHttp,
+    { method: 'GET', url: '/v2/users/me', ...(options.signal ? { signal: options.signal } : {}) },
+    AuthUserSchema,
+  )
 }

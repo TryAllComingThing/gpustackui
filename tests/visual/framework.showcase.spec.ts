@@ -12,6 +12,9 @@ test('showcase uses shared U adapters, local fixtures, and theme-aware states', 
   const errors: string[] = []
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()) })
   page.on('pageerror', (error) => errors.push(error.message))
+  page.on('response', (response) => {
+    if (response.status() >= 400) errors.push(`${response.status()} ${response.request().method()} ${response.url()}`)
+  })
   await page.goto('/showcase/index.html', { waitUntil: 'networkidle' })
 
   await expect(page.getByTestId('matrix-table')).toContainText('UDataTable')
@@ -19,15 +22,12 @@ test('showcase uses shared U adapters, local fixtures, and theme-aware states', 
   await expect(page.getByTestId('matrix-navigation')).toContainText('UBreadcrumb')
   await expect(page.getByTestId('matrix-textarea')).toContainText('.gp-app-textarea')
   await expect(page.getByTestId('matrix-datepicker')).toContainText('UInputDate')
-  await expect(page.getByTestId('matrix-datepicker')).toContainText('已实现')
   await expect(page.getByTestId('matrix-radio')).toContainText('URadioGroup')
-  await expect(page.getByTestId('matrix-radio')).toContainText('已实现')
-  await expect(page.getByTestId('matrix-switch')).toContainText('已实现')
-  await expect(page.getByTestId('matrix-popover')).toContainText('已实现')
-  await expect(page.getByTestId('matrix-upload')).toContainText('已实现')
-  await expect(page.getByTestId('matrix-tree')).toContainText('已实现')
+  await expect(page.getByTestId('matrix-switch')).toContainText('USwitch')
+  await expect(page.getByTestId('matrix-popover')).toContainText('UPopover')
+  await expect(page.getByTestId('matrix-upload')).toContainText('UFileUpload')
+  await expect(page.getByTestId('matrix-tree')).toContainText('UTree')
   await expect(page.getByTestId('matrix-chart')).toContainText('UChart')
-  await expect(page.getByTestId('matrix-chart')).toContainText('已实现')
   await expect(page.locator('.gp-sidebar-nav')).toHaveCount(1)
   await expect(page.locator('[data-testid="breadcrumb"]')).toHaveCount(1)
   await expect(page.getByTestId('advanced-radio')).toBeVisible()
@@ -50,6 +50,11 @@ test('showcase uses shared U adapters, local fixtures, and theme-aware states', 
   await expect(page.locator('.gp-selection-summary')).toContainText('已选择 1 项资源')
 
   const patternTable = page.getByTestId('pattern-table')
+  const loadCount = patternTable.getByTestId('pattern-load-count')
+  await expect(loadCount).toHaveText('远程加载次数：1')
+  await patternTable.getByRole('searchbox').pressSequentially('控制台', { delay: 30 })
+  expect(await loadCount.textContent()).toBe('远程加载次数：1')
+  await expect(loadCount).toHaveText('远程加载次数：2', { timeout: 1_000 })
   const viewButton = patternTable.getByRole('button', { name: '查看 saas-001' })
   await expect(viewButton.locator('svg')).toHaveCount(1)
   await viewButton.click()
@@ -72,6 +77,20 @@ test('showcase uses shared U adapters, local fixtures, and theme-aware states', 
     await page.selectOption('[data-testid="density-select"]', density)
     await expect(page.locator('html')).toHaveAttribute('data-density', density)
   }
+
+  for (const theme of Object.keys(THEME_HOVER_RGB)) {
+    await page.selectOption('[data-testid="theme-select"]', theme)
+    for (const appearance of ['light', 'dark']) {
+      await page.selectOption('[data-testid="appearance-select"]', appearance)
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme)
+      await expect(page.locator('html')).toHaveAttribute('data-appearance', appearance)
+      await expect(page.locator('html')).toHaveAttribute('data-appearance-preference', appearance)
+      await expect(page.locator('html')).toHaveCSS('color-scheme', appearance)
+      await expect(page.locator('html')).toHaveClass(appearance === 'dark' ? /(?:^|\s)dark(?:\s|$)/ : /^(?!.*\bdark\b).*/)
+    }
+  }
+  await page.selectOption('[data-testid="appearance-select"]', 'system')
+  await expect(page.locator('html')).toHaveAttribute('data-appearance-preference', 'system')
 
   await page.getByTestId('state-dialog-open').click()
   await expect(page.getByRole('dialog')).toBeVisible()

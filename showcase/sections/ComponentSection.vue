@@ -54,13 +54,13 @@ function onUploadReject(files: File[]) {
       <UButton class="gp-app-button gp-app-button--outline" data-testid="button-modal-open" variant="outline" @click="modalOpen = true">打开弹窗</UButton>
     </div>
     <div class="demo-row"><label for="demo-name">模型名称</label><UInput id="demo-name" class="gp-app-input" v-model="name" placeholder="请输入模型名称" /><span>输入值：{{ name || '（空）' }}</span></div>
-    <div class="demo-row"><label for="demo-notes">备注</label><UTextarea id="demo-notes" class="gp-app-textarea" v-model="notes" :rows="2" placeholder="请输入备注" /><span>输入值：{{ notes || '（空）' }}</span></div>
+    <div class="demo-row"><label for="demo-notes">备注</label><UTextarea id="demo-notes" data-testid="textarea-notes" class="gp-app-textarea" v-model="notes" :rows="2" placeholder="请输入备注" /><span>输入值：{{ notes || '（空）' }}</span></div>
     <div class="demo-row" data-testid="date-state-fixtures"><span>部署日期</span><UInputDate aria-label="部署日期" /><UInputDate aria-label="禁用日期" disabled /></div>
     <div class="demo-row" data-testid="input-state-fixtures">
       <UInput model-value="Read-only fixture" readonly aria-label="Read-only fixture" data-testid="input-readonly" />
       <UInput model-value="Disabled fixture" disabled aria-label="Disabled fixture" data-testid="input-disabled" />
-      <USelect :items="['One', 'Two']" model-value="One" disabled aria-label="Disabled select fixture" />
-      <UCheckbox v-model="fixtureSelected" label="Fixture selection" />
+      <USelect :items="['One', 'Two']" model-value="One" disabled aria-label="Disabled select fixture" data-testid="select-disabled" />
+      <UCheckbox v-model="fixtureSelected" label="Fixture selection" data-testid="checkbox-fixture" />
       <UCheckbox disabled label="Disabled selection fixture" />
     </div>
     <h3>扩展组件 / Nuxt UI</h3>
@@ -127,6 +127,6 @@ function onUploadReject(files: File[]) {
     </div>
     <h3>数据表格 / Mock</h3>
     <table class="gp-table"><thead><tr><th>名称</th><th>状态</th><th>利用率</th></tr></thead><tbody><tr v-for="r in sampleRows" :key="r.id"><td>{{ r.name }}</td><td>{{ r.status }}</td><td>{{ r.utilization }}</td></tr></tbody></table>
-    <UModal v-model:open="modalOpen" class="gp-modal" data-testid="component-modal" title="确认操作" description="M2 模拟交互，不会请求后端。"><template #body><p>这是 Nuxt UI 弹窗兼容性验证。</p><UButton class="gp-app-button gp-app-button--primary" @click="modalOpen = false">关闭</UButton></template></UModal>
+    <UModal v-model:open="modalOpen" class="gp-modal" data-testid="component-modal" title="确认操作" description="M2 模拟交互，不会请求后端。"><template #body><p>这是 Nuxt UI 弹窗兼容性示例。</p><UButton class="gp-app-button gp-app-button--primary" @click="modalOpen = false">关闭</UButton></template></UModal>
   </section>
 </template>

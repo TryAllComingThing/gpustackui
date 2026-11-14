@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { z } from 'zod'
+
+const { t } = useI18n()
 
 export interface ComplexFormField {
   name: string
@@ -20,10 +23,14 @@ const props = withDefaults(defineProps<{
   resetLabel?: string
   successMessage?: string
 }>(), {
-  submitLabel: '提交',
-  resetLabel: '重置',
-  successMessage: '提交成功',
+  submitLabel: undefined,
+  resetLabel: undefined,
+  successMessage: undefined,
 })
+
+const resolvedSubmitLabel = computed(() => props.submitLabel ?? t('patterns.form.submit'))
+const resolvedResetLabel = computed(() => props.resetLabel ?? t('patterns.form.reset'))
+const resolvedSuccessMessage = computed(() => props.successMessage ?? t('patterns.form.success'))
 
 const emit = defineEmits<{
   submit: [state: Record<string, unknown>]
@@ -32,7 +39,14 @@ const emit = defineEmits<{
   reset: []
 }>()
 
-const state = reactive<Record<string, unknown>>({ ...props.initialState })
+function cloneState(value: Record<string, unknown>): Record<string, unknown> {
+  if (typeof structuredClone === 'function') {
+    try { return structuredClone(value) } catch { /* reactive proxies and non-cloneable values use the JSON fallback */ }
+  }
+  return JSON.parse(JSON.stringify(value)) as Record<string, unknown>
+}
+
+const state = reactive<Record<string, unknown>>(cloneState(props.initialState))
 const fieldErrors = reactive<Record<string, string | undefined>>({})
 const submitting = ref(false)
 const submitted = ref(false)
@@ -49,12 +63,12 @@ function applyIssues(issues: Array<{ path: PropertyKey[]; message: string }>) {
     const name = String(issue.path[0] ?? '')
     if (name && !fieldErrors[name]) fieldErrors[name] = issue.message
   }
-  formError.value = issues.map((issue) => issue.message).join('；') || '请修正表单错误'
+  formError.value = issues.map((issue) => issue.message).join('；') || t('patterns.form.correctionRequired')
   emit('error', formError.value)
 }
 
 function onNuxtFormError(event: { errors?: Array<{ name?: string; message?: string }> }) {
-  applyIssues((event.errors ?? []).map((error) => ({ path: error.name ? [error.name] : [], message: error.message ?? '请修正表单错误' })))
+  applyIssues((event.errors ?? []).map((error) => ({ path: error.name ? [error.name] : [], message: error.message ?? t('patterns.form.correctionRequired') })))
 }
 
 async function handleSubmit() {
@@ -73,7 +87,7 @@ async function handleSubmit() {
     emit('submit', { ...data })
     emit('success', { ...data })
   } catch (error) {
-    formError.value = error instanceof Error ? error.message : '提交失败，请稍后重试'
+    formError.value = error instanceof Error ? error.message : t('patterns.form.failed')
     emit('error', formError.value)
   } finally {
     submitting.value = false
@@ -81,11 +95,26 @@ async function handleSubmit() {
 }
 
 function reset() {
-  Object.assign(state, props.initialState)
-  submitted.value = false
-  clearErrors()
+  replaceState(props.initialState)
   emit('reset')
 }
+
+function replaceState(nextState: Record<string, unknown>) {
+  for (const key of Object.keys(state)) delete state[key]
+  Object.assign(state, cloneState(nextState))
+  submitted.value = false
+  clearErrors()
+}
+
+watch(() => props.initialState, (nextState) => {
+  replaceState(nextState)
+}, { deep: true })
+
+watch(state, () => {
+  submitted.value = false
+  formError.value = ''
+  for (const key of Object.keys(fieldErrors)) fieldErrors[key] = undefined
+}, { deep: true })
 </script>
 
 <template>
@@ -97,9 +126,9 @@ function reset() {
       </UFormField>
     </div>
     <div class="gp-complex-form__actions">
-      <UButton type="submit" :loading="submitting" :disabled="submitting">{{ submitLabel }}</UButton>
-      <UButton type="button" color="neutral" variant="outline" :disabled="submitting" @click="reset">{{ resetLabel }}</UButton>
-      <span v-if="submitted" class="gp-complex-form__success" role="status">{{ successMessage }}</span>
+      <UButton type="submit" :loading="submitting" :disabled="submitting">{{ resolvedSubmitLabel }}</UButton>
+      <UButton type="button" color="neutral" variant="outline" :disabled="submitting" @click="reset">{{ resolvedResetLabel }}</UButton>
+      <span v-if="submitted" class="gp-complex-form__success" role="status">{{ resolvedSuccessMessage }}</span>
       <span v-if="formError" class="gp-complex-form__error" role="alert">{{ formError }}</span>
     </div>
   </UForm>

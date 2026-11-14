@@ -35,16 +35,16 @@
   --gp-type-caption-size: 12px; --gp-type-caption-weight: 400; --gp-type-caption-line-height: 18px;
   --gp-type-numeric-size: 14px; --gp-type-numeric-weight: 500; --gp-type-numeric-line-height: 22px;
   --gp-type-code-size: 13px; --gp-type-code-weight: 400; --gp-type-code-line-height: 20px;
-  /* F3 base fallbacks mirror the approved Typography source before runtime init. */
+  /* Base fallbacks mirror the Typography source before runtime init. */
   --gp-type-numeric-variant: tabular-nums;
   --gp-type-code-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  /* F3 semantic aliases derived from approved theme layers. */
+  /* Semantic aliases derived from theme layers. */
   --gp-surface-canvas: var(--gp-background-n150);
   --gp-surface-default: var(--gp-surface-white);
   --gp-surface-subtle: var(--gp-background-n100);
   --gp-surface-raised: var(--gp-background-n100);
   --gp-surface-overlay: var(--gp-surface-white);
-  /* Approved compatibility aliases; deferred extensions do not add new values. */
+  /* Compatibility aliases; each one points to a canonical token. */
   --gp-radius-interactive: var(--gp-radius-control);
   --gp-radius-surface: var(--gp-radius-card);
   --gp-shadow-surface: var(--gp-shadow-card);
@@ -62,7 +62,7 @@
   --gp-text-disabled: var(--gp-text-n400);
   --gp-primary-accent: var(--gp-brand-g400);
   --gp-primary-light: var(--gp-brand-g300);
-  /* PROPOSED compatibility ladder; pending approval of the design z-index contract. */
+  /* Compatibility z-index values; a dedicated contract can replace them later. */
   --gp-z-header: 20; --gp-z-sidebar: 30; --gp-z-popover: 40;
   --gp-control-height-md: var(--gp-control-height);
   --gp-table-row-height-md: var(--gp-table-row-height);
