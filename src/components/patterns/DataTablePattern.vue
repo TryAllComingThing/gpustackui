@@ -44,6 +44,7 @@ const props = withDefaults(defineProps<{
   load?: (query: DataTableQuery, signal?: AbortSignal) => Promise<DataTableResult<T>>
   pageSize?: number
   debounceMs?: number
+  refreshToken?: number
   emptyMessage?: string
   ariaLabel?: string
 }>(), {
@@ -53,6 +54,7 @@ const props = withDefaults(defineProps<{
   load: undefined,
   pageSize: 5,
   debounceMs: 300,
+  refreshToken: 0,
   emptyMessage: undefined,
   ariaLabel: undefined,
 })
@@ -181,6 +183,12 @@ watch([search, filterValues], () => {
 
 watch(() => props.pageSize, (pageSize) => {
   pagination.value = applyPageSize(pagination.value, pageSize)
+})
+
+watch(() => props.refreshToken, () => {
+  if (!props.load) return
+  debouncedRemoteLoad.cancel()
+  void loadRows()
 })
 
 watch(totalCount, (total) => {

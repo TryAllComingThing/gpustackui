@@ -11,7 +11,11 @@ interface NavGroup {
 }
 
 const NAV_GROUPS: NavGroup[] = [
+  { key: 'iam', labelKey: 'nav.iam', icon: 'i-lucide-shield-check', order: 15, defaultOpen: true },
   { key: 'resources', labelKey: 'nav.resources', icon: 'i-lucide-server', order: 20, defaultOpen: true },
+  { key: 'content', labelKey: 'nav.content', icon: 'i-lucide-megaphone', order: 35 },
+  { key: 'configuration', labelKey: 'nav.configuration', icon: 'i-lucide-sliders-horizontal', order: 55 },
+  { key: 'security', labelKey: 'nav.security', icon: 'i-lucide-shield-alert', order: 70 },
 ]
 
 type Translate = (key: string) => string

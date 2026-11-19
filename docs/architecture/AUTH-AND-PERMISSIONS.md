@@ -10,7 +10,7 @@
   - `POST /auth/logout`：清除 Cookie，可能返回 `{ logout_url }` 或空响应。`logout_url` 仅在 HTTPS、无凭据且 origin 命中显式 `VITE_TRUSTED_LOGOUT_ORIGINS` 白名单时允许跳转；其它值只回到站内登录页。
   - `GET /auth/config`：返回 `is_saml`、`is_oidc`、`first_time_setup`、`get_initial_password_command`。
   - `POST /auth/update-password`：JSON `{ current_password, new_password }`。
-- 当前用户：`GET /v2/users/me`，响应为 `UserPublic`，关键字段包括 `id`、`username`、`is_admin`、`is_active`、`full_name`、`avatar_url`、`source`、`require_password_change`。`is_active` 与 `require_password_change` 是必填布尔字段；缺失、类型错误、`is_active !== true` 或 `require_password_change === true` 一律失败关闭。
+- 当前用户：`GET /api/users/me`，响应为 `UserPublic`，关键字段包括 `id`、`username`、`is_admin`、`is_active`、`full_name`、`avatar_url`、`source`、`require_password_change`。`is_active` 与 `require_password_change` 是必填布尔字段；缺失、类型错误、`is_active !== true` 或 `require_password_change === true` 一律失败关闭。
 - 权限模型：当前只定义 `is_admin` 管理员能力，没有任意字符串权限列表。路由权限 token 仅支持 `authenticated` 与 `admin`；未知 token 必须失败关闭。
 - 权限组合：`permissions` 表示全部满足（`every`），不是任一满足。
 - `401`：清除本地用户状态并跳转登录；登录接口自身的 `401` 只显示凭据错误，不触发会话跳转。
@@ -23,7 +23,7 @@
 ## 当前实现
 
 - `src/api/auth/`：认证配置、登录、登出、修改密码、当前用户 Schema 与请求函数。
-- `src/services/auth/session.ts`：只通过 `GET /v2/users/me` 做服务端会话确认；单飞（single-flight）合并并发确认。启动时删除旧版 `gpustack-auth-user` localStorage 缓存，不再将其视为认证来源。`ensureSession()` 与强制 `refresh()` 都复用同一 pending 请求；登录、退出等认证状态切换会使旧探测失效，避免旧响应覆盖新状态或让新状态卡在旧请求上。
+- `src/services/auth/session.ts`：只通过 `GET /api/users/me` 做服务端会话确认；单飞（single-flight）合并并发确认。启动时删除旧版 `gpustack-auth-user` localStorage 缓存，不再将其视为认证来源。`ensureSession()` 与强制 `refresh()` 都复用同一 pending 请求；登录、退出等认证状态切换会使旧探测失效，避免旧响应覆盖新状态或让新状态卡在旧请求上。
 - `src/stores/auth.ts`：显式状态机 `unknown → checking → authenticated | anonymous | unavailable`。仅服务端确认成功后才进入 `authenticated`；网络或服务异常进入 `unavailable`；本地无用户缓存恢复。
 - `src/app/router/access.ts`：纯函数判断 `allow`、`login`、`forbidden`。
 - `src/app/router/guards.ts`：统一保护 `requiresAuth`、`requiresAdmin`、`permissions`；未确认会话时先执行服务端确认，再决定放行、登录回跳、禁止访问或服务不可用。缺少任何访问元数据的路由失败关闭到登录页，不得静默视为公开路由。`guestOnly` 登录页对已登录用户回到默认页。
@@ -32,7 +32,7 @@
 - `src/app/pages/PasswordChangePage.vue`：通过 `POST /auth/update-password` 修改当前账号密码；成功后尝试服务端登出并回登录页。若登出未能确认，保留“密码已更新”结果并提示当前会话可能仍有效，不得宣称已安全退出。
 - `src/app/pages/ServiceUnavailablePage.vue`：重试时调用 `auth.refresh()`；成功回原目标，`401` 回登录，`403` 回禁止页，网络/服务错误留在 `/unavailable`，回跳参数复用同一站内路径校验。
 - `src/services/auth/session-events.ts`：统一 `401/403` 导航事件；并发 `401` 只产生一次重定向。
-- `src/services/http/client.ts`：`401` 通知清理会话并回登录；`403` 进入禁止访问页；登录、`/v2/users/me` 探测与退出请求不触发全局跳转，退出结果由认证状态机与 Header 显式处理，避免重定向循环。
+- `src/services/http/client.ts`：`401` 通知清理会话并回登录；`403` 进入禁止访问页；登录、`/api/users/me` 探测与退出请求不触发全局跳转，退出结果由认证状态机与 Header 显式处理，避免重定向循环。
 - `src/services/http/csrf.ts`：状态变更请求发送 CSRF Cookie→Header。浏览器生产构建始终要求配置 `VITE_CSRF_COOKIE_NAME` 且 Cookie 存在；缺失配置或 Cookie 时在发送请求前失败关闭，`VITE_CSRF_REQUIRED=false` 只在非生产构建生效。
 - `src/api/auth/auth.ts`：CSRF 必需且尚无可见 Token 时，登录前通过安全的 `GET /auth/config` 引导后端设置 Cookie；引导后仍无 Token 时以 `CSRF` 错误阻断登录，不发送用户名和密码。
 - 所有业务路由已设置 `requiresAuth`；管理员专用页面按契约设置 `requiresAdmin: true`。
@@ -40,7 +40,7 @@
 ## 登录与会话流程
 
 1. 访问受保护路由时，guard 检查 `auth.status`。
-2. `unknown`/`checking` 状态下调用 `ensureSession()`；并发调用共享同一个 `/v2/users/me` 请求。
+2. `unknown`/`checking` 状态下调用 `ensureSession()`；并发调用共享同一个 `/api/users/me` 请求。
 3. 服务端确认成功：写入用户与 `authenticated`，继续目标路由。
 4. `401`：清除用户状态，跳转 `/login?redirect=<原目标>`；回跳目标经过白名单校验。
 5. `403`：保留已确认的用户身份，进入 `/403`，不得误判为未登录。

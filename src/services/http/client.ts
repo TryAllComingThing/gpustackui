@@ -23,7 +23,7 @@ function requestPathname(url: string | undefined): string {
 
 export function createHttpClient(options: HttpClientOptions = {}) {
   const client = axios.create({
-    baseURL: options.baseURL ?? import.meta.env.VITE_API_BASE_URL ?? '/v2',
+    baseURL: options.baseURL ?? import.meta.env.VITE_API_BASE_URL ?? '/api',
     timeout: options.timeout ?? 15000,
     withCredentials: true,
   })

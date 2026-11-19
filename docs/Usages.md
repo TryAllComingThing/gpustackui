@@ -35,7 +35,7 @@ npm run dev
 
 ```dotenv
 VITE_APP_NAME=你的产品名称
-VITE_API_BASE_URL=/v2
+VITE_API_BASE_URL=/api
 VITE_AUTH_BASE_URL=
 VITE_APP_BASE=/
 VITE_ENABLE_DEMO_MODULES=false
@@ -103,7 +103,7 @@ docs/ai/TASK-LEVELS.md，
 - 有单元测试并通过 typecheck、lint、test:unit、build。
 
 API 契约：
-GET /v2/orders?page=1&perPage=20&search=&status=
+GET /api/orders?page=1&perPage=20&search=&status=
 响应必须由 Zod 校验。
 如果契约信息不足，不要虚构端点，先列出缺失项。
 

@@ -1,0 +1,1343 @@
+openapi: 3.1.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+info:
+  title: Organization API - Backend Handoff Draft
+  summary: Tenant-scoped organization API draft for backend implementation and reconciliation.
+  version: 0.3.0-backend-draft
+  contact:
+    name: Backend and frontend contract owners
+  description: |
+    Backend handoff draft generated from the admin-foundation planning documents
+    on 2026-11-15. It is intended to give the backend a complete, machine-readable
+    starting point for implementation and reconciliation.
+
+    This file is NOT evidence that the backend has implemented these endpoints,
+    and it is NOT a signed backend contract. The backend must return a real
+    OpenAPI 3.1 document with its actual topology, security settings, storage,
+    transaction, idempotency, permission-version and audit semantics. No frontend
+    request function may be created from this draft before G1 and G2 close.
+
+    Canonical proposal: organization.openapi.yaml. This handoff draft must be
+    reconciled against that proposal and the planning documents listed below.
+    Product decisions confirmed on 2026-11-15: ordinary tenant APIs never accept
+    a client-selected tenant; cross-tenant operations use a separate /platform/*
+    surface; organization lifecycle is status-only (no delete or restore).
+x-contract-provenance: frontend-generated-backend-handoff-draft
+x-contract-canonical-source: organization.openapi.yaml
+x-backend-openapi-status: backend-reconciliation-required
+x-freeze-status: DRAFT_FOR_BACKEND_RECONCILIATION
+x-generated-at: '2026-11-15'
+x-generated-from:
+  - organization-api-contract-v0.2.md
+  - organization.openapi.yaml
+  - role-permission-matrix.md
+  - adr-001-identity-tenant-organization.md
+  - page-contract-matrix.md
+  - audit-event-catalog.md
+  - audit-event-v1.schema.json
+  - shortest-path-execution.md
+x-out-of-scope:
+  - /platform/*
+  - /users
+  - /roles
+  - /dictionaries
+  - /announcements
+  - /audit
+x-access-denied-audit-event: organization.access_denied
+x-access-denied-audit-mode: independent-reliable-security-channel
+x-audit-event-catalog:
+  - organization.created
+  - organization.updated
+  - organization.moved
+  - organization.status_changed
+  - organization.access_denied
+x-backend-implementation-notes:
+  tenant-context: tenant_id is injected from the verified session; ordinary APIs must reject client-selected tenant switching.
+  data-scope: Only self, org, org_subtree and all are allowed; all means current tenant only.
+  transaction: Create, update, move and status changes must be transactional and enforce root, depth, cycle, active-child and active-member invariants.
+  idempotency: POST create/move/status require Idempotency-Key; retention TTL, fingerprint and cleanup task require backend approval.
+  concurrency: PATCH, move and status require ETag/If-Match; missing returns 428, stale returns 412, business conflicts return 409.
+  audit: High-risk writes use audit_event_v1 in the business transaction; Outbox write failure fails the transaction closed. Denied access uses an independent reliable security channel.
+  permission-version: Successful permission-affecting writes must increment permissions_version and define refresh/invalidation behavior.
+  last-admin: Last platform administrator and per-tenant last tenant administrator checks must be atomic; no check-then-write.
+  errors: Stable business error codes and request_id are required; clients must fail closed on unknown codes.
+x-backend-handoff:
+  status: required
+  freezeStatus: DRAFT_FOR_BACKEND_RECONCILIATION
+  acceptanceDocument: shortest-path-execution.md
+  contractDiffBaseline: organization.openapi.yaml
+  requiredSignoffs: [backend, security, operations, frontend]
+  mustReconcile:
+    - real server URL, base path and deployment topology
+    - authentication, CSRF, request tracing and cookie settings
+    - tenant injection point and forbidden client-selected tenant mechanisms
+    - field types, limits, stable error codes and idempotency retention
+    - audit outbox, permission-version invalidation and transaction behavior
+  requiredOutputs:
+    - backend-owned OpenAPI 3.1 file with real servers and security
+    - OpenAPI lint and request/response example schema validation
+    - diff report against organization.openapi.yaml with every difference resolved
+    - backend and security signoff evidence for G1 and G2
+servers:
+  - url: /api
+    description: Candidate non-versioned API namespace; backend must replace this with the real deployment topology.
+tags:
+  - name: Organizations
+    description: Tenant-scoped organization tree and lifecycle handoff draft.
+security:
+  - sessionCookie: []
+paths:
+  /organizations/tree:
+    get:
+      tags: [Organizations]
+      operationId: getOrganizationTree
+      x-required-permission: iam:organization:read
+      x-data-scope: [org, org_subtree, all]
+      x-tenant-context: server-injected-session
+      x-audit-events: []
+      summary: Get the authorized organization tree
+      description: |
+        Returns only organizations visible to the caller. The tenant boundary is
+        injected from the verified session and is not accepted from the client.
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+        - name: root_id
+          in: query
+          required: false
+          description: Visible node to use as the tree root. Out-of-scope values return 404.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 128
+        - name: include_inactive
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: max_depth
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 4
+            default: 4
+        - name: keyword
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 200
+      responses:
+        '200':
+          description: Authorized tree response.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationTreeResponse'
+              examples:
+                tree:
+                  value:
+                    items:
+                      - tenant_id: tenant_01
+                        id: org_root
+                        code: HQ
+                        name: Group Headquarters
+                        type: company
+                        status: active
+                        parent_id: null
+                        sort_order: 10
+                        leader_user_id: null
+                        description: null
+                        depth: 1
+                        version: 5
+                        created_at: '2026-11-01T08:00:00Z'
+                        updated_at: '2026-11-14T08:30:00Z'
+                        inactive_at: null
+                        children: []
+                    meta:
+                      root_id: null
+                      include_inactive: false
+                      max_depth: 4
+                      truncated: false
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/OrganizationNotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /organizations:
+    get:
+      tags: [Organizations]
+      operationId: listOrganizations
+      x-required-permission: iam:organization:read
+      x-data-scope: [org, org_subtree, all]
+      x-tenant-context: server-injected-session
+      x-audit-events: []
+      summary: List organizations within the caller's data scope
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 200
+        - name: parent_id
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 128
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrganizationStatus'
+        - name: type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrganizationType'
+        - name: sort_by
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [code, name, sort_order, created_at, updated_at]
+            default: sort_order
+        - name: sort_order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+      responses:
+        '200':
+          description: Authorized and paginated organization list.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationListResponse'
+              examples:
+                empty:
+                  value:
+                    items: []
+                    pagination:
+                      page: 1
+                      per_page: 20
+                      total: 0
+                      total_pages: 0
+                page:
+                  $ref: '#/components/examples/OrganizationListPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    post:
+      tags: [Organizations]
+      operationId: createOrganization
+      x-required-permission: iam:organization:create
+      x-data-scope: [org, org_subtree, all]
+      x-tenant-context: server-injected-session
+      x-idempotency: required
+      x-audit-events: [organization.created]
+      summary: Create a non-root organization
+      description: |
+        The server injects tenant_id from the verified session. A root organization
+        is provisioned separately; this operation cannot create a second root.
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+            examples:
+              createDepartment:
+                value:
+                  parent_id: org_hq
+                  code: PLATFORM
+                  name: Platform Engineering
+                  type: department
+                  sort_order: 20
+                  leader_user_id: null
+                  description: Platform engineering organization
+      responses:
+        '201':
+          description: Organization created.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            Location:
+              $ref: '#/components/headers/Location'
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+              examples:
+                created:
+                  $ref: '#/components/examples/OrganizationCreated'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ParentNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /organizations/{organization_id}:
+    parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+    get:
+      tags: [Organizations]
+      operationId: getOrganization
+      x-required-permission: iam:organization:read
+      x-data-scope: [org, org_subtree, all]
+      x-tenant-context: server-injected-session
+      x-audit-events: []
+      summary: Get one organization
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+      responses:
+        '200':
+          description: Organization visible to the caller.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+              examples:
+                active:
+                  $ref: '#/components/examples/OrganizationUpdated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/OrganizationNotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+    patch:
+      tags: [Organizations]
+      operationId: updateOrganization
+      x-required-permission: iam:organization:update
+      x-data-scope: [org, org_subtree, all]
+      x-tenant-context: server-injected-session
+      x-if-match: required
+      x-audit-events: [organization.updated]
+      summary: Update organization base data
+      description: Does not change code, hierarchy, status or tenant_id.
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateRequest'
+            examples:
+              updateDepartment:
+                value:
+                  name: Platform and Infrastructure
+                  type: department
+                  sort_order: 15
+                  leader_user_id: user_01
+                  description: Platform and infrastructure organization
+      responses:
+        '200':
+          description: Updated organization.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+              examples:
+                updated:
+                  $ref: '#/components/examples/OrganizationUpdated'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/OrganizationNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '412':
+          $ref: '#/components/responses/PreconditionFailed'
+        '428':
+          $ref: '#/components/responses/PreconditionRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /organizations/{organization_id}/move:
+    parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+    post:
+      tags: [Organizations]
+      operationId: moveOrganization
+      x-required-permission: iam:organization:move
+      x-data-scope: [org, org_subtree, all]
+      x-tenant-context: server-injected-session
+      x-idempotency: required
+      x-if-match: required
+      x-audit-events: [organization.moved]
+      summary: Move an organization subtree
+      description: |
+        Locks the tenant structure, source subtree and destination parent. Rejects
+        cycles, roots, inactive destinations and moves exceeding four levels.
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationMoveRequest'
+            examples:
+              moveDepartment:
+                value:
+                  target_parent_id: org_operations
+                  sort_order: 10
+      responses:
+        '200':
+          description: Moved organization.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+              examples:
+                moved:
+                  $ref: '#/components/examples/OrganizationMoved'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/ParentNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '412':
+          $ref: '#/components/responses/PreconditionFailed'
+        '428':
+          $ref: '#/components/responses/PreconditionRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /organizations/{organization_id}/status:
+    parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 128
+    post:
+      tags: [Organizations]
+      operationId: changeOrganizationStatus
+      x-required-permission: iam:organization:update-status
+      x-data-scope: [org, org_subtree, all]
+      x-tenant-context: server-injected-session
+      x-idempotency: required
+      x-if-match: required
+      x-audit-events: [organization.status_changed]
+      summary: Activate or deactivate an organization
+      description: |
+        Uses one permission for both directions: iam:organization:update-status.
+        No cascade is defined in v0.2.
+      parameters:
+        - $ref: '#/components/parameters/RequestId'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationStatusRequest'
+            examples:
+              deactivate:
+                value:
+                  status: inactive
+                  reason: Organization restructuring
+              activate:
+                value:
+                  status: active
+      responses:
+        '200':
+          description: Organization with the requested state.
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+            X-Request-Id:
+              $ref: '#/components/headers/XRequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+              examples:
+                active:
+                  $ref: '#/components/examples/OrganizationUpdated'
+                inactive:
+                  $ref: '#/components/examples/OrganizationDeactivated'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/OrganizationNotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '412':
+          $ref: '#/components/responses/PreconditionFailed'
+        '428':
+          $ref: '#/components/responses/PreconditionRequired'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '502':
+          $ref: '#/components/responses/BadGateway'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: session
+      description: HttpOnly server session cookie; token contents are never exposed to the frontend.
+  parameters:
+    RequestId:
+      name: X-Request-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 128
+      description: Client-generated correlation ID; the server echoes or replaces it.
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+      description: CSRF header required for state-changing requests by the existing frontend contract.
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+      description: Scoped to tenant, actor, method, path and request body hash.
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+      description: ETag/version precondition, for example "3".
+  headers:
+    ETag:
+      description: Quoted organization version, for example "3".
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+    Location:
+      description: Created organization resource URL.
+      schema:
+        type: string
+        format: uri-reference
+    XRequestId:
+      description: Request correlation ID.
+      schema:
+        type: string
+  examples:
+    OrganizationCreated:
+      summary: New active department
+      value:
+        tenant_id: tenant_01
+        id: org_platform
+        code: PLATFORM
+        name: Platform Engineering
+        type: department
+        status: active
+        parent_id: org_hq
+        sort_order: 20
+        leader_user_id: null
+        description: Platform engineering organization
+        depth: 2
+        version: 3
+        created_at: '2026-11-01T08:00:00Z'
+        updated_at: '2026-11-14T08:30:00Z'
+        inactive_at: null
+    OrganizationUpdated:
+      summary: Organization base data updated
+      value:
+        tenant_id: tenant_01
+        id: org_platform
+        code: PLATFORM
+        name: Platform and Infrastructure
+        type: department
+        status: active
+        parent_id: org_hq
+        sort_order: 15
+        leader_user_id: user_01
+        description: Platform and infrastructure organization
+        depth: 2
+        version: 4
+        created_at: '2026-11-01T08:00:00Z'
+        updated_at: '2026-11-15T02:00:00Z'
+        inactive_at: null
+    OrganizationMoved:
+      summary: Organization moved under a new parent
+      value:
+        tenant_id: tenant_01
+        id: org_platform
+        code: PLATFORM
+        name: Platform and Infrastructure
+        type: department
+        status: active
+        parent_id: org_operations
+        sort_order: 10
+        leader_user_id: user_01
+        description: Platform and infrastructure organization
+        depth: 2
+        version: 5
+        created_at: '2026-11-01T08:00:00Z'
+        updated_at: '2026-11-15T02:10:00Z'
+        inactive_at: null
+    OrganizationDeactivated:
+      summary: Organization deactivated without cascade
+      value:
+        tenant_id: tenant_01
+        id: org_platform
+        code: PLATFORM
+        name: Platform and Infrastructure
+        type: department
+        status: inactive
+        parent_id: org_operations
+        sort_order: 10
+        leader_user_id: user_01
+        description: Platform and infrastructure organization
+        depth: 2
+        version: 6
+        created_at: '2026-11-01T08:00:00Z'
+        updated_at: '2026-11-15T02:20:00Z'
+        inactive_at: '2026-11-15T02:20:00Z'
+    OrganizationListPage:
+      summary: Paginated organization list within scope
+      value:
+        items:
+          - tenant_id: tenant_01
+            id: org_platform
+            code: PLATFORM
+            name: Platform and Infrastructure
+            type: department
+            status: active
+            parent_id: org_operations
+            sort_order: 10
+            leader_user_id: user_01
+            description: Platform and infrastructure organization
+            depth: 2
+            version: 5
+            created_at: '2026-11-01T08:00:00Z'
+            updated_at: '2026-11-15T02:10:00Z'
+            inactive_at: null
+        pagination:
+          page: 1
+          per_page: 20
+          total: 1
+          total_pages: 1
+    ValidationErrorExample:
+      summary: Stable validation failure with field details
+      value:
+        code: ORG_VALIDATION_FAILED
+        message: Request validation failed.
+        details:
+          fields:
+            - field: code
+              code: required
+              message: code is required
+            - field: sort_order
+              code: minimum
+              message: sort_order must be greater than or equal to 0
+        request_id: req_01
+    UnauthorizedExample:
+      summary: Missing or revoked session
+      value:
+        code: UNAUTHORIZED
+        message: Authentication is required.
+        request_id: req_01
+    ForbiddenExample:
+      summary: Missing functional permission
+      value:
+        code: ORG_FORBIDDEN
+        message: You do not have permission to perform this operation.
+        request_id: req_01
+    OrganizationNotFoundExample:
+      summary: Organization absent or outside data scope
+      value:
+        code: ORG_NOT_FOUND
+        message: Organization not found.
+        request_id: req_01
+    ParentNotFoundExample:
+      summary: Parent organization absent or outside writable scope
+      value:
+        code: ORG_PARENT_NOT_FOUND
+        message: Parent organization not found.
+        request_id: req_01
+    LeaderNotFoundExample:
+      summary: Leader absent or outside the allowed user scope
+      value:
+        code: ORG_LEADER_NOT_FOUND
+        message: Leader user not found or not assignable.
+        request_id: req_01
+    CodeConflictExample:
+      summary: Duplicate normalized code in the tenant
+      value:
+        code: ORG_CODE_CONFLICT
+        message: Organization code already exists in this tenant.
+        request_id: req_01
+    ParentInactiveExample:
+      summary: Destination parent is inactive
+      value:
+        code: ORG_PARENT_INACTIVE
+        message: Parent organization is inactive.
+        request_id: req_01
+    CycleDetectedExample:
+      summary: Move targets the source or one of its descendants
+      value:
+        code: ORG_CYCLE
+        message: Organization cannot be moved into itself or its subtree.
+        request_id: req_01
+    MaxDepthExceededExample:
+      summary: Move would exceed four levels
+      value:
+        code: ORG_MAX_DEPTH_EXCEEDED
+        message: Organization move would exceed the maximum depth of 4.
+        request_id: req_01
+    ActiveChildrenConflictExample:
+      summary: Deactivation blocked by active descendants
+      value:
+        code: ORG_HAS_ACTIVE_CHILDREN
+        message: Organization has active children.
+        request_id: req_01
+    ActiveMembersConflictExample:
+      summary: Deactivation blocked by active members
+      value:
+        code: ORG_HAS_ACTIVE_MEMBERS
+        message: Organization has active members.
+        request_id: req_01
+    RootProtectedExample:
+      summary: Root creation or deactivation is protected
+      value:
+        code: ORG_ROOT_PROTECTED
+        message: The tenant root organization is protected.
+        request_id: req_01
+    InvalidStateExample:
+      summary: Lifecycle state transition is invalid
+      value:
+        code: ORG_INVALID_STATE
+        message: Organization state transition is not allowed.
+        request_id: req_01
+    IdempotencyReusedExample:
+      summary: Idempotency key reused with a different request body
+      value:
+        code: IDEMPOTENCY_KEY_REUSED
+        message: Idempotency-Key was already used with a different request.
+        request_id: req_01
+    IdempotencyInProgressExample:
+      summary: Original request with the same key is still in progress
+      value:
+        code: IDEMPOTENCY_IN_PROGRESS
+        message: A request with the same Idempotency-Key is still in progress.
+        request_id: req_01
+    VersionConflictExample:
+      summary: If-Match version is stale
+      value:
+        code: ORG_VERSION_CONFLICT
+        message: Organization has changed since the supplied version.
+        details:
+          expected_version: 5
+        request_id: req_01
+    PreconditionRequiredExample:
+      summary: If-Match header is missing
+      value:
+        code: PRECONDITION_REQUIRED
+        message: If-Match header is required.
+        request_id: req_01
+    RateLimitedExample:
+      summary: Request rate limit exceeded
+      value:
+        code: RATE_LIMITED
+        message: Request rate limit exceeded.
+        request_id: req_01
+    ServerErrorExample:
+      summary: Server or dependency failure
+      value:
+        code: ORG_SERVER_ERROR
+        message: The organization service is temporarily unavailable.
+        request_id: req_01
+    BadGatewayExample:
+      summary: Upstream dependency failed
+      value:
+        code: ORG_SERVER_ERROR
+        message: An upstream dependency failed.
+        request_id: req_01
+    ServiceUnavailableExample:
+      summary: Service is temporarily unavailable
+      value:
+        code: ORG_SERVER_ERROR
+        message: The organization service is temporarily unavailable.
+        request_id: req_01
+  schemas:
+    OrganizationStatus:
+      type: string
+      enum: [active, inactive]
+    OrganizationType:
+      type: string
+      enum: [company, department, team, other]
+    Organization:
+      type: object
+      required:
+        - tenant_id
+        - id
+        - code
+        - name
+        - type
+        - status
+        - parent_id
+        - sort_order
+        - leader_user_id
+        - description
+        - depth
+        - version
+        - created_at
+        - updated_at
+        - inactive_at
+      properties:
+        tenant_id:
+          type: string
+          description: Server-injected tenant boundary.
+        id:
+          type: string
+          description: Opaque immutable resource ID.
+        code:
+          type: string
+          minLength: 1
+          maxLength: 64
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        type:
+          $ref: '#/components/schemas/OrganizationType'
+        status:
+          $ref: '#/components/schemas/OrganizationStatus'
+        parent_id:
+          type: [string, 'null']
+        sort_order:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        leader_user_id:
+          type: [string, 'null']
+        description:
+          type: [string, 'null']
+          maxLength: 2000
+        depth:
+          type: integer
+          minimum: 1
+          maximum: 4
+        version:
+          type: integer
+          minimum: 1
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        inactive_at:
+          type: [string, 'null']
+          format: date-time
+    OrganizationTreeNode:
+      allOf:
+        - $ref: '#/components/schemas/Organization'
+        - type: object
+          required: [children]
+          properties:
+            children:
+              type: array
+              items:
+                $ref: '#/components/schemas/OrganizationTreeNode'
+    OrganizationCreateRequest:
+      type: object
+      additionalProperties: false
+      required: [parent_id, code, name, type, sort_order]
+      properties:
+        parent_id:
+          type: string
+          minLength: 1
+          description: Required; ordinary creation cannot create a root.
+        code:
+          type: string
+          minLength: 1
+          maxLength: 64
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        type:
+          $ref: '#/components/schemas/OrganizationType'
+        sort_order:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        leader_user_id:
+          type: [string, 'null']
+        description:
+          type: [string, 'null']
+          maxLength: 2000
+    OrganizationUpdateRequest:
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        type:
+          $ref: '#/components/schemas/OrganizationType'
+        sort_order:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+        leader_user_id:
+          type: [string, 'null']
+        description:
+          type: [string, 'null']
+          maxLength: 2000
+    OrganizationMoveRequest:
+      type: object
+      additionalProperties: false
+      required: [target_parent_id, sort_order]
+      properties:
+        target_parent_id:
+          type: string
+          minLength: 1
+        sort_order:
+          type: integer
+          minimum: 0
+          maximum: 1000000
+    OrganizationStatusRequest:
+      type: object
+      additionalProperties: false
+      required: [status]
+      properties:
+        status:
+          $ref: '#/components/schemas/OrganizationStatus'
+        reason:
+          type: string
+          maxLength: 500
+    Pagination:
+      type: object
+      additionalProperties: false
+      required: [page, per_page, total, total_pages]
+      properties:
+        page:
+          type: integer
+          minimum: 1
+        per_page:
+          type: integer
+          minimum: 1
+          maximum: 100
+        total:
+          type: integer
+          minimum: 0
+        total_pages:
+          type: integer
+          minimum: 0
+    OrganizationListResponse:
+      type: object
+      additionalProperties: false
+      required: [items, pagination]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    OrganizationTreeMeta:
+      type: object
+      additionalProperties: false
+      required: [root_id, include_inactive, max_depth, truncated]
+      properties:
+        root_id:
+          type: [string, 'null']
+        include_inactive:
+          type: boolean
+        max_depth:
+          type: integer
+          minimum: 1
+          maximum: 4
+        truncated:
+          type: boolean
+    OrganizationTreeResponse:
+      type: object
+      additionalProperties: false
+      required: [items, meta]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationTreeNode'
+        meta:
+          $ref: '#/components/schemas/OrganizationTreeMeta'
+    Error:
+      type: object
+      additionalProperties: false
+      required: [code, message, request_id]
+      properties:
+        code:
+          $ref: '#/components/schemas/OrganizationErrorCode'
+        message:
+          type: string
+          description: Non-sensitive diagnostic message; UI must not branch on it.
+        details:
+          type: object
+          additionalProperties: true
+          properties:
+            fields:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+        request_id:
+          type: string
+    FieldError:
+      type: object
+      additionalProperties: false
+      required: [field, code, message]
+      properties:
+        field:
+          type: string
+          description: Wire field path, for example code or sort_order.
+        code:
+          type: string
+          description: Field-level validation code for frontend mapping.
+        message:
+          type: string
+          description: Non-sensitive diagnostic message; UI must not display it verbatim.
+    OrganizationErrorCode:
+      type: string
+      description: Stable business error code for frontend mapping and contract tests.
+      enum:
+        - ORG_VALIDATION_FAILED
+        - UNAUTHORIZED
+        - ORG_FORBIDDEN
+        - ORG_NOT_FOUND
+        - ORG_PARENT_NOT_FOUND
+        - ORG_LEADER_NOT_FOUND
+        - ORG_CODE_CONFLICT
+        - ORG_PARENT_INACTIVE
+        - ORG_CYCLE
+        - ORG_MAX_DEPTH_EXCEEDED
+        - ORG_HAS_ACTIVE_CHILDREN
+        - ORG_HAS_ACTIVE_MEMBERS
+        - ORG_ROOT_PROTECTED
+        - ORG_INVALID_STATE
+        - IDEMPOTENCY_KEY_REUSED
+        - IDEMPOTENCY_IN_PROGRESS
+        - ORG_VERSION_CONFLICT
+        - PRECONDITION_REQUIRED
+        - RATE_LIMITED
+        - ORG_SERVER_ERROR
+  responses:
+    ValidationError:
+      description: Request validation failed.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            validation:
+              $ref: '#/components/examples/ValidationErrorExample'
+    Unauthorized:
+      description: Missing, expired or revoked session.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            unauthorized:
+              $ref: '#/components/examples/UnauthorizedExample'
+    Forbidden:
+      description: Authenticated but missing the required functional permission.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            forbidden:
+              $ref: '#/components/examples/ForbiddenExample'
+    OrganizationNotFound:
+      description: Organization does not exist or is outside the caller's data scope.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            notFound:
+              $ref: '#/components/examples/OrganizationNotFoundExample'
+    ParentNotFound:
+      description: Source, parent or leader does not exist or is outside the caller's writable scope.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            parentNotFound:
+              $ref: '#/components/examples/ParentNotFoundExample'
+            leaderNotFound:
+              $ref: '#/components/examples/LeaderNotFoundExample'
+    Conflict:
+      description: Business state conflict; inspect the stable error code.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            codeConflict:
+              $ref: '#/components/examples/CodeConflictExample'
+            parentInactive:
+              $ref: '#/components/examples/ParentInactiveExample'
+            cycle:
+              $ref: '#/components/examples/CycleDetectedExample'
+            maxDepth:
+              $ref: '#/components/examples/MaxDepthExceededExample'
+            activeChildren:
+              $ref: '#/components/examples/ActiveChildrenConflictExample'
+            activeMembers:
+              $ref: '#/components/examples/ActiveMembersConflictExample'
+            rootProtected:
+              $ref: '#/components/examples/RootProtectedExample'
+            invalidState:
+              $ref: '#/components/examples/InvalidStateExample'
+            idempotencyReused:
+              $ref: '#/components/examples/IdempotencyReusedExample'
+            idempotencyInProgress:
+              $ref: '#/components/examples/IdempotencyInProgressExample'
+    PreconditionRequired:
+      description: Required If-Match precondition is missing.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            preconditionRequired:
+              $ref: '#/components/examples/PreconditionRequiredExample'
+    PreconditionFailed:
+      description: If-Match version is stale; reload the resource.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            versionConflict:
+              $ref: '#/components/examples/VersionConflictExample'
+    RateLimited:
+      description: Rate limit exceeded. Honor Retry-After.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+            minimum: 0
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            rateLimited:
+              $ref: '#/components/examples/RateLimitedExample'
+    ServerError:
+      description: Server or dependency failure. The client must not assume success.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            serverError:
+              $ref: '#/components/examples/ServerErrorExample'
+    BadGateway:
+      description: Upstream dependency failed.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            badGateway:
+              $ref: '#/components/examples/BadGatewayExample'
+    ServiceUnavailable:
+      description: Service is temporarily unavailable.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+            minimum: 0
+        X-Request-Id:
+          $ref: '#/components/headers/XRequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            serviceUnavailable:
+              $ref: '#/components/examples/ServiceUnavailableExample'

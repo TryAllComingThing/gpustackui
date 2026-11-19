@@ -50,7 +50,7 @@
 - `VITE_ENABLE_GPUSTACK_EXAMPLE=true` 才注册 GPUStack 专用 GPU 资源路由；默认关闭，E2E 通过 `.env.e2e` 显式启用。
 - `VITE_SSO_LOGIN_URL` 只在 `/auth/config` 报告 SAML/OIDC 可用时展示；仅接受站内绝对路径或 HTTPS URL。
 - 通用模块、认证、主题、组件和服务基础设施不得依赖 `src/modules/resources/examples/gpustack/`。
-- GPU 设备 API 继续通过 `src/api/resources/gpu-device.ts` 暴露，示例开关不改变 `GET /v2/gpu-devices` 契约。
+- GPU 设备 API 继续通过 `src/api/resources/gpu-device.ts` 暴露，示例开关不改变 `GET /api/gpu-devices` 契约。
 
 ## 3. 设计理念
 

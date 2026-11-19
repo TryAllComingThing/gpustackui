@@ -11,13 +11,13 @@ export const adminUser = {
 }
 
 export async function mockAuthenticatedSession(page: Page, user = adminUser) {
-  await page.route('**/v2/users/me', async (route) => {
+  await page.route('**/users/me', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(user) })
   })
 }
 
 export async function mockAnonymousSession(page: Page) {
-  await page.route('**/v2/users/me', async (route) => {
+  await page.route('**/users/me', async (route) => {
     await route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Unauthorized' }) })
   })
 }

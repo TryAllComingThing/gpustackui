@@ -1,0 +1,6 @@
+export { rolesRoutes } from './routes'
+export { canEditRole, changedPermissionCount, isRoleDraftDirty, permissionGroupState, permissionLabelKey, roleSearchMatches, togglePermissionGroup } from './model'
+export { DATA_SCOPES } from '../../types/admin'
+export type { AdminStatus, DataScope } from '../../types/admin'
+export type { PermissionGroup, PermissionDefinition, RoleFixture } from './fixtures/roles'
+export type { RoleDraft } from './model'

@@ -113,7 +113,7 @@ Token 层级：
 - 旧组件前缀已统一为 `U*`；`auto-imports.d.ts` 与 `components.d.ts` 由工具链按需重新生成，不作为源码。
 - 五主题、三密度、三外观和 Typography 由 JSON/CSS 源驱动，运行时不维护第二套值。
 - 认证/权限采用 HttpOnly Cookie + `is_admin`；前端已实现服务端会话确认、`unknown/checking/authenticated/anonymous/unavailable` 状态机、登录/回跳/退出、统一 `401/403` 和业务路由保护。前端守卫不是安全边界，后端必须独立授权。
-- GPU 设备 API 已按 `GET /v2/gpu-devices` 与分页响应定义；示例页面仍使用本地 fixture。
+- GPU 设备 API 已按 `GET /api/gpu-devices` 与分页响应定义；示例页面仍使用本地 fixture。
 - 产品名称、子路径、示例模块和 SSO 入口集中在 `src/config/product.ts`。资源、模型、部署和服务 fixtures 仅在 `VITE_ENABLE_DEMO_MODULES=true` 时注册；GPUStack 专用 GPU 页面还需 `VITE_ENABLE_GPUSTACK_EXAMPLE=true`。
 - 登录页在 `/auth/config` 报告 SAML/OIDC 可用时显示 SSO 入口；`/account/password` 使用真实修改密码契约，并在成功后尝试服务端登出。
 - 当前有效来源是根 `DESIGN.md`、本文件、`docs/design/` 与真实源码。

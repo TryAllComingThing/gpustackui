@@ -12,6 +12,7 @@ export default [
       'test-results/**',
       'playwright-report*/**',
       'coverage/**',
+      'planning/admin-foundation/prototypes/**',
     ],
   },
   {

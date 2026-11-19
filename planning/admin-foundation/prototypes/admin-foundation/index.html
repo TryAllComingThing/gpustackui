@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="standard" data-density="standard" data-appearance="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>管理平台基础能力 HTML 原型</title>
+    <link rel="stylesheet" href="../../../../src/theme/styles/tokens.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/themes/standard.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/themes/business.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/themes/future.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/themes/sky.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/themes/ocean.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/themes/appearance.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/typography.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/layout.css" />
+    <link rel="stylesheet" href="../../../../src/theme/styles/components.css" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="prototype-shell">
+      <header class="gp-app-header prototype-header">
+        <div class="gp-app-header__brand">
+          <span class="prototype-brand-mark" aria-hidden="true">GP</span>
+          <span>管理平台基础能力 · HTML 原型</span>
+        </div>
+        <nav class="prototype-screen-nav" aria-label="原型场景">
+          <button type="button" class="prototype-nav-button" data-screen-target="organization" aria-current="page">机构树</button>
+          <button type="button" class="prototype-nav-button" data-screen-target="roles">权限矩阵</button>
+          <button type="button" class="prototype-nav-button" data-screen-target="announcements">公告</button>
+          <button type="button" class="prototype-nav-button" data-screen-target="audit">审计详情</button>
+        </nav>
+        <div class="prototype-preferences" aria-label="原型偏好">
+          <label>
+            <span>主题</span>
+            <select id="theme-select" aria-label="主题">
+              <option value="standard">活力科技蓝</option>
+              <option value="business">沉稳商务蓝</option>
+              <option value="future">蓝紫未来科技</option>
+              <option value="sky">明亮天空蓝</option>
+              <option value="ocean">深海智慧蓝</option>
+            </select>
+          </label>
+          <label>
+            <span>密度</span>
+            <select id="density-select" aria-label="密度">
+              <option value="compact">紧凑</option>
+              <option value="standard" selected>标准</option>
+              <option value="comfortable">宽松</option>
+            </select>
+          </label>
+          <label>
+            <span>外观</span>
+            <select id="appearance-select" aria-label="外观">
+              <option value="system">跟随系统</option>
+              <option value="light" selected>浅色</option>
+              <option value="dark">深色</option>
+            </select>
+          </label>
+        </div>
+      </header>
+
+      <div class="prototype-workspace">
+        <aside class="prototype-sidebar" aria-label="原型说明">
+          <div class="prototype-fact-card">
+            <strong>本地 fixture</strong>
+            <p>本原型不请求后端，不代表已实现 API。所有写操作只更新本页状态。</p>
+          </div>
+          <nav aria-label="管理导航示例">
+            <p class="prototype-sidebar-label">身份与权限</p>
+            <button type="button" class="prototype-side-link" data-screen-target="organization" aria-current="page">机构管理</button>
+            <button type="button" class="prototype-side-link" data-screen-target="roles">角色管理</button>
+            <p class="prototype-sidebar-label">内容与安全</p>
+            <button type="button" class="prototype-side-link" data-screen-target="announcements">公告管理</button>
+            <button type="button" class="prototype-side-link" data-screen-target="audit">审计详情</button>
+          </nav>
+          <div class="prototype-fact-card prototype-fact-card--muted">
+            <strong>评审重点</strong>
+            <p>键盘、320px 窄屏、状态不只依赖颜色、焦点恢复和不可用态。</p>
+          </div>
+        </aside>
+
+        <main class="gp-app-main prototype-main" id="prototype-main" tabindex="-1">
+          <div class="prototype-live sr-only" id="global-live" role="status" aria-live="polite"></div>
+
+          <section class="prototype-screen" id="screen-organization" data-screen="organization" aria-labelledby="organization-title">
+            <div class="gp-page">
+              <div class="prototype-breadcrumb" aria-label="面包屑">工作台 / 身份与权限 / 机构管理</div>
+              <header class="prototype-page-header">
+                <div>
+                  <h1 id="organization-title">机构管理</h1>
+                  <p>树表格主路径；拖拽只是增强。当前演示数据范围：研发中心及子树。</p>
+                </div>
+                <div class="prototype-page-meta">
+                  <span class="prototype-badge">机构管理员</span>
+                  <span class="prototype-badge prototype-badge--scope">org_subtree</span>
+                </div>
+              </header>
+
+              <div class="gp-card prototype-toolbar" role="search" aria-label="机构筛选">
+                <label class="prototype-field prototype-field--search">
+                  <span>搜索机构</span>
+                  <input id="org-search" type="search" placeholder="编码或名称" autocomplete="off" />
+                </label>
+                <label class="prototype-field">
+                  <span>状态</span>
+                  <select id="org-status-filter">
+                    <option value="all">全部状态</option>
+                    <option value="active">启用</option>
+                    <option value="inactive">停用</option>
+                  </select>
+                </label>
+                <label class="prototype-checkbox">
+                  <input id="org-include-inactive" type="checkbox" checked />
+                  <span>显示停用节点</span>
+                </label>
+                <label class="prototype-field prototype-field--state">
+                  <span>原型状态</span>
+                  <select id="org-demo-state" aria-label="机构原型状态">
+                    <option value="normal">正常</option>
+                    <option value="loading">加载中</option>
+                    <option value="empty">空数据</option>
+                    <option value="filter-empty">筛选无结果</option>
+                    <option value="forbidden">403 无权限</option>
+                    <option value="not-found">404 范围外</option>
+                    <option value="conflict">409 业务冲突</option>
+                    <option value="version">412 版本过期</option>
+                    <option value="network">网络超时</option>
+                    <option value="server">服务错误</option>
+                  </select>
+                </label>
+                <button type="button" class="prototype-button prototype-button--primary" id="org-create-button">新建机构</button>
+              </div>
+
+              <div class="prototype-live" id="org-live" role="status" aria-live="polite"></div>
+              <div class="prototype-banner" id="org-banner" hidden></div>
+              <div class="gp-card prototype-tree-card" id="org-table-region" aria-busy="false">
+                <table class="prototype-tree-table" id="org-tree" role="treegrid" aria-label="授权范围内机构树"></table>
+                <div class="prototype-state-panel" id="org-state-panel" hidden></div>
+              </div>
+
+              <details class="prototype-notes">
+                <summary>键盘与状态验收说明</summary>
+                <ul>
+                  <li>聚焦机构名称按钮后，上下方向键移动，左右方向键展开/收起，Home/End 移到首尾。</li>
+                  <li>移动和启停使用对话框；关闭后焦点回到触发按钮。</li>
+                  <li>320px 下不出现页面级横向滚动，操作仍可通过键盘完成。</li>
+                  <li>状态同时提供文本、图标和 live region 播报，不只依赖颜色。</li>
+                </ul>
+              </details>
+            </div>
+          </section>
+
+          <section class="prototype-screen" id="screen-roles" data-screen="roles" aria-labelledby="roles-title" hidden>
+            <div class="gp-page">
+              <div class="prototype-breadcrumb" aria-label="面包屑">工作台 / 身份与权限 / 角色管理</div>
+              <header class="prototype-page-header">
+                <div>
+                  <h1 id="roles-title">角色权限矩阵</h1>
+                  <p>独立工作区；内置角色受保护，自定义角色按租户实例化。</p>
+                </div>
+                <span class="prototype-badge">当前租户 all</span>
+              </header>
+
+              <div class="prototype-role-layout">
+                <div class="gp-card prototype-role-list" aria-label="角色列表">
+                  <label class="prototype-field">
+                    <span>搜索角色</span>
+                    <input id="role-search" type="search" placeholder="角色名称" autocomplete="off" />
+                  </label>
+                  <button type="button" class="prototype-role-item" data-role="tenant_admin" aria-pressed="false">租户管理员 <span>内置</span></button>
+                  <button type="button" class="prototype-role-item" data-role="org_admin" aria-pressed="false">机构管理员 <span>内置</span></button>
+                  <button type="button" class="prototype-role-item" data-role="content_editor" aria-pressed="true">内容运营 <span>自定义</span></button>
+                </div>
+
+                <div class="gp-card prototype-permission-panel">
+                  <div class="prototype-panel-header">
+                    <div>
+                      <h2 id="permission-role-title">内容运营</h2>
+                      <p id="permission-role-description">自定义角色属于当前租户；下列控件演示权限矩阵交互。</p>
+                    </div>
+                    <span class="prototype-badge" id="permission-role-badge">自定义</span>
+                  </div>
+                  <div class="prototype-permission-toolbar">
+                    <label class="prototype-checkbox"><input type="checkbox" id="permission-changes-only" /> <span>仅看变更</span></label>
+                    <span id="permission-change-summary" class="prototype-change-summary">尚未修改</span>
+                  </div>
+                  <div class="prototype-permission-groups" role="group" aria-label="权限矩阵"></div>
+                  <div class="prototype-actions">
+                    <button type="button" class="prototype-button" id="permission-reset">重置修改</button>
+                    <button type="button" class="prototype-button prototype-button--primary" id="permission-save" disabled>保存变更</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="prototype-screen" id="screen-announcements" data-screen="announcements" aria-labelledby="announcements-title" hidden>
+            <div class="gp-page">
+              <div class="prototype-breadcrumb" aria-label="面包屑">工作台 / 内容中心 / 公告管理</div>
+              <header class="prototype-page-header">
+                <div>
+                  <h1 id="announcements-title">公告管理</h1>
+                  <p>草稿与预览快照分离；已发布内容不可原地修改。</p>
+                </div>
+                <span class="prototype-badge prototype-badge--published" id="announcement-status-badge">published</span>
+              </header>
+
+              <div class="prototype-announcement-layout">
+                <div class="gp-card prototype-announcement-list" aria-label="公告列表">
+                  <button type="button" class="prototype-announcement-item" aria-pressed="true">
+                    <strong>平台维护通知</strong><span>已发布</span><small>受众：研发中心 + 租户管理员</small>
+                  </button>
+                  <button type="button" class="prototype-announcement-item" aria-pressed="false">
+                    <strong>机构调整说明</strong><span>草稿</span><small>受众：全租户</small>
+                  </button>
+                  <button type="button" class="prototype-announcement-item" aria-pressed="false">
+                    <strong>季度安全提醒</strong><span>计划发布</span><small>受众：全租户</small>
+                  </button>
+                </div>
+
+                <div class="gp-card prototype-announcement-editor">
+                  <div class="prototype-panel-header">
+                    <div><h2>平台维护通知</h2><p>发布后只读；如需修改必须创建新版本或撤回后重新发布。</p></div>
+                    <span class="prototype-badge prototype-badge--published" id="announcement-panel-status">已发布</span>
+                  </div>
+                  <label class="prototype-field"><span>标题</span><input id="announcement-title" value="平台维护通知" readonly /></label>
+                  <label class="prototype-field"><span>正文</span><textarea id="announcement-body" rows="5" readonly>本周六 22:00–23:00 进行平台维护。</textarea></label>
+                  <fieldset class="prototype-fieldset">
+                    <legend>受众规则</legend>
+                    <label class="prototype-checkbox"><input type="checkbox" checked disabled /> 研发中心及子树</label>
+                    <label class="prototype-checkbox"><input type="checkbox" checked disabled /> 租户管理员</label>
+                    <label class="prototype-checkbox"><input type="checkbox" disabled /> 全租户</label>
+                  </fieldset>
+                  <div class="prototype-preview-snapshot" id="announcement-preview-block">
+                    <strong>预览快照</strong>
+                    <p id="announcement-preview-time">生成时间：2026-11-15 10:20 UTC</p>
+                    <p>预计受众：42 人</p>
+                  </div>
+                  <div class="prototype-actions">
+                    <button type="button" class="prototype-button" id="announcement-preview">重新预览</button>
+                    <button type="button" class="prototype-button prototype-button--danger" id="announcement-withdraw">撤回公告</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="prototype-screen" id="screen-audit" data-screen="audit" aria-labelledby="audit-title" hidden>
+            <div class="gp-page">
+              <div class="prototype-breadcrumb" aria-label="面包屑">工作台 / 安全与审计 / 审计详情</div>
+              <header class="prototype-page-header">
+                <div>
+                  <h1 id="audit-title">审计详情</h1>
+                  <p>严格只读；首期仅保存和查询，不提供导出、归档或合规删除。</p>
+                </div>
+                <span class="prototype-badge">audit_event_v1</span>
+              </header>
+
+              <div class="prototype-audit-layout">
+                <div class="gp-card prototype-audit-list" aria-label="审计事件列表">
+                  <div class="prototype-audit-filter">
+                    <label class="prototype-field"><span>动作</span><input value="organization.moved" readonly /></label>
+                    <label class="prototype-field"><span>结果</span><select><option>全部</option><option>success</option><option>denied</option></select></label>
+                  </div>
+                  <button type="button" class="prototype-audit-item" aria-pressed="true">
+                    <strong>organization.moved</strong><span>成功</span><small>2026-11-15 10:42:12 UTC</small>
+                  </button>
+                  <button type="button" class="prototype-audit-item" aria-pressed="false">
+                    <strong>organization.status_changed</strong><span>成功</span><small>2026-11-15 10:28:03 UTC</small>
+                  </button>
+                  <button type="button" class="prototype-audit-item" aria-pressed="false">
+                    <strong>organization.access_denied</strong><span>拒绝</span><small>2026-11-15 10:11:47 UTC</small>
+                  </button>
+                </div>
+
+                <div class="gp-card prototype-audit-detail">
+                  <div class="prototype-panel-header">
+                    <div><h2>组织移动成功</h2><p>平台组件成功 · organization.moved</p></div>
+                    <button type="button" class="prototype-button" id="copy-request-id">复制 request_id</button>
+                  </div>
+                  <dl class="prototype-definition-list">
+                    <div><dt>事件 ID</dt><dd>evt_01HX7M</dd></div>
+                    <div><dt>租户</dt><dd>tenant_01 · 示例租户</dd></div>
+                    <div><dt>操作者</dt><dd>tenant_admin · user_01</dd></div>
+                    <div><dt>请求 ID</dt><dd id="audit-request-id">req_01J9F4K2</dd></div>
+                    <div><dt>资源</dt><dd>organization · org_platform</dd></div>
+                    <div><dt>结果</dt><dd>success</dd></div>
+                  </dl>
+                  <div class="prototype-diff" aria-label="变更摘要">
+                    <div><span>parent_id</span><code>org_hq → org_rnd</code></div>
+                    <div><span>depth</span><code>2 → 3</code></div>
+                    <div><span>敏感字段</span><code>已脱敏</code></div>
+                  </div>
+                  <p class="prototype-note">此页面不提供编辑、删除、导出、归档或合规删除入口。</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="prototype-overlay" id="drawer-overlay" hidden>
+      <aside class="prototype-drawer" id="org-drawer" role="dialog" aria-modal="true" aria-labelledby="org-drawer-title" hidden>
+        <div class="prototype-panel-header">
+          <div><h2 id="org-drawer-title">新建机构</h2><p>编码创建后不可修改；父机构必须启用且在可写范围。</p></div>
+          <button type="button" class="prototype-icon-button" data-close-drawer aria-label="关闭新建机构">×</button>
+        </div>
+        <form id="org-form" class="prototype-form">
+          <label class="prototype-field"><span>父机构</span><select id="org-parent"><option>集团总部</option><option>研发中心</option><option>平台研发部</option></select></label>
+          <label class="prototype-field"><span>编码</span><input id="org-code" required value="OPS" /></label>
+          <label class="prototype-field"><span>名称</span><input id="org-name" required value="" /></label>
+          <label class="prototype-field"><span>类型</span><select><option>部门</option><option>团队</option><option>其他</option></select></label>
+          <label class="prototype-field"><span>排序</span><input type="number" value="30" /></label>
+          <label class="prototype-field"><span>负责人</span><input placeholder="搜索用户" /></label>
+          <label class="prototype-field"><span>描述</span><textarea rows="3"></textarea></label>
+          <div class="prototype-form-error" id="org-form-error" hidden></div>
+          <div class="prototype-actions">
+            <button type="button" class="prototype-button" data-close-drawer>取消</button>
+            <button type="submit" class="prototype-button prototype-button--primary">保存机构</button>
+          </div>
+        </form>
+      </aside>
+    </div>
+
+    <dialog class="prototype-dialog" id="move-dialog" aria-labelledby="move-title">
+      <form method="dialog">
+        <div class="prototype-panel-header">
+          <div><h2 id="move-title">移动机构</h2><p>移动会改变子树层级，并影响范围内用户的权限版本。</p></div>
+          <button type="button" class="prototype-icon-button" data-close-dialog aria-label="关闭移动机构">×</button>
+        </div>
+        <div class="prototype-dialog-content">
+          <p><strong>源机构：</strong><span id="move-source-name">平台研发部</span></p>
+          <label class="prototype-field"><span>选择新父机构</span><select id="move-target"><option>集团总部</option><option>研发中心</option><option>数据平台部</option></select></label>
+          <div class="prototype-impact-box">
+            <strong>影响摘要</strong>
+            <p>子树高度：2 级；移动后深度：3 级；预计影响 8 名用户。</p>
+          </div>
+          <div class="prototype-form-error" id="move-error" hidden></div>
+        </div>
+        <div class="prototype-actions">
+          <button type="button" class="prototype-button" data-close-dialog>取消</button>
+          <button type="button" class="prototype-button prototype-button--primary" id="move-confirm">确认移动</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="prototype-dialog" id="status-dialog" aria-labelledby="status-title">
+      <form method="dialog">
+        <div class="prototype-panel-header">
+          <div><h2 id="status-title">停用机构</h2><p>停用前必须处理启用子节点和活动成员。</p></div>
+          <button type="button" class="prototype-icon-button" data-close-dialog aria-label="关闭停用机构">×</button>
+        </div>
+        <div class="prototype-dialog-content">
+          <p><strong>目标：</strong><span id="status-target-name">平台研发部</span></p>
+          <div class="prototype-impact-box prototype-impact-box--warning">
+            <strong>当前存在 1 个启用子节点、3 名活动成员。</strong>
+            <p>请先迁移成员并处理子节点，否则服务端将返回 `ORG_HAS_ACTIVE_CHILDREN` 或 `ORG_HAS_ACTIVE_MEMBERS`。</p>
+          </div>
+          <label class="prototype-field"><span>原因</span><textarea rows="2" placeholder="组织调整"></textarea></label>
+          <div class="prototype-form-error">停用不会级联；确认后将要求刷新树和权限摘要。</div>
+        </div>
+        <div class="prototype-actions">
+          <button type="button" class="prototype-button" data-close-dialog>取消</button>
+          <button type="button" class="prototype-button prototype-button--danger" id="status-confirm">确认停用</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="prototype-dialog" id="generic-dialog" aria-labelledby="generic-dialog-title">
+      <form method="dialog">
+        <div class="prototype-panel-header">
+          <div><h2 id="generic-dialog-title">确认操作</h2><p id="generic-dialog-message">请确认是否继续。</p></div>
+          <button type="button" class="prototype-icon-button" data-close-dialog aria-label="关闭确认对话框">×</button>
+        </div>
+        <div class="prototype-actions">
+          <button type="button" class="prototype-button" data-close-dialog>取消</button>
+          <button type="button" class="prototype-button prototype-button--primary" id="generic-dialog-confirm">确认</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>

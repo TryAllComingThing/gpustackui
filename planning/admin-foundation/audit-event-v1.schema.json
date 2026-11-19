@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/admin-foundation/audit-event-v1.schema.json",
+  "title": "audit_event_v1",
+  "description": "Proposed audit event envelope. Backend, security and operations must sign off storage, delivery and compensation semantics before implementation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "occurred_at",
+    "tenant_id",
+    "actor_scope",
+    "actor_type",
+    "actor_id",
+    "request_id",
+    "action",
+    "resource_type",
+    "resource_id",
+    "result",
+    "reason_code",
+    "sensitive_fields_redacted"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Stable idempotency key for the audit event."
+    },
+    "event_type": {
+      "type": "string",
+      "pattern": "^(organization|user|role|dictionary|announcement|auth|platform)\\.[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "description": "Event name from audit-event-catalog.md; must not be derived from request message text."
+    },
+    "event_version": {
+      "const": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Tenant boundary. Platform operations use the explicitly targeted tenant ID."
+    },
+    "target_tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Required when actor_scope is platform and the operation targets a tenant."
+    },
+    "actor_scope": {
+      "enum": ["tenant", "platform", "system"]
+    },
+    "actor_type": {
+      "enum": ["user", "platform_user", "service", "system", "break_glass"]
+    },
+    "actor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_id_hash": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Opaque hash only; never a raw session ID."
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "platform_permission": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resource_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "resource_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "result": {
+      "enum": ["success", "failure", "denied"]
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "before_summary": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "after_summary": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "sensitive_fields_redacted": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "source_ip": {
+      "type": "string",
+      "minLength": 1
+    },
+    "user_agent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "actor_scope": {
+            "const": "platform"
+          }
+        },
+        "required": ["actor_scope"]
+      },
+      "then": {
+        "required": ["target_tenant_id", "platform_permission"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result": {
+            "enum": ["failure", "denied"]
+          }
+        },
+        "required": ["result"]
+      },
+      "then": {
+        "required": ["reason_code"]
+      }
+    }
+  ]
+}

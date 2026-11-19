@@ -1,10 +1,16 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { announcementsRoutes } from '../../modules/announcements'
+import { auditLogsRoutes } from '../../modules/audit-logs'
 import { dashboardRoutes } from '../../modules/dashboard'
 import { deploymentsRoutes } from '../../modules/deployments'
+import { dictionariesRoutes } from '../../modules/dictionaries'
 import { modelsRoutes } from '../../modules/models'
+import { organizationsRoutes } from '../../modules/organizations'
 import { gpustackExampleRoutes, resourcesRoutes } from '../../modules/resources'
+import { rolesRoutes } from '../../modules/roles'
 import { servicesRoutes } from '../../modules/services'
 import { settingsRoutes } from '../../modules/settings'
+import { usersRoutes } from '../../modules/users'
 // create:module:imports
 
 const configuredGpuStackExample = __ENABLE_GPUSTACK_EXAMPLE__
@@ -21,6 +27,12 @@ const demoRoutes: RouteRecordRaw[] = [
 export const appRoutes: RouteRecordRaw[] = [
   { path: '/', redirect: '/dashboard', meta: { public: true } },
   ...dashboardRoutes,
+  ...organizationsRoutes,
+  ...usersRoutes,
+  ...rolesRoutes,
+  ...dictionariesRoutes,
+  ...announcementsRoutes,
+  ...auditLogsRoutes,
   ...(configuredDemoModules ? demoRoutes : []),
   ...settingsRoutes,
   // create:module:routes

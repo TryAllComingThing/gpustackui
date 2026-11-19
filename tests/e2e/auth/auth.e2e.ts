@@ -13,7 +13,7 @@ async function installAuthApi(
   let authenticated = initialAuthenticated
   let meCalls = 0
 
-  await page.route('**/v2/users/me', async (route) => {
+  await page.route('**/users/me', async (route) => {
     meCalls += 1
     if (authenticated) {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(adminUser) })
@@ -92,8 +92,8 @@ test('a session probe 401 on refresh returns to login without another confirmati
   await expect(page.locator('.gp-app-shell')).toBeVisible()
   let probe401Calls = 0
 
-  await page.unroute('**/v2/users/me')
-  await page.route('**/v2/users/me', async (route) => {
+  await page.unroute('**/users/me')
+  await page.route('**/users/me', async (route) => {
     probe401Calls += 1
     await route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Expired' }) })
   })
@@ -144,7 +144,7 @@ test('successful SSO logout navigates to the configured trusted logout URL', asy
 
 test('unavailable page retries session confirmation and returns to the original route', async ({ page }) => {
   let online = false
-  await page.route('**/v2/users/me', async (route) => {
+  await page.route('**/users/me', async (route) => {
     if (!online) {
       await route.abort('failed')
       return
@@ -163,7 +163,7 @@ test('unavailable page retries session confirmation and returns to the original 
 })
 
 test('invalid credentials keep the user on login and show an accessible error', async ({ page }) => {
-  await page.route('**/v2/users/me', async (route) => {
+  await page.route('**/users/me', async (route) => {
     await route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Unauthorized' }) })
   })
   await page.route('**/auth/login', async (route) => {
@@ -180,7 +180,7 @@ test('invalid credentials keep the user on login and show an accessible error', 
 })
 
 test('shows the configured SSO entry only when the backend reports SAML or OIDC', async ({ page }) => {
-  await page.route('**/v2/users/me', async (route) => {
+  await page.route('**/users/me', async (route) => {
     await route.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ message: 'Unauthorized' }) })
   })
   await page.route('**/auth/config', async (route) => {

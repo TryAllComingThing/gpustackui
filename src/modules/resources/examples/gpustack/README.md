@@ -4,4 +4,4 @@
 
 通用项目保持 `VITE_ENABLE_GPUSTACK_EXAMPLE=false`，并通过 `VITE_APP_NAME` 配置产品名称。关闭后示例路由不会注册。
 
-后端契约仍由兼容路径 `src/api/resources/gpu-device.ts` 提供，保持 `GET /v2/gpu-devices` 与 `GET /v2/gpu-devices/{id}` 不变。
+后端契约仍由兼容路径 `src/api/resources/gpu-device.ts` 提供，保持 `GET /api/gpu-devices` 与 `GET /api/gpu-devices/{id}` 不变。

@@ -10,6 +10,8 @@ export type ApiErrorCode =
   | 'CSRF'
   | 'VALIDATION'
   | 'CONFLICT'
+  | 'PRECONDITION_FAILED'
+  | 'PRECONDITION_REQUIRED'
   | 'RATE_LIMIT'
   | 'SERVER'
   | 'UNKNOWN'
@@ -18,12 +20,18 @@ export interface ApiError {
   code: ApiErrorCode
   status?: number
   message: string
+  serverCode?: string
   requestId?: string
   retryAfterSeconds?: number
   details?: unknown
 }
 
 export type Result<T> = { ok: true; data: T } | { ok: false; error: ApiError }
+
+export function formatApiError(error: ApiError, fallback: string): string {
+  const message = error.message.trim() || fallback
+  return error.requestId ? `${message} (request_id: ${error.requestId})` : message
+}
 
 const STATUS_CODES: Record<number, ApiErrorCode> = {
   400: 'VALIDATION',
@@ -32,7 +40,9 @@ const STATUS_CODES: Record<number, ApiErrorCode> = {
   404: 'NOT_FOUND',
   408: 'TIMEOUT',
   409: 'CONFLICT',
+  412: 'PRECONDITION_FAILED',
   422: 'VALIDATION',
+  428: 'PRECONDITION_REQUIRED',
   429: 'RATE_LIMIT',
   500: 'SERVER',
   502: 'SERVER',
@@ -73,7 +83,7 @@ export function toApiError(error: unknown): ApiError {
         : 'NETWORK'
 
   const body = typeof error.response?.data === 'object' && error.response.data !== null
-    ? error.response.data as { message?: unknown }
+    ? error.response.data as { code?: unknown; message?: unknown; request_id?: unknown }
     : undefined
   const fallback = code === 'TIMEOUT' ? 'Request timed out' : code === 'NETWORK' ? 'Network error' : error.message
   const serverMessage = typeof body?.message === 'string' && body.message.trim() ? body.message.trim() : undefined
@@ -81,12 +91,18 @@ export function toApiError(error: unknown): ApiError {
   const retryAfterSeconds = status === 429
     ? parseRetryAfterSeconds(headers?.['retry-after'] ?? headers?.['Retry-After'])
     : undefined
+  const headerRequestId = typeof headers?.['x-request-id'] === 'string' ? headers['x-request-id'] as string : undefined
+  const bodyRequestId = typeof body?.request_id === 'string' && body.request_id.trim() ? body.request_id.trim() : undefined
+  const serverCode = typeof body?.code === 'string' && /^[A-Z][A-Z0-9_]{0,63}$/.test(body.code)
+    ? body.code
+    : undefined
 
   return {
     code,
     status,
     message: serverMessage ?? fallback,
-    requestId: typeof headers?.['x-request-id'] === 'string' ? (headers['x-request-id'] as string) : undefined,
+    ...(serverCode !== undefined ? { serverCode } : {}),
+    requestId: headerRequestId ?? bodyRequestId,
     ...(retryAfterSeconds !== undefined ? { retryAfterSeconds } : {}),
   }
 }

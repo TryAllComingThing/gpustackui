@@ -14,12 +14,12 @@ test.beforeEach(async ({ page }) => {
   await mockAuthenticatedSession(page)
 })
 
-test('all business pages render deterministic fixtures without business API calls', async ({ page }) => {
+test('non-admin fixture pages render without business API calls', async ({ page }) => {
   const businessRequests: string[] = []
   const errors: string[] = []
   page.on('request', (request) => {
     const path = new URL(request.url()).pathname
-    if (path.startsWith('/v2/')) businessRequests.push(path)
+    if (path.startsWith('/api/')) businessRequests.push(path)
   })
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()) })
   page.on('pageerror', (error) => errors.push(error.message))
@@ -32,7 +32,7 @@ test('all business pages render deterministic fixtures without business API call
     for (const text of route.expected) await expect(pageRoot).toContainText(text)
   }
 
-  expect([...new Set(businessRequests)]).toEqual(['/v2/users/me'])
+  expect([...new Set(businessRequests)]).toEqual(['/api/users/me'])
   expect(errors).toEqual([])
 })
 

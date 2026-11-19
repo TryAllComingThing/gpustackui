@@ -19,6 +19,10 @@ function response(config: InternalAxiosRequestConfig, status: number): AxiosResp
 describe('HTTP session event handling', () => {
   beforeEach(() => vi.clearAllMocks())
 
+  it('uses the non-versioned API namespace by default', () => {
+    expect(createHttpClient().defaults.baseURL).toBe('/api')
+  })
+
   it('notifies unauthorized for business 401 with the request epoch', async () => {
     const client = createHttpClient({ baseURL: '' })
     client.defaults.adapter = async (config) => {
@@ -59,7 +63,7 @@ describe('HTTP session event handling', () => {
     }
 
     await expect(client.post('/auth/login/')).rejects.toBeInstanceOf(AxiosError)
-    await expect(client.get('/v2/users/me/')).rejects.toBeInstanceOf(AxiosError)
+    await expect(client.get('/users/me/')).rejects.toBeInstanceOf(AxiosError)
     await expect(client.post('/auth/logout/')).rejects.toBeInstanceOf(AxiosError)
     expect(notifyUnauthorized).not.toHaveBeenCalled()
   })

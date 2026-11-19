@@ -22,17 +22,16 @@ describe('auth API transport contract', () => {
     vi.mocked(hasCsrfToken).mockReset().mockReturnValue(false)
   })
 
-  it('confirms the current user through the defined auth base URL contract', async () => {
+  it('confirms the current user through the business API base URL', async () => {
     const user = { id: 1, username: 'admin', is_admin: true, is_active: true, require_password_change: false, source: 'Local' }
-    vi.mocked(requestValidatedWithClient).mockResolvedValue({ ok: true, data: user })
+    vi.mocked(requestValidated).mockResolvedValue({ ok: true, data: user })
 
     await expect(getCurrentUser()).resolves.toEqual({ ok: true, data: user })
-    expect(requestValidatedWithClient).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'auth-http' }),
-      { method: 'GET', url: '/v2/users/me' },
+    expect(requestValidated).toHaveBeenCalledWith(
+      { method: 'GET', url: '/users/me' },
       AuthUserSchema,
     )
-    expect(requestValidated).not.toHaveBeenCalled()
+    expect(requestValidatedWithClient).not.toHaveBeenCalled()
   })
 
   it('keeps credential endpoints on the auth base URL', async () => {

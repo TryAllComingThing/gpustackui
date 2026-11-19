@@ -3,6 +3,7 @@ import {
   authHttp,
   hasCsrfToken,
   isCsrfRequired,
+  requestValidated,
   requestValidatedWithClient,
   requestWithClient,
   type Result,
@@ -73,9 +74,8 @@ export function updatePassword(currentPassword: string, newPassword: string): Pr
 }
 
 export function getCurrentUser(options: { signal?: AbortSignal } = {}): Promise<Result<AuthUser>> {
-  return requestValidatedWithClient(
-    authHttp,
-    { method: 'GET', url: '/v2/users/me', ...(options.signal ? { signal: options.signal } : {}) },
+  return requestValidated(
+    { method: 'GET', url: '/users/me', ...(options.signal ? { signal: options.signal } : {}) },
     AuthUserSchema,
   )
 }

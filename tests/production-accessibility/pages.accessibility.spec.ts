@@ -1,11 +1,17 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 import { mockAuthenticatedSession } from '../e2e/support/auth'
+import { mockAdminApi } from '../e2e/support/admin-api'
 
-const productionRoutes = ['/dashboard', '/resources/nodes', '/models', '/deployments', '/services', '/settings', '/account/password']
+const productionRoutes = [
+  '/dashboard', '/system/organizations', '/system/users', '/system/roles', '/system/dictionaries',
+  '/content/announcements', '/audit/logs', '/audit/logs/evt_20261115_001',
+  '/resources/nodes', '/models', '/deployments', '/services', '/settings', '/account/password',
+]
 
 test.beforeEach(async ({ page }) => {
   await mockAuthenticatedSession(page)
+  await mockAdminApi(page)
 })
 
 test('production fixture pages have no critical or serious axe violations', async ({ page }) => {

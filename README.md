@@ -114,7 +114,7 @@ npm run build:showcase
 
 参考 `.env.example`：
 
-- `VITE_API_BASE_URL`：业务 API 基址，默认 `/v2`
+- `VITE_API_BASE_URL`：业务 API 基址，默认 `/api`；部署可覆盖，路径不含 API 版本
 - `VITE_AUTH_BASE_URL`：认证 API 基址，默认空
 - `VITE_APP_NAME`：产品显示名称，默认 `Vue SaaS Framework`
 - `VITE_APP_BASE`：部署子路径，例如 `/console/`；非法值回退 `/`

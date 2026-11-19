@@ -22,7 +22,7 @@ const member: AuthUser = AuthUserSchema.parse({
 })
 
 describe('GPUStack auth and route access contract', () => {
-  it('parses the /v2/users/me response shape', () => {
+  it('parses the /users/me response shape', () => {
     expect(admin.username).toBe('admin')
     expect(admin.is_admin).toBe(true)
   })
